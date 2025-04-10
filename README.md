@@ -1,12 +1,10 @@
 # Boxygo
 
-**Boxygo** to innowacyjne rozwiązanie dla osiedli mieszkaniowych – autonomiczny system dostawy paczek, który umożliwia bezkontaktowe dostarczanie przesyłek bezpośrednio pod drzwi mieszkańców.
+**Boxygo** is an innovative solution for residential complexes – an autonomous parcel delivery robot that is part of an integrated package delivery system. It enables contactless delivery of parcels directly to the residents' doorsteps.
 
-## Kluczowe cechy
-- **Autonomia:** Samodzielne poruszanie się systemu w obrębie osiedla.
-- **Wygoda:** Bezpieczeństwo i łatwość odbioru przesyłek, bez konieczności angażowania kurierów.
-- **Nowoczesność:** Nowatorskie podejście do logistyki i obsługi przesyłek na terenach zamkniętych.
+## Key Features
+- **Autonomy:** The robot navigates independently within residential areas.
+- **Convenience:** Secure and effortless parcel delivery without the involvement of traditional couriers.
+- **Modernity:** A pioneering approach to logistics and parcel handling in gated communities.
 
-Boxygo to nowy standard w dostawach, przynoszący korzyści zarówno mieszkańcom, jak i obsłudze przesyłek.
-
----
+Boxygo sets a new standard in deliveries, benefiting both residents and service providers.
