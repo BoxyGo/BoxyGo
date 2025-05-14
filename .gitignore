@@ -1,4 +1,6 @@
 # colcon artifacts
 build/
 install/
-log
+log/
+
+src/.vscode
