@@ -1,0 +1,40 @@
+cd ~/BoxyGo
+
+source /opt/ros/humble/setup.bash
+
+colcon build --symlink-install
+
+source install/setup.bash
+
+
+
+###Terminal 1 
+ros2 launch boxygo sim_launch_v1.py
+
+
+
+###Terminal 2 - sterowanie
+ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/diff_cont/cmd_vel_unstamped
+lub
+ros2 topic pub /diff_cont/cmd_vel_unstamped geometry_msgs/msg/Twist "linear:
+  x: 0.9
+  y: 0.0
+  z: 0.0
+angular:
+  x: 0.0
+  y: 0.0
+  z: 0.0"
+  
+  
+  
+###Terminal 3 - (opcjonalnie) odczywyanie wartości
+ros2 topic echo /diff_cont/cmd_vel_unstamped
+lub
+ros2 topic echo /joint_states
+
+
+
+export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:~/BoxyGo/src/boxygo/models ###dodawanie modelu hoverboard wheel
+
+
+

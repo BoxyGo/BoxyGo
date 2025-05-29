@@ -1,0 +1,180 @@
+<?xml version="1.0"?>
+<robot name="delivery_robot" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- Właściwości -->
+  <xacro:property name="body_length" value="0.9"/>
+  <xacro:property name="body_width" value="0.5"/>
+  <xacro:property name="body_height" value="0.6"/>
+  <xacro:property name="wheel_radius" value="0.1016"/>
+  <xacro:property name="wheel_width" value="0.05"/>
+  <xacro:property name="wheel_gap" value="0.35"/>
+  <xacro:property name="wheel_y_offset" value="${0.5 * body_width + 0.5 * wheel_width}"/>
+  <xacro:property name="wheel_mass" value="3.0"/>
+  <xacro:property name="pkg_path" value="$(find boxygo)"/>
+
+  <!-- Materiały -->
+  <material name="black"><color rgba="0 0 0 1"/></material>
+  <material name="blue"><color rgba="0 0 1 1"/></material>
+  <material name="red"><color rgba="1 0 0 1"/></material>
+  <material name="white"><color rgba="1 1 1 1"/></material>
+
+  <!-- Korpus -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="${body_length} ${body_width} ${body_height}"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${body_length} ${body_width} ${body_height}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="20"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+  </link>
+
+  <!-- Makro koła -->
+  <xacro:macro name="wheel" params="side index x_offset">
+    <xacro:property name="wheel_side_sign" value="${1 if side == 'left' else -1}"/>
+    <xacro:property name="ixx" value="${(1.0/12.0) * wheel_mass * (3 * wheel_radius**2 + wheel_width**2)}"/>
+    <xacro:property name="izz" value="${0.5 * wheel_mass * wheel_radius**2}"/>
+    
+    <link name="${side}_wheel_${index}">
+      <visual>
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="1.5707 0 0"/>
+        <material name="black"/>
+      </visual>
+      <visual name="shaft_visual">
+        <geometry>
+          <cylinder radius="0.015" length="${wheel_radius * 2}"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <material name="white"/>
+      </visual>
+      <collision>
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="1.5707 0 0"/>
+      </collision>
+      <inertial>
+        <mass value="${wheel_mass}"/>
+        <inertia ixx="${ixx}" iyy="${ixx}" izz="${izz}" ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+    </link>
+
+    <!-- Tarcie dla Gazebo Classic -->
+    <gazebo reference="${side}_wheel_${index}">
+      <mu1>1.0</mu1>
+      <mu2>1.0</mu2>
+      <kp>100000.0</kp>
+      <kd>10.0</kd>
+      <minDepth>0.001</minDepth>
+      <maxVel>0.01</maxVel>
+    </gazebo>
+
+    <joint name="${side}_wheel_${index}_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="${side}_wheel_${index}"/>
+      <origin xyz="${x_offset} ${wheel_side_sign * wheel_y_offset} ${-0.5 * body_height}" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="10.0" velocity="10.0"/>
+      <dynamics damping="0.1" friction="0.1"/>
+    </joint>
+    <transmission name="${side}_wheel_${index}_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${side}_wheel_${index}_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="${side}_wheel_${index}_motor">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  </xacro:macro>
+
+  <!-- Koła lewe -->
+  <xacro:wheel side="left" index="1" x_offset="${-wheel_gap}"/>
+  <xacro:wheel side="left" index="2" x_offset="0"/>
+  <xacro:wheel side="left" index="3" x_offset="${wheel_gap}"/>
+  <!-- Koła prawe -->
+  <xacro:wheel side="right" index="1" x_offset="${-wheel_gap}"/>
+  <xacro:wheel side="right" index="2" x_offset="0"/>
+  <xacro:wheel side="right" index="3" x_offset="${wheel_gap}"/>
+
+  <!-- Gazebo - kolor -->
+  <gazebo reference="base_link">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+  <gazebo reference="left_wheel_1">
+    <material>Gazebo/Red</material>
+  </gazebo>
+  <gazebo reference="left_wheel_2">
+    <material>Gazebo/Red</material>
+  </gazebo>
+  <gazebo reference="left_wheel_3">
+    <material>Gazebo/Red</material>
+  </gazebo>
+  <gazebo reference="right_wheel_1">
+    <material>Gazebo/Red</material>
+  </gazebo>
+  <gazebo reference="right_wheel_2">
+    <material>Gazebo/Red</material>
+  </gazebo>
+  <gazebo reference="right_wheel_3">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+  <!-- Plugin ros2_control -->
+  <gazebo>
+    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+      <update_rate>30</update_rate>
+      <parameters>${pkg_path}/config/diff_drive_controller_v1.yaml</parameters>
+    </plugin>
+  </gazebo>
+
+  <!-- ros2_control hardware -->
+  <ros2_control name="BoxyGoSystem" type="system">
+    <hardware>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+    </hardware>
+    <joint name="left_wheel_1_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="left_wheel_2_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="left_wheel_3_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="right_wheel_1_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="right_wheel_2_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="right_wheel_3_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+
+</robot>
