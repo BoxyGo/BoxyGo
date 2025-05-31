@@ -8,15 +8,14 @@
   <xacro:property name="wheel_radius" value="0.1016"/>
   <xacro:property name="wheel_width" value="0.05"/>
   <xacro:property name="wheel_gap" value="0.35"/>
-  <xacro:property name="wheel_y_offset" value="${0.5 * body_width + 0.5 * wheel_width}"/>
+  <xacro:property name="wheel_y_offset" value="${0.5 * body_width + 0.009}"/>
   <xacro:property name="wheel_mass" value="3.0"/>
   <xacro:property name="pkg_path" value="$(find boxygo)"/>
 
   <!-- Materiały -->
   <material name="black"><color rgba="0 0 0 1"/></material>
-  <material name="blue"><color rgba="0 0 1 1"/></material>
-  <material name="red"><color rgba="1 0 0 1"/></material>
-  <material name="white"><color rgba="1 1 1 1"/></material>
+  <material name="white"><color rgba="0.7 0.7 0.7 0.5"/></material>
+  <material name="grey"><color rgba="0.5 0.5 0.5 1"/></material>
 
   <!-- Korpus -->
   <link name="base_link">
@@ -24,7 +23,7 @@
       <geometry>
         <box size="${body_length} ${body_width} ${body_height}"/>
       </geometry>
-      <material name="blue"/>
+      <material name="white"/>
     </visual>
     <collision>
       <geometry>
@@ -38,11 +37,9 @@
   </link>
 
   <!-- Makro koła -->
-  <xacro:macro name="wheel" params="side index x_offset">
-    <xacro:property name="wheel_side_sign" value="${1 if side == 'left' else -1}"/>
+  <xacro:macro name="wheel" params="side wheel_side_sign joint_sign index x_offset">
     <xacro:property name="ixx" value="${(1.0/12.0) * wheel_mass * (3 * wheel_radius**2 + wheel_width**2)}"/>
     <xacro:property name="izz" value="${0.5 * wheel_mass * wheel_radius**2}"/>
-    
     <link name="${side}_wheel_${index}">
       <inertial> 
         <mass value="${wheel_mass}"/>
@@ -50,28 +47,18 @@
       </inertial>
       <visual>
         <geometry>
-          <mesh filename="package://${pkg_path}/meshes/hoverboard_wheel.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="${pkg_path}/meshes/hoverboard_wheel_v2.stl" scale="0.001 0.001 0.001"/>
         </geometry>
-        <origin xyz="0 0 0" rpy="1.5707 0 0"/>
-        <material name="black"/>
-      </visual>
-      <visual name="shaft_visual">
-        <geometry>
-          <cylinder radius="0.015" length="${wheel_radius * 2}"/>
-        </geometry>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <material name="white"/>
+        <origin xyz="0 0 0" rpy="0 0 ${wheel_side_sign * 3.141592}"/>
+        <material name="grey"/>
       </visual>
       <collision>
         <geometry>
-          <mesh filename="package://${pkg_path}/meshes/hoverboard_wheel.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="${pkg_path}/meshes/hoverboard_wheel_v2.stl" scale="0.001 0.001 0.001"/>
         </geometry>
-        <origin xyz="0 0 0" rpy="1.5707 0 0"/>
+        <origin xyz="0 0 0" rpy="0 0 ${wheel_side_sign * 3.141592}"/>
       </collision>
-      
     </link>
-
-    <!-- Tarcie dla Gazebo Classic -->
     <gazebo reference="${side}_wheel_${index}">
       <mu1>1.0</mu1>
       <mu2>1.0</mu2>
@@ -80,11 +67,10 @@
       <minDepth>0.001</minDepth>
       <maxVel>0.01</maxVel>
     </gazebo>
-
     <joint name="${side}_wheel_${index}_joint" type="continuous">
       <parent link="base_link"/>
       <child link="${side}_wheel_${index}"/>
-      <origin xyz="${x_offset} ${wheel_side_sign * wheel_y_offset} ${-0.5 * body_height}" rpy="0 0 0"/>
+      <origin xyz="${x_offset} ${joint_sign * wheel_y_offset} ${-0.5 * body_height}" rpy="0 0 0"/>
       <axis xyz="0 1 0"/>
       <limit effort="10.0" velocity="10.0"/>
       <dynamics damping="0.1" friction="0.1"/>
@@ -102,35 +88,35 @@
   </xacro:macro>
 
   <!-- Koła lewe -->
-  <xacro:wheel side="left" index="1" x_offset="${-wheel_gap}"/>
-  <xacro:wheel side="left" index="2" x_offset="0"/>
-  <xacro:wheel side="left" index="3" x_offset="${wheel_gap}"/>
+  <xacro:wheel side="left" wheel_side_sign="1" joint_sign="1" index="1" x_offset="${-wheel_gap}"/>
+  <xacro:wheel side="left" wheel_side_sign="1" joint_sign="1" index="2" x_offset="0"/>
+  <xacro:wheel side="left" wheel_side_sign="1" joint_sign="1" index="3" x_offset="${wheel_gap}"/>
   <!-- Koła prawe -->
-  <xacro:wheel side="right" index="1" x_offset="${-wheel_gap}"/>
-  <xacro:wheel side="right" index="2" x_offset="0"/>
-  <xacro:wheel side="right" index="3" x_offset="${wheel_gap}"/>
+  <xacro:wheel side="right" wheel_side_sign="0" joint_sign="-1" index="1" x_offset="${-wheel_gap}"/>
+  <xacro:wheel side="right" wheel_side_sign="0" joint_sign="-1" index="2" x_offset="0"/>
+  <xacro:wheel side="right" wheel_side_sign="0" joint_sign="-1" index="3" x_offset="${wheel_gap}"/>
 
   <!-- Gazebo - kolor -->
   <gazebo reference="base_link">
-    <material>Gazebo/Blue</material>
+    <material>Gazebo/White</material>
   </gazebo>
   <gazebo reference="left_wheel_1">
-    <material>Gazebo/Red</material>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <gazebo reference="left_wheel_2">
-    <material>Gazebo/Red</material>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <gazebo reference="left_wheel_3">
-    <material>Gazebo/Red</material>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <gazebo reference="right_wheel_1">
-    <material>Gazebo/Red</material>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <gazebo reference="right_wheel_2">
-    <material>Gazebo/Red</material>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <gazebo reference="right_wheel_3">
-    <material>Gazebo/Red</material>
+    <material>Gazebo/Grey</material>
   </gazebo>
 
   <!-- Plugin ros2_control -->

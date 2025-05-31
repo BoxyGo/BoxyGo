@@ -42,7 +42,6 @@ install(
     worlds
     launch
     config
-    models
     meshes
   DESTINATION share/${PROJECT_NAME}
 )
