@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+
+source ~/BoxyGo/install/setup.bash
+
 # Ścieżka do katalogu z plikami launch w pakiecie boxygo
 LAUNCH_DIR="$HOME/BoxyGo/src/boxygo/launch"
 
