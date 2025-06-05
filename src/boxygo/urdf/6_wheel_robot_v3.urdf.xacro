@@ -8,15 +8,15 @@
   <xacro:property name="wheel_radius" value="0.1016"/>
   <xacro:property name="wheel_width" value="0.05"/>
   <xacro:property name="wheel_gap" value="0.35"/>
-  <xacro:property name="wheel_y_offset" value="${0.5 * body_width + 0.5 * wheel_width}"/>
+  <xacro:property name="wheel_y_offset" value="${0.5 * body_width + 0.05}"/>
+  <xacro:property name="z_offset" value="${-0.5 * body_height - 0.1}"/>
   <xacro:property name="wheel_mass" value="3.0"/>
   <xacro:property name="pkg_path" value="$(find boxygo)"/>
 
   <!-- Materiały -->
   <material name="black"><color rgba="0 0 0 1"/></material>
-  <material name="blue"><color rgba="0 0 1 1"/></material>
-  <material name="red"><color rgba="1 0 0 1"/></material>
-  <material name="white"><color rgba="1 1 1 1"/></material>
+  <material name="white"><color rgba="0.7 0.7 0.7 0.5"/></material>
+  <material name="grey"><color rgba="0.5 0.5 0.5 1"/></material>
 
   <!-- Korpus -->
   <link name="base_link">
@@ -24,7 +24,7 @@
       <geometry>
         <box size="${body_length} ${body_width} ${body_height}"/>
       </geometry>
-      <material name="blue"/>
+      <material name="white"/>
     </visual>
     <collision>
       <geometry>
@@ -38,37 +38,28 @@
   </link>
 
   <!-- Makro koła -->
-  <xacro:macro name="wheel" params="side index x_offset">
-    <xacro:property name="wheel_side_sign" value="${1 if side == 'left' else -1}"/>
-    <xacro:property name=
-"ixx" value="${(1.0/12.0) * wheel_mass * (3 * wheel_radius**2 + wheel_width**2)}"/>
+  <xacro:macro name="wheel" params="side parent_link wheel_side_sign joint_sign index x_offset">
+    <xacro:property name="ixx" value="${(1.0/12.0) * wheel_mass * (3 * wheel_radius**2 + wheel_width**2)}"/>
     <xacro:property name="izz" value="${0.5 * wheel_mass * wheel_radius**2}"/>
-    
     <link name="${side}_wheel_${index}">
-      <!-- Wizualizacja z pliku STL (bezwzględna ścieżka) -->
-      <visual>
-        <geometry>
-          <mesh filename="/home/jakub/BoxyGo/src/boxygo/meshes/hoverboard_wheel.stl" scale="0.001 0.001  0.001 "/>
-        </geometry>
-        <origin xyz="0 0 0" rpy="1.5707 0 0"/>
-        <material name="black"/>
-      </visual>
-
-      <!-- Kolizja uproszczona -->
-      <collision>
-        <geometry>
-          <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
-        </geometry>
-        <origin xyz="0 0 0" rpy="1.5707 0 0"/>
-      </collision>
-
-      <inertial>
+      <inertial> 
         <mass value="${wheel_mass}"/>
         <inertia ixx="${ixx}" iyy="${ixx}" izz="${izz}" ixy="0.0" ixz="0.0" iyz="0.0"/>
       </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="${pkg_path}/meshes/hov_wheel_short_look.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 ${wheel_side_sign * math.pi}"/>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="${pkg_path}/meshes/hov_wheel_short_colision.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 ${wheel_side_sign * math.pi}"/>
+      </collision>
     </link>
-
-    <!-- Tarcie dla Gazebo Classic -->
     <gazebo reference="${side}_wheel_${index}">
       <mu1>1.0</mu1>
       <mu2>1.0</mu2>
@@ -77,11 +68,10 @@
       <minDepth>0.001</minDepth>
       <maxVel>0.01</maxVel>
     </gazebo>
-
     <joint name="${side}_wheel_${index}_joint" type="continuous">
-      <parent link="base_link"/>
+      <parent link="${parent_link}"/>
       <child link="${side}_wheel_${index}"/>
-      <origin xyz="${x_offset} ${wheel_side_sign * wheel_y_offset} ${-0.5 * body_height}" rpy="0 0 0"/>
+      <origin xyz="${x_offset} ${joint_sign * wheel_y_offset} ${z_offset}" rpy="0 0 0"/>
       <axis xyz="0 1 0"/>
       <limit effort="10.0" velocity="10.0"/>
       <dynamics damping="0.1" friction="0.1"/>
@@ -98,36 +88,249 @@
   </transmission>
   </xacro:macro>
 
-  <!-- Koła lewe -->
-  <xacro:wheel side="left" index="1" x_offset="${-wheel_gap}"/>
-  <xacro:wheel side="left" index="2" x_offset="0"/>
-  <xacro:wheel side="left" index="3" x_offset="${wheel_gap}"/>
-  <!-- Koła prawe -->
-  <xacro:wheel side="right" index="1" x_offset="${-wheel_gap}"/>
-  <xacro:wheel side="right" index="2" x_offset="0"/>
-  <xacro:wheel side="right" index="3" x_offset="${wheel_gap}"/>
+  <xacro:macro name="wheel_beam" params="side beam_link wheel_side_sign index x_offset y_offset">
+    <xacro:property name="ixx" value="${(1.0/12.0) * wheel_mass * (3 * wheel_radius**2 + wheel_width**2)}"/>
+    <xacro:property name="izz" value="${0.5 * wheel_mass * wheel_radius**2}"/>
+    <link name="${side}_wheel_${index}">
+      <inertial> 
+        <mass value="${wheel_mass}"/>
+        <inertia ixx="${ixx}" iyy="${ixx}" izz="${izz}" ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="${pkg_path}/meshes/hov_wheel_short_look.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 ${wheel_side_sign * math.pi}"/>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="${pkg_path}/meshes/hov_wheel_short_colision.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 ${wheel_side_sign * math.pi}"/>
+      </collision>
+    </link>
+    <gazebo reference="${side}_wheel_${index}">
+      <mu1>1.0</mu1>
+      <mu2>1.0</mu2>
+      <kp>100000.0</kp>
+      <kd>10.0</kd>
+      <minDepth>0.001</minDepth>
+      <maxVel>0.01</maxVel>
+    </gazebo>
+    <joint name="${side}_wheel_${index}_joint" type="continuous">
+      <parent link="${beam_link}"/>
+      <child link="${side}_wheel_${index}"/>
+      <origin xyz="${x_offset} ${y_offset} 0" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="10.0" velocity="10.0"/>
+      <dynamics damping="0.1" friction="0.1"/>
+    </joint>
+    <transmission name="${side}_wheel_${index}_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${side}_wheel_${index}_joint">
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${side}_wheel_${index}_motor">
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+  </xacro:macro>
+
+
+  <link name="left_rocker_beam">
+    <inertial>
+      <mass value="0.8"/>
+      <inertia ixx="0.01" iyy="0.01" izz="0.01" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <mesh filename="${pkg_path}/meshes/rocker_model.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="${pkg_path}/meshes/rocker_model.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </collision>
+  </link>
+
+  <joint name="left_rocker_beam_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_rocker_beam"/>
+    <origin xyz="-0.175 ${wheel_y_offset} ${z_offset}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="10.0" velocity="10.0"/>
+    <dynamics damping="0.1" friction="0.1"/>
+  </joint>
+
+  <link name="right_rocker_beam">
+  <inertial>
+    <mass value="0.8"/>
+    <inertia ixx="0.01" iyy="0.01" izz="0.01" ixy="0" ixz="0" iyz="0"/>
+  </inertial>
+  <visual>
+    <geometry>
+      <mesh filename="${pkg_path}/meshes/rocker_model.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <origin xyz="0 0 0" rpy="0 0 ${math.pi}"/>
+    <material name="grey"/>
+  </visual>
+  <collision>
+    <geometry>
+      <mesh filename="${pkg_path}/meshes/rocker_model.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <origin xyz="0 0 0" rpy="0 0 ${math.pi}"/>
+  </collision>
+</link>
+<joint name="right_rocker_beam_joint" type="continuous">
+  <parent link="base_link"/>
+  <child link="right_rocker_beam"/>
+  <origin xyz="-0.175 ${-wheel_y_offset} ${z_offset}" rpy="0 0 0"/>
+  <axis xyz="0 1 0"/>
+  <limit effort="10.0" velocity="10.0"/>
+  <dynamics damping="0.1" friction="0.1"/>
+</joint>
+
+<xacro:macro name="wheel_universal" params="side parent_link wheel_side_sign index x_offset y_offset z_offset">
+  <xacro:property name="ixx" value="${(1.0/12.0) * wheel_mass * (3 * wheel_radius**2 + wheel_width**2)}"/>
+  <xacro:property name="izz" value="${0.5 * wheel_mass * wheel_radius**2}"/>
+  <link name="${side}_wheel_${index}">
+    <inertial> 
+      <mass value="${wheel_mass}"/>
+      <inertia ixx="${ixx}" iyy="${ixx}" izz="${izz}" ixy="0.0" ixz="0.0" iyz="0.0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <mesh filename="${pkg_path}/meshes/hov_wheel_short_look.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 ${wheel_side_sign * math.pi}"/>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="${pkg_path}/meshes/hov_wheel_short_colision.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 ${wheel_side_sign * math.pi}"/>
+    </collision>
+  </link>
+  <gazebo reference="${side}_wheel_${index}">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+    <kp>100000.0</kp>
+    <kd>10.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>0.01</maxVel>
+  </gazebo>
+  <joint name="${side}_wheel_${index}_joint" type="continuous">
+    <parent link="${parent_link}"/>
+    <child link="${side}_wheel_${index}"/>
+    <origin xyz="${x_offset} ${y_offset} ${z_offset}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="10.0" velocity="10.0"/>
+    <dynamics damping="0.1" friction="0.1"/>
+  </joint>
+  <transmission name="${side}_wheel_${index}_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${side}_wheel_${index}_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="${side}_wheel_${index}_motor">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+</xacro:macro>
+
+<!-- Koła LEWE: -->
+<!-- 1. Koło przy base_link (lewa strona) -->
+<xacro:wheel_universal
+    side="left"
+    parent_link="base_link"
+    wheel_side_sign="0"
+    index="1"
+    x_offset="${wheel_gap}"
+    y_offset="${wheel_y_offset}"
+    z_offset="${z_offset}"/>
+
+<!-- 2. Koło przy left_rocker_beam (lewa strona, środek) -->
+<xacro:wheel_universal
+    side="left"
+    parent_link="left_rocker_beam"
+    wheel_side_sign="0"
+    index="2"
+    x_offset="0.175"
+    y_offset="0"
+    z_offset="0"/>
+
+<!-- 3. Koło przy left_rocker_beam (lewa strona, tył) -->
+<xacro:wheel_universal
+    side="left"
+    parent_link="left_rocker_beam"
+    wheel_side_sign="0"
+    index="3"
+    x_offset="-0.175"
+    y_offset="0"
+    z_offset="0"/>
+
+<!-- Koła PRAWE: -->
+<!-- 1. Koło przy base_link (prawa strona) -->
+<xacro:wheel_universal
+    side="right"
+    parent_link="base_link"
+    wheel_side_sign="1"
+    index="1"
+    x_offset="${wheel_gap}"
+    y_offset="-${wheel_y_offset}"
+    z_offset="${z_offset}"/>
+
+<!-- 2. Koło przy right_rocker_beam (prawa strona, środek) -->
+<xacro:wheel_universal
+    side="right"
+    parent_link="right_rocker_beam"
+    wheel_side_sign="1"
+    index="2"
+    x_offset="0.175"
+    y_offset="0"
+    z_offset="0"/>
+
+<!-- 3. Koło przy right_rocker_beam (prawa strona, tył) -->
+<xacro:wheel_universal
+    side="right"
+    parent_link="right_rocker_beam"
+    wheel_side_sign="1"
+    index="3"
+    x_offset="-0.175"
+    y_offset="0"
+    z_offset="0"/>
+
+
 
   <!-- Gazebo - kolor -->
   <gazebo reference="base_link">
-    <material>Gazebo/Blue</material>
+    <material>Gazebo/White</material>
   </gazebo>
   <gazebo reference="left_wheel_1">
-    <material>Gazebo/Red</material>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <gazebo reference="left_wheel_2">
-    <material>Gazebo/Red</material>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <gazebo reference="left_wheel_3">
-    <material>Gazebo/Red</material>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <gazebo reference="right_wheel_1">
-    <material>Gazebo/Red</material>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <gazebo reference="right_wheel_2">
-    <material>Gazebo/Red</material>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <gazebo reference="right_wheel_3">
-    <material>Gazebo/Red</material>
+    <material>Gazebo/Grey</material>
   </gazebo>
 
   <!-- Plugin ros2_control -->
