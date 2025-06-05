@@ -1,0 +1,19 @@
+slam_toolbox:
+  ros__parameters:
+    mode: "mapping"
+    map_frame: "map"
+    odom_frame: "odom"
+    base_frame: "base_link"
+
+    scan_topic: "/gazebo_ros_laser/out"
+    odom_topic: "/diff_cont/odom"
+
+    resolution: 0.05
+    max_laser_range: 12.0
+    min_laser_range: 0.1
+
+    use_scan_matching: true
+    scan_buffer_length: 1.0
+
+    loop_closure_translation_threshold: 0.2
+    loop_closure_rotation_threshold: 0.6
