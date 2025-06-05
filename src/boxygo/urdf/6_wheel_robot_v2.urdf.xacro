@@ -37,12 +37,6 @@
   </link>
   
     <!-- Kamera -->
-  <joint name="depth_camera_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="depth_camera_link"/>
-    <origin xyz="${body_length/2 + 0.01} 0 0.1" rpy="0 0 0"/>
-  </joint>
-
   <link name="depth_camera_link">
     <visual>
       <geometry>
@@ -61,32 +55,39 @@
     </inertial>
   </link>
 
+  <joint name="depth_camera_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="depth_camera_link"/>
+    <origin xyz="${body_length/2 + 0.01} 0 ${body_height/2 - 0.1}" rpy="0 0 0"/>
+  </joint>
+
   <joint name="depth_camera_optical_joint" type="fixed">
     <parent link="depth_camera_link"/>
     <child link="depth_camera_link_optical"/>
-    <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/> <!-- Standard ROS transform: optical frame (Z forward, X right, Y down) -->
+    <origin xyz="0 0 0" rpy="-1.5708 0 -1.5708"/> <!-- -pi/2 in radians -->
   </joint>
 
-  <link name="depth_camera_link_optical"></link>
+  <link name="depth_camera_link_optical"/>
 
   <gazebo reference="depth_camera_link">
     <sensor name="depth_camera" type="depth">
-      <pose> 0 0 0 0 0 0 </pose>
+      <pose>0 0 0 0 0 0</pose>
       <visualize>true</visualize>
-      <update_rate>10</update_rate>
+      <update_rate>30.0</update_rate>
       <camera>
-        <horizontal_fov>1.089</horizontal_fov>
+        <horizontal_fov>1.39626</horizontal_fov>
         <image>
-          <format>B8G8R8</format>
           <width>640</width>
           <height>480</height>
+          <format>B8G8R8</format>
         </image>
         <clip>
-          <near>0.05</near>
-          <far>8.0</far>
+          <near>0.1</near>
+          <far>10.0</far>
         </clip>
       </camera>
       <plugin name="depth_camera_controller" filename="libgazebo_ros_camera.so">
+        <camera_name>depth_camera</camera_name>
         <frame_name>depth_camera_link_optical</frame_name>
         <min_depth>0.1</min_depth>
         <max_depth>100.0</max_depth>
@@ -233,10 +234,10 @@
   <gazebo reference="right_wheel_3">
     <material>Gazebo/Grey</material>
   </gazebo>
-  <gazebo reference="depth_camera_link">
+  <gazebo reference="lidar_link">
     <material>Gazebo/Black</material>
   </gazebo>
-  <gazebo reference="lidar_link">
+  <gazebo reference="depth_camera_link">
     <material>Gazebo/Black</material>
   </gazebo>
 
