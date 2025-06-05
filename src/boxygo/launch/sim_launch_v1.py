@@ -9,8 +9,9 @@ import os
 def generate_launch_description():
     pkg_boxygo = get_package_share_directory('boxygo')
 
-    urdf_path = os.path.join(pkg_boxygo, 'urdf', '6_wheel_robot_v2.urdf.xacro') 
+    urdf_path = os.path.join(pkg_boxygo, 'urdf', '6_wheel_robot.urdf.xacro') 
     controller_config = os.path.join(pkg_boxygo, 'config', 'diff_drive_controller_v1.yaml')
+    slam_params       = os.path.join(pkg_boxygo, 'config', 'slam_toolbox_params.yaml')
     world_path = os.path.join(pkg_boxygo, 'worlds', 'small_city.world')
 
     return LaunchDescription([
@@ -63,6 +64,22 @@ def generate_launch_description():
                 ('/diff_cont/cmd_vel_unstamped', '/cmd_vel'),
             ],
             output='screen'
+        ),
+        Node(
+            package='slam_toolbox',
+            executable='sync_slam_toolbox_node',
+            name='slam_toolbox',
+            output='screen',
+            parameters=[
+                slam_params,
+                {'use_sim_time': True}
+            ],
+            remappings=[
+                # LIDAR publikuje na 'gazebo_ros_laser/out'
+                ('scan', 'gazebo_ros_laser/out'),
+                # Odometria dostępna na 'diff_cont/odom'
+                ('odom', 'diff_cont/odom'),
+            ]
         ),
     ])
 
