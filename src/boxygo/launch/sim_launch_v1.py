@@ -9,7 +9,7 @@ import os
 def generate_launch_description():
     pkg_boxygo = get_package_share_directory('boxygo')
 
-    urdf_path = os.path.join(pkg_boxygo, 'urdf', '6_wheel_robot_v2.urdf.xacro') 
+    urdf_path = os.path.join(pkg_boxygo, 'urdf', '6_wheel_robot_v3.urdf.xacro') 
     controller_config = os.path.join(pkg_boxygo, 'config', 'diff_drive_controller_v1.yaml')
     world_path = os.path.join(pkg_boxygo, 'worlds', 'small_city.world')
 
