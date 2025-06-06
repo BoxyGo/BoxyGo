@@ -15,7 +15,7 @@ diff_cont:
     base_frame_id: base_link
     left_wheel_names: ["left_wheel_1_joint", "left_wheel_2_joint", "left_wheel_3_joint"]
     right_wheel_names: ["right_wheel_1_joint", "right_wheel_2_joint", "right_wheel_3_joint"]
-    wheel_separation: 0.5
+    wheel_separation: 0.657
     wheel_radius: 0.1016 
     use_stamped_vel: false
 
