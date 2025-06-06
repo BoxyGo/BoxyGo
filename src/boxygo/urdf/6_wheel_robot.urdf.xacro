@@ -37,6 +37,47 @@
     </inertial>
   </link>
 
+  <!-- IMU sensor -->
+  <link name="imu_link">
+    <inertial>
+      <mass value="0.01"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-5" ixy="0" ixz="0" iyy="1e-5" iyz="0" izz="1e-5"/>
+    </inertial>
+  </link>
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="0 0 ${body_height/2}" rpy="0 0 0"/>
+  </joint>
+
+  <gazebo reference="imu_link">
+    <sensor type="imu" name="imu_sensor">
+      <always_on>true</always_on>
+      <update_rate>2.0</update_rate>
+      <imu>
+        <noise>
+          <angular_velocity>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.001</stddev>
+          </angular_velocity>
+          <linear_acceleration>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.001</stddev>
+          </linear_acceleration>
+        </noise>
+      </imu>
+      <plugin name="imu_plugin" filename="libgazebo_ros_imu_sensor.so">
+        <ros>
+          <namespace>/</namespace>
+          <remapping>~/out:=imu/data</remapping>
+        </ros>
+        <frame_name>imu_link</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
 
   <!-- footprint-->
   <joint name="base_footprint_joint" type="fixed">
@@ -249,12 +290,12 @@
     </collision>
   </link>
   <gazebo reference="${side}_wheel_${index}">
-    <mu1>1.0</mu1>
-    <mu2>1.0</mu2>
+    <mu1>5.0</mu1>
+    <mu2>5.0</mu2>
     <kp>100000.0</kp>
     <kd>10.0</kd>
     <minDepth>0.001</minDepth>
-    <maxVel>0.01</maxVel>
+    <maxVel>0.1</maxVel>
   </gazebo>
   <joint name="${side}_wheel_${index}_joint" type="continuous">
     <parent link="${parent_link}"/>
