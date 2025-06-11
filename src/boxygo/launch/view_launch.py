@@ -8,7 +8,9 @@ import os
 
 def generate_launch_description():
     pkg_boxygo = get_package_share_directory('boxygo')
-    urdf_path = os.path.join(pkg_boxygo, 'urdf', '6_wheel_robot_v2.urdf.xacro')
+    # This launch file referenced a URDF that does not exist. Use the
+    # available robot description instead.
+    urdf_path = os.path.join(pkg_boxygo, 'urdf', '6_wheel_robot.urdf.xacro')
 
     # Pusty świat z Gazebo (domyślny empty.world, możesz podać swój jeśli masz)
     gazebo_launch = IncludeLaunchDescription(
