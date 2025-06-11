@@ -88,7 +88,6 @@
 
     <link name="base_footprint">
     </link>
-  
     <!-- Kamera -->
   <link name="depth_camera_link">
     <visual>
@@ -210,62 +209,37 @@
   </gazebo>
 
 
-  <link name="left_rocker_beam">
-    <inertial>
-      <mass value="0.8"/>
-      <inertia ixx="0.01" iyy="0.01" izz="0.01" ixy="0" ixz="0" iyz="0"/>
-    </inertial>
-    <visual>
-      <geometry>
-        <mesh filename="${pkg_path}/meshes/rocker_model.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <material name="grey"/>
-    </visual>
-    <collision>
-      <geometry>
-        <mesh filename="${pkg_path}/meshes/rocker_model.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-    </collision>
-  </link>
-
-  <joint name="left_rocker_beam_joint" type="continuous">
-    <parent link="base_link"/>
-    <child link="left_rocker_beam"/>
-    <origin xyz="-0.175 ${wheel_y_offset} ${z_offset}" rpy="0 0 0"/>
-    <axis xyz="0 1 0"/>
-    <limit effort="10.0" velocity="10.0"/>
-    <dynamics damping="0.1" friction="0.1"/>
-  </joint>
-
-  <link name="right_rocker_beam">
-  <inertial>
-    <mass value="0.8"/>
-    <inertia ixx="0.01" iyy="0.01" izz="0.01" ixy="0" ixz="0" iyz="0"/>
-  </inertial>
-  <visual>
-    <geometry>
-      <mesh filename="${pkg_path}/meshes/rocker_model.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <origin xyz="0 0 0" rpy="0 0 ${math.pi}"/>
-    <material name="grey"/>
-  </visual>
-  <collision>
-    <geometry>
-      <mesh filename="${pkg_path}/meshes/rocker_model.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <origin xyz="0 0 0" rpy="0 0 ${math.pi}"/>
-  </collision>
-</link>
-<joint name="right_rocker_beam_joint" type="continuous">
-  <parent link="base_link"/>
-  <child link="right_rocker_beam"/>
-  <origin xyz="-0.175 ${-wheel_y_offset} ${z_offset}" rpy="0 0 0"/>
-  <axis xyz="0 1 0"/>
-  <limit effort="10.0" velocity="10.0"/>
-  <dynamics damping="0.1" friction="0.1"/>
-</joint>
+  <xacro:macro name="rocker_beam" params="side orientation_sign side_sign">
+    <link name="${side}_rocker_beam">
+      <inertial>
+        <mass value="0.8"/>
+        <inertia ixx="0.01" iyy="0.01" izz="0.01" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="${pkg_path}/meshes/rocker_model.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 ${orientation_sign * math.pi}"/>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="${pkg_path}/meshes/rocker_model.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 ${orientation_sign * math.pi}"/>
+      </collision>
+    </link>
+    <joint name="${side}_rocker_beam_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="${side}_rocker_beam"/>
+      <origin xyz="-0.175 ${side_sign * wheel_y_offset} ${z_offset}" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="10.0" velocity="10.0"/>
+      <dynamics damping="0.1" friction="0.1"/>
+    </joint>
+  </xacro:macro>
+  <xacro:rocker_beam side="left" orientation_sign="0" side_sign="1"/>
+  <xacro:rocker_beam side="right" orientation_sign="1" side_sign="-1"/>
 
 <xacro:macro name="wheel_universal" params="side parent_link wheel_side_sign index x_offset y_offset z_offset">
   <xacro:property name="ixx" value="${(1.0/12.0) * wheel_mass * (3 * wheel_radius**2 + wheel_width**2)}"/>
