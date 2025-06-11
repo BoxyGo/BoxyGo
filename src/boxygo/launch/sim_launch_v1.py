@@ -1,6 +1,6 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
 from launch.substitutions import Command
@@ -49,22 +49,29 @@ def generate_launch_description():
             output='screen'
         ),
 
-        Node(
-            package='controller_manager',
-            executable='spawner',
-            arguments=['joint_broad', '--controller-manager', '/controller_manager', '--param-file', controller_config],
-            output='screen'
+        # --- Dodajemy TimerAction dla kontrolerów! ---
+        TimerAction(
+            period=5.0,  # 5 sekund opóźnienia po starcie (zmień w razie potrzeby)
+            actions=[
+                Node(
+                    package='controller_manager',
+                    executable='spawner',
+                    arguments=['joint_state_broadcaster', '--controller-manager', '/controller_manager'],
+                    output='screen'
+                ),
+                Node(
+                    package='controller_manager',
+                    executable='spawner',
+                    arguments=['diff_cont', '--controller-manager', '/controller_manager', '--param-file', controller_config],
+                    remappings=[
+                        ('/diff_cont/cmd_vel_unstamped', '/cmd_vel'),
+                    ],
+                    output='screen'
+                ),
+            ]
         ),
+        # --- KONIEC TimerAction ---
 
-        Node(
-            package='controller_manager',
-            executable='spawner',
-            arguments=['diff_cont', '--controller-manager', '/controller_manager', '--param-file', controller_config],
-            remappings=[
-                ('/diff_cont/cmd_vel_unstamped', '/cmd_vel'),
-            ],
-            output='screen'
-        ),
         Node(
             package='slam_toolbox',
             executable='sync_slam_toolbox_node',
@@ -75,11 +82,8 @@ def generate_launch_description():
                 {'use_sim_time': True}
             ],
             remappings=[
-                # LIDAR publikuje na 'gazebo_ros_laser/out'
                 ('scan', 'gazebo_ros_laser/out'),
-                # Odometria dostępna na 'diff_cont/odom'
                 ('odom', 'diff_cont/odom'),
             ]
         ),
     ])
-
