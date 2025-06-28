@@ -6,7 +6,7 @@ slam_toolbox:
     base_frame: "base_link"
 
     scan_topic: "/gazebo_ros_laser/out"
-    odom_topic: "/diff_cont/odom"
+    odom_topic: "/odometry/filtered" # "/diff_cont/odom"
 
     resolution: 0.05
     max_laser_range: 12.0

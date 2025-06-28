@@ -54,7 +54,7 @@
   <gazebo reference="imu_link">
     <sensor type="imu" name="imu_sensor">
       <always_on>true</always_on>
-      <update_rate>2.0</update_rate>
+      <update_rate>60.0</update_rate>
       <imu>
         <noise>
           <angular_velocity>
@@ -75,6 +75,9 @@
           <remapping>~/out:=imu/data</remapping>
         </ros>
         <frame_name>imu_link</frame_name>
+        <orientation>0.01 0 0  0 0.01 0  0 0 0.01</orientation>
+        <angular_velocity>0.01 0 0  0 0.01 0  0 0 0.01</angular_velocity>
+        <linear_acceleration>999 0 0  0 999 0  0 0 999</linear_acceleration>
       </plugin>
     </sensor>
   </gazebo>
@@ -126,7 +129,7 @@
     <sensor name="depth_camera" type="depth">
       <pose>0 0 0 0 0 0</pose>
       <visualize>true</visualize>
-      <update_rate>30.0</update_rate>
+      <update_rate>60.0</update_rate>
       <camera>
         <horizontal_fov>1.39626</horizontal_fov>
         <image>
@@ -176,7 +179,7 @@
   <gazebo reference="lidar_link">
     <sensor name="lidar_sensor" type="ray">
       <always_on>true</always_on>
-      <update_rate>10.0</update_rate>
+      <update_rate>60.0</update_rate>
       <visualize>true</visualize>
       <ray>
         <scan>
@@ -217,14 +220,14 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="${pkg_path}/meshes/rocker_model.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://${pkg_path}/meshes/rocker_model.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <material name="grey"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="${pkg_path}/meshes/rocker_model.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://${pkg_path}/meshes/rocker_model.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin xyz="0 0 0" rpy="0 0 0"/>
     </collision>
@@ -246,14 +249,14 @@
   </inertial>
   <visual>
     <geometry>
-      <mesh filename="${pkg_path}/meshes/rocker_model.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://${pkg_path}/meshes/rocker_model.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <origin xyz="0 0 0" rpy="0 0 ${math.pi}"/>
     <material name="grey"/>
   </visual>
   <collision>
     <geometry>
-      <mesh filename="${pkg_path}/meshes/rocker_model.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="file://${pkg_path}/meshes/rocker_model.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <origin xyz="0 0 0" rpy="0 0 ${math.pi}"/>
   </collision>
@@ -277,14 +280,14 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="${pkg_path}/meshes/hov_wheel_short_look.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://${pkg_path}/meshes/hov_wheel_short_look.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin xyz="0 0 0" rpy="0 0 ${wheel_side_sign * math.pi}"/>
       <material name="grey"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="${pkg_path}/meshes/hov_wheel_short_colision.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://${pkg_path}/meshes/hov_wheel_short_look.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin xyz="0 0 0" rpy="0 0 ${wheel_side_sign * math.pi}"/>
     </collision>
@@ -413,7 +416,7 @@
   <!-- Plugin ros2_control -->
   <gazebo>
     <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
-      <update_rate>30</update_rate>
+      <update_rate>60</update_rate>
       <parameters>${pkg_path}/config/diff_drive_controller_v1.yaml</parameters>
     </plugin>
   </gazebo>

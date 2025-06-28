@@ -13,13 +13,14 @@ def generate_launch_description():
     controller_config = os.path.join(pkg_boxygo, 'config', 'diff_drive_controller_v1.yaml')
     slam_params       = os.path.join(pkg_boxygo, 'config', 'slam_toolbox_params.yaml')
     world_path = os.path.join(pkg_boxygo, 'worlds', 'small_city.world')
+    ekf_config = os.path.join(pkg_boxygo, 'config', 'ekf.yaml')
 
     return LaunchDescription([
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 os.path.join(get_package_share_directory('gazebo_ros'), 'launch', 'gazebo.launch.py')
             ),
-            launch_arguments={'world': world_path}.items()
+            launch_arguments={'world': world_path, 'use_sim_time': 'true'}.items()
         ),
 
         Node(
@@ -46,7 +47,8 @@ def generate_launch_description():
                 '-P', '0.0',
                 '-Y', '3.14' 
             ],
-            output='screen'
+            output='screen',
+            parameters=[{'use_sim_time': True}]
         ),
 
         # --- Dodajemy TimerAction dla kontrolerów! ---
@@ -57,7 +59,8 @@ def generate_launch_description():
                     package='controller_manager',
                     executable='spawner',
                     arguments=['joint_state_broadcaster', '--controller-manager', '/controller_manager'],
-                    output='screen'
+                    output='screen',
+                    parameters=[{'use_sim_time': True}]
                 ),
                 Node(
                     package='controller_manager',
@@ -66,7 +69,8 @@ def generate_launch_description():
                     remappings=[
                         ('/diff_cont/cmd_vel_unstamped', '/cmd_vel'),
                     ],
-                    output='screen'
+                    output='screen',
+                    parameters=[{'use_sim_time': True}]
                 ),
             ]
         ),
@@ -83,7 +87,16 @@ def generate_launch_description():
             ],
             remappings=[
                 ('scan', 'gazebo_ros_laser/out'),
-                ('odom', 'diff_cont/odom'),
+                ('odom', '/odometry/filtered'), # 'diff_cont/odom'
             ]
         ),
+
+        Node(
+            package='robot_localization',
+            executable='ekf_node',
+            name='ekf_filter_node',
+            output='screen',
+            parameters=[ekf_config, {'use_sim_time': True}],
+        ),
+
     ])
