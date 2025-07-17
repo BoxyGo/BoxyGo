@@ -15,7 +15,7 @@ diff_cont:
     publish_odometry_tf: false
     left_wheel_names: ["left_wheel_1_joint", "left_wheel_2_joint", "left_wheel_3_joint"]
     right_wheel_names: ["right_wheel_1_joint", "right_wheel_2_joint", "right_wheel_3_joint"]
-    wheel_separation: 0.657
-    wheel_radius: 0.1016 
+    wheel_separation: 0.657 # 6_wheel_robot.urdf 0.657    new_robot 0.5275
+    wheel_radius: 0.1016    # 6_wheel_robot.urdf 0.1016   new_robot 0.08255
     use_stamped_vel: false
     enable_odom_tf: false # był problem z podwójnym publikowaniem tf, więc wyłączyłem

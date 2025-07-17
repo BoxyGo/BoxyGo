@@ -9,8 +9,8 @@ import os
 def generate_launch_description():
     pkg_boxygo = get_package_share_directory('boxygo')
 
-    urdf_path = os.path.join(pkg_boxygo, 'urdf', '6_wheel_robot.urdf.xacro') 
-    controller_config = os.path.join(pkg_boxygo, 'config', 'diff_drive_controller_v1.yaml')
+    urdf_path = os.path.join(pkg_boxygo, 'urdf', '6_wheel_robot.urdf.xacro') # 6_wheel_robot.urdf.xacro / new_robot.urdf.xacro
+    controller_config = os.path.join(pkg_boxygo, 'config', 'diff_drive_controller.yaml')
     slam_params       = os.path.join(pkg_boxygo, 'config', 'slam_toolbox_params.yaml')
     world_path = os.path.join(pkg_boxygo, 'worlds', 'small_city.world')
     ekf_config = os.path.join(pkg_boxygo, 'config', 'ekf.yaml')
@@ -74,22 +74,26 @@ def generate_launch_description():
                 ),
             ]
         ),
-        # --- KONIEC TimerAction ---
 
-        Node(
-            package='slam_toolbox',
-            executable='sync_slam_toolbox_node',
-            name='slam_toolbox',
-            output='screen',
-            parameters=[
-                slam_params,
-                {'use_sim_time': True}
-            ],
-            remappings=[
-                ('scan', 'gazebo_ros_laser/out'),
-                ('odom', '/odometry/filtered'), # 'diff_cont/odom'
-            ]
-        ),
+        # TimerAction(
+        #     period=8.0,
+        #     actions=[
+        #         Node(
+        #             package='slam_toolbox',
+        #             executable='sync_slam_toolbox_node',
+        #             name='slam_toolbox',
+        #             output='screen',
+        #             parameters=[
+        #                 slam_params,
+        #                 {'use_sim_time': True}
+        #             ],
+        #             remappings=[
+        #                 ('scan', '/scan'),
+        #                 ('odom', '/odometry/filtered'), # 'diff_cont/odom'
+        #             ]
+        #         ),
+        #     ]
+        # ),
 
         Node(
             package='robot_localization',
