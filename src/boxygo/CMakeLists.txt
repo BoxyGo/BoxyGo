@@ -18,6 +18,9 @@ find_package(nav2_costmap_2d REQUIRED)
 find_package(nav2_amcl REQUIRED)
 find_package(nav2_bringup REQUIRED)
 find_package(slam_toolbox REQUIRED)
+find_package(gazebo_ros2_control REQUIRED)
+find_package(ros2_control REQUIRED)
+find_package(ros2_controllers REQUIRED)
 
 # dodatkowe pakiety do URDF/launch
 find_package(robot_state_publisher REQUIRED)
