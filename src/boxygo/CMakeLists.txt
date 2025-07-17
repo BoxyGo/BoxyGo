@@ -39,6 +39,8 @@ install(
     worlds
     launch
     config
+    meshes
+    maps
   DESTINATION share/${PROJECT_NAME}
 )
 
