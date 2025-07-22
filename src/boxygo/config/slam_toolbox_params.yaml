@@ -2,7 +2,7 @@ slam_toolbox:
   ros__parameters:
 
     # Tryb działania: mapping lub localization
-    mode: "localization"
+    mode: "mapping"
 
     # Nazwy ramek i tematów
     map_frame: "map"

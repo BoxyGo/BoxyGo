@@ -9,7 +9,7 @@ from launch_ros.actions import SetRemap
 
 def generate_launch_description():
     pkg_boxygo = get_package_share_directory('boxygo')
-    map_file = os.path.join(pkg_boxygo, 'maps', 'my_map.yaml')
+    map_file = os.path.join(pkg_boxygo, 'maps', 'playground_map.yaml') # small_city_map.yaml / playground_map.yaml
     params_file = os.path.join(pkg_boxygo, 'config', 'nav2_params.yaml')
 
     return LaunchDescription([
