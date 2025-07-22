@@ -8,7 +8,7 @@ controller_manager:
 
 diff_cont:
   ros__parameters:
-    cmd_vel_topic: "/cmd_vel"
+    use_stamped_vel: false
     publish_rate: 60.0
     base_frame_id: base_link
     odom_frame_id: odometry/filtered # odom
@@ -17,5 +17,5 @@ diff_cont:
     right_wheel_names: ["right_wheel_1_joint", "right_wheel_2_joint", "right_wheel_3_joint"]
     wheel_separation: 0.657 # 6_wheel_robot.urdf 0.657    new_robot 0.5275
     wheel_radius: 0.1016    # 6_wheel_robot.urdf 0.1016   new_robot 0.08255
-    use_stamped_vel: false
     enable_odom_tf: false # był problem z podwójnym publikowaniem tf, więc wyłączyłem
+

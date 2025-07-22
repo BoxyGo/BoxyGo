@@ -423,6 +423,7 @@
 
   <!-- ros2_control hardware -->
   <ros2_control name="BoxyGoSystem" type="system">
+
     <hardware>
       <plugin>gazebo_ros2_control/GazeboSystem</plugin>
     </hardware>

@@ -51,21 +51,20 @@ def generate_launch_description():
             parameters=[{'use_sim_time': True}]
         ),
 
-        # --- Dodajemy TimerAction dla kontrolerów! ---
         TimerAction(
-            period=5.0,  # 5 sekund opóźnienia po starcie (zmień w razie potrzeby)
+            period=5.0,
             actions=[
                 Node(
                     package='controller_manager',
                     executable='spawner',
-                    arguments=['joint_state_broadcaster', '--controller-manager', '/controller_manager'],
+                    arguments=['joint_state_broadcaster', '--controller-manager', 'controller_manager'],
                     output='screen',
                     parameters=[{'use_sim_time': True}]
                 ),
                 Node(
                     package='controller_manager',
                     executable='spawner',
-                    arguments=['diff_cont', '--controller-manager', '/controller_manager', '--param-file', controller_config],
+                    arguments=['diff_cont','--controller-manager','controller_manager','--param-file', controller_config],
                     remappings=[
                         ('/diff_cont/cmd_vel_unstamped', '/cmd_vel'),
                     ],
