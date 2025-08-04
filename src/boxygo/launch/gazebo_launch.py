@@ -8,14 +8,13 @@ import os
 
 def generate_launch_description():
     pkg_boxygo = get_package_share_directory('boxygo')
-
-    urdf_path = os.path.join(pkg_boxygo, 'urdf', '6_wheel_robot.urdf.xacro') 
-    controller_config = os.path.join(pkg_boxygo, 'config', 'diff_drive_controller_v1.yaml')
-    slam_params       = os.path.join(pkg_boxygo, 'config', 'slam_toolbox_params.yaml')
-    world_path = os.path.join(pkg_boxygo, 'worlds', 'small_city.world')
+    urdf_path = os.path.join(pkg_boxygo, 'urdf', '6_wheel_robot.urdf.xacro') # 6_wheel_robot.urdf.xacro / new_robot.urdf.xacro
+    controller_config = os.path.join(pkg_boxygo, 'config', 'diff_drive_controller.yaml')
+    world_path = os.path.join(pkg_boxygo, 'worlds', 'playground.world') # small_city.world / playground.world
     ekf_config = os.path.join(pkg_boxygo, 'config', 'ekf.yaml')
 
     return LaunchDescription([
+
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 os.path.join(get_package_share_directory('gazebo_ros'), 'launch', 'gazebo.launch.py')
@@ -51,43 +50,26 @@ def generate_launch_description():
             parameters=[{'use_sim_time': True}]
         ),
 
-        # --- Dodajemy TimerAction dla kontrolerów! ---
         TimerAction(
-            period=5.0,  # 5 sekund opóźnienia po starcie (zmień w razie potrzeby)
+            period=5.0,
             actions=[
                 Node(
                     package='controller_manager',
                     executable='spawner',
-                    arguments=['joint_state_broadcaster', '--controller-manager', '/controller_manager'],
+                    arguments=['joint_state_broadcaster', '--controller-manager', 'controller_manager'],
                     output='screen',
                     parameters=[{'use_sim_time': True}]
                 ),
                 Node(
                     package='controller_manager',
                     executable='spawner',
-                    arguments=['diff_cont', '--controller-manager', '/controller_manager', '--param-file', controller_config],
+                    arguments=['diff_cont','--controller-manager','controller_manager','--param-file', controller_config],
                     remappings=[
                         ('/diff_cont/cmd_vel_unstamped', '/cmd_vel'),
                     ],
                     output='screen',
                     parameters=[{'use_sim_time': True}]
                 ),
-            ]
-        ),
-        # --- KONIEC TimerAction ---
-
-        Node(
-            package='slam_toolbox',
-            executable='sync_slam_toolbox_node',
-            name='slam_toolbox',
-            output='screen',
-            parameters=[
-                slam_params,
-                {'use_sim_time': True}
-            ],
-            remappings=[
-                ('scan', 'gazebo_ros_laser/out'),
-                ('odom', '/odometry/filtered'), # 'diff_cont/odom'
             ]
         ),
 

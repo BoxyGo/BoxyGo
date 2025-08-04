@@ -43,6 +43,7 @@ install(
     launch
     config
     meshes
+    maps
   DESTINATION share/${PROJECT_NAME}
 )
 

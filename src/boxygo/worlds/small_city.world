@@ -38,6 +38,75 @@
       <direction>-0.5 0.1 -0.4</direction>
     </light> 
 
+    <!-- Pomieszczenie 15x15m wokół (-18, 0) -->
+<model name="room_15x15_centered_-18_0">
+  <static>true</static>
+  <link name="walls_link">
+
+    <!-- Ściana północna -->
+    <visual name="wall_north_visual">
+      <pose>-18 7.5 1 0 0 0</pose>
+      <geometry>
+        <box><size>15 0.2 2</size></box>
+      </geometry>
+      <material><script><name>Gazebo/Grey</name></script></material>
+    </visual>
+    <collision name="wall_north_collision">
+      <pose>-18 7.5 1 0 0 0</pose>
+      <geometry>
+        <box><size>15 0.2 2</size></box>
+      </geometry>
+    </collision>
+
+    <!-- Ściana południowa -->
+    <visual name="wall_south_visual">
+      <pose>-18 -7.5 1 0 0 0</pose>
+      <geometry>
+        <box><size>15 0.2 2</size></box>
+      </geometry>
+      <material><script><name>Gazebo/Grey</name></script></material>
+    </visual>
+    <collision name="wall_south_collision">
+      <pose>-18 -7.5 1 0 0 0</pose>
+      <geometry>
+        <box><size>15 0.2 2</size></box>
+      </geometry>
+    </collision>
+
+    <!-- Ściana wschodnia -->
+    <visual name="wall_east_visual">
+      <pose>-10.5 0 1 0 0 0</pose>
+      <geometry>
+        <box><size>0.2 15 2</size></box>
+      </geometry>
+      <material><script><name>Gazebo/Grey</name></script></material>
+    </visual>
+    <collision name="wall_east_collision">
+      <pose>-10.5 0 1 0 0 0</pose>
+      <geometry>
+        <box><size>0.2 15 2</size></box>
+      </geometry>
+    </collision>
+
+    <!-- Ściana zachodnia -->
+    <visual name="wall_west_visual">
+      <pose>-25.5 0 1 0 0 0</pose>
+      <geometry>
+        <box><size>0.2 15 2</size></box>
+      </geometry>
+      <material><script><name>Gazebo/Grey</name></script></material>
+    </visual>
+    <collision name="wall_west_collision">
+      <pose>-25.5 0 1 0 0 0</pose>
+      <geometry>
+        <box><size>0.2 15 2</size></box>
+      </geometry>
+    </collision>
+
+  </link>
+</model>
+
+
     <!-- ground plane -->
     <model name="ground_plane">
       <static>true</static>
