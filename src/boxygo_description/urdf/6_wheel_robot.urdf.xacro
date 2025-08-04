@@ -40,68 +40,6 @@
     </inertial>
   </link>
   
-<<<<<<< Updated upstream
-    <!-- Kamera -->
-  <link name="depth_camera_link">
-    <visual>
-      <geometry>
-        <box size="0.02 0.09 0.03"/>
-      </geometry>
-      <material name="black"/>
-    </visual>
-    <collision>
-      <geometry>
-        <box size="0.02 0.09 0.03"/>
-      </geometry>
-    </collision>
-    <inertial>
-      <mass value="0.1"/>
-      <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0.0" izz="0.0001"/>
-    </inertial>
-  </link>
-
-  <joint name="depth_camera_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="depth_camera_link"/>
-    <origin xyz="${body_length/2 + 0.01} 0 ${body_height/2 - 0.1}" rpy="0 0 0"/>
-  </joint>
-
-  <joint name="depth_camera_optical_joint" type="fixed">
-    <parent link="depth_camera_link"/>
-    <child link="depth_camera_link_optical"/>
-    <origin xyz="0 0 0" rpy="-1.5708 0 -1.5708"/> <!-- -pi/2 in radians -->
-  </joint>
-
-  <link name="depth_camera_link_optical"/>
-
-  <gazebo reference="depth_camera_link">
-    <sensor name="depth_camera" type="depth">
-      <pose>0 0 0 0 0 0</pose>
-      <visualize>true</visualize> 
-      <update_rate>60.0</update_rate>
-      <camera>
-        <horizontal_fov>1.39626</horizontal_fov>
-        <image>
-          <width>640</width>
-          <height>480</height>
-          <format>B8G8R8</format>
-        </image>
-        <clip>
-          <near>0.1</near>
-          <far>10.0</far>
-        </clip>
-      </camera>
-      <plugin name="depth_camera_controller" filename="libgazebo_ros_camera.so">
-        <camera_name>depth_camera</camera_name>
-        <frame_name>depth_camera_link_optical</frame_name>
-        <min_depth>0.1</min_depth>
-        <max_depth>100.0</max_depth>
-      </plugin>
-    </sensor>
-  </gazebo>
-
-=======
->>>>>>> Stashed changes
     <!-- Lidar 2D -->
   <link name="lidar_link">
     <visual>

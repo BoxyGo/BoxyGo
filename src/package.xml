@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>boxygo_controllers</name>
+  <version>1.0.0</version>
+  <description>TODO: Boxygo controllers package</description>
+  <maintainer email="boxygo.mail@gmail.com">user</maintainer>
+  <license>Apache-2.0</license>
+  <url type="Github organisation">https://github.com/BoxyGo</url>
+  <url type="Github organisation">https://github.com/BoxyGo/BoxyGo</url>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>controller_manager</depend>
+  <depend>ros2_control</depend>
+  <depend>ros2_controllers</depend>
+  <depend>controller_manager_msgs</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+</package>
