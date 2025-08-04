@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <robot name="delivery_robot" xmlns:xacro="http://ros.org/wiki/xacro">
 
+  <xacro:include filename="_d435i.urdf.xacro"/>
+
   <!-- Właściwości -->
   <xacro:property name="body_length" value="0.9"/>
   <xacro:property name="body_width" value="0.5"/>
@@ -12,6 +14,7 @@
   <xacro:property name="z_offset" value="${-0.5 * body_height - 0.1}"/>
   <xacro:property name="wheel_mass" value="3.0"/>
   <xacro:property name="pkg_path" value="$(find boxygo)"/>
+
 
   <!-- Materiały -->
   <material name="black"><color rgba="0 0 0 1"/></material>
@@ -36,62 +39,8 @@
       <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
     </inertial>
   </link>
-
-  <!-- IMU sensor -->
-  <link name="imu_link">
-    <inertial>
-      <mass value="0.01"/>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <inertia ixx="1e-5" ixy="0" ixz="0" iyy="1e-5" iyz="0" izz="1e-5"/>
-    </inertial>
-  </link>
-  <joint name="imu_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="imu_link"/>
-    <origin xyz="0 0 ${body_height/2}" rpy="0 0 0"/>
-  </joint>
-
-  <gazebo reference="imu_link">
-    <sensor type="imu" name="imu_sensor">
-      <always_on>true</always_on>
-      <update_rate>60.0</update_rate>
-      <imu>
-        <noise>
-          <angular_velocity>
-            <type>gaussian</type>
-            <mean>0.0</mean>
-            <stddev>0.001</stddev>
-          </angular_velocity>
-          <linear_acceleration>
-            <type>gaussian</type>
-            <mean>0.0</mean>
-            <stddev>0.001</stddev>
-          </linear_acceleration>
-        </noise>
-      </imu>
-      <plugin name="imu_plugin" filename="libgazebo_ros_imu_sensor.so">
-        <ros>
-          <namespace>/</namespace>
-          <remapping>~/out:=imu/data</remapping>
-        </ros>
-        <frame_name>imu_link</frame_name>
-        <orientation>0.01 0 0  0 0.01 0  0 0 0.01</orientation>
-        <angular_velocity>0.01 0 0  0 0.01 0  0 0 0.01</angular_velocity>
-        <linear_acceleration>999 0 0  0 999 0  0 0 999</linear_acceleration>
-      </plugin>
-    </sensor>
-  </gazebo>
-
-  <!-- footprint-->
-  <joint name="base_footprint_joint" type="fixed">
-        <parent link="base_link"/>
-        <child link="base_footprint"/>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-    </joint>
-
-    <link name="base_footprint">
-    </link>
   
+<<<<<<< Updated upstream
     <!-- Kamera -->
   <link name="depth_camera_link">
     <visual>
@@ -151,6 +100,8 @@
     </sensor>
   </gazebo>
 
+=======
+>>>>>>> Stashed changes
     <!-- Lidar 2D -->
   <link name="lidar_link">
     <visual>
@@ -211,6 +162,11 @@
       </plugin>
     </sensor>
   </gazebo>
+
+  <!-- Kamera D435i -->
+  <xacro:sensor_d435i parent="base_link" name="camera" topics_ns="camera"> 
+        <origin xyz="${body_length/2 + 0.01} 0 ${body_height/2 - 0.1}" rpy="0.0 0.0 0.0"/>
+  </xacro:sensor_d435i>
 
 
   <link name="left_rocker_beam">
@@ -407,9 +363,6 @@
     <material>Gazebo/Grey</material>
   </gazebo>
   <gazebo reference="lidar_link">
-    <material>Gazebo/Black</material>
-  </gazebo>
-  <gazebo reference="depth_camera_link">
     <material>Gazebo/Black</material>
   </gazebo>
 

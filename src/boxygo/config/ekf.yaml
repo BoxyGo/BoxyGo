@@ -1,39 +1,94 @@
+### ekf config file ###
 ekf_filter_node:
-  ros__parameters:
-    frequency: 10.0               # Jak często działa filtr (Hz)
-    sensor_timeout: 0.3           # Jak długo czeka na dane z sensora (sekundy)
+    ros__parameters:
+    
+        use_sim_time: true
+        frequency: 30.0
+        sensor_timeout: 0.1
+        two_d_mode: true
 
-    two_d_mode: true              # Praca 2D – wyłącza Z i roll/pitch
-    publish_tf: true              # Publikuje transformację odom → base_link
-    publish_acceleration: false
+        map_frame: map                   # Defaults to "map" if unspecified
+        odom_frame: odom                 # Defaults to "odom" if unspecified
+        base_link_frame: base_link       # Defaults to "base_link" if unspecified
+        world_frame: odom                # Defaults to the value of odom_frame if unspecified
 
-    map_frame: map                # Używane tylko gdy jest drugi EKF (globalny)
-    odom_frame: odom              # Ramka lokalna (bazowa)
-    base_link_frame: base_link    # Ramka robota
-    world_frame: odom             # Dla tego EKF odom = world
+        transform_time_offset: 0.0
 
-    use_control: false            # Nie używasz danych z np. /cmd_vel
+        odom0: diff_cont/odom
 
-    odom0: diff_cont/odom
-    odom0_config: [true,  true,  false,   # x, y, z
-                   false, false, false,   # roll, pitch, yaw
-                   true, false, false,     # vx, vy, vz
-                   false, false, false,    # vroll, vpitch, vyaw
-                   false, false, false]   # ax, ay, az
+        odom0_differential: false
+        odom0_relative: false
+        odom0_queue_size: 10
 
-    imu0: imu/data
-    imu0_config: [false, false, false,   # x, y, z
-                  false, false, true,    # roll, pitch, yaw (tylko yaw)
-                  false, false, false,   # vx, vy, vz
-                  false, false, true,    # vroll, vpitch, vyaw (tylko wyaw)
-                  false, false, false]   # ax, ay, az (wyłączyłem bo robot ruszał się mimo że w gazebo stoi w miejscu)
+        odom0_config: [true, true, false,
+                       false, false, false,
+                       true,  false,  false,
+                       false, false, false,
+                       false, false, false]
 
-    odom0_differential: false
-    odom0_relative: false
+        #        [x_pos   , y_pos    , z_pos,
+        #         roll    , pitch    , yaw,
+        #         x_vel   , y_vel    , z_vel,
+        #         roll_vel, pitch_vel, yaw_vel,
+        #         x_accel , y_accel  , z_accel]
 
-    imu0_differential: false
-    imu0_relative: true
 
-    imu0_remove_gravitational_acceleration: true
 
-    print_diagnostics: true       # Przydatne przy debugowaniu
+        imu0: /camera/imu
+
+
+        imu0_differential: false
+        imu0_relative: false
+        imu0_queue_size: 10
+        imu0_remove_gravitational_acceleration: true
+
+        imu0_config: [false, false, false,
+                      false,  false,  true,
+                      false, false, false,
+                      false,  false,  true,
+                      true,  false,  false]
+
+        #        [x_pos   , y_pos    , z_pos,
+        #         roll    , pitch    , yaw,
+        #         x_vel   , y_vel    , z_vel,
+        #         roll_vel, pitch_vel, yaw_vel,
+        #         x_accel , y_accel  , z_accel]
+
+        print_diagnostics: true
+        debug: false
+        debug_out_file: "config/ekf_debug.txt"
+        # process_noise_covariance: [
+        #   0.05, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0,
+        #   0, 0.05, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,
+        #   0, 0, 0.06, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,
+        #   0, 0, 0, 0.03, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,
+        #   0, 0, 0, 0, 0.03, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0,
+        #   0, 0, 0, 0, 0, 0.06, 0, 0, 0,  0, 0, 0, 0, 0, 0,
+        #   0, 0, 0, 0, 0, 0, 0.025,0, 0,  0, 0, 0, 0, 0, 0,
+        #   0, 0, 0, 0, 0, 0, 0, 0.025,0,  0, 0, 0, 0, 0, 0,
+        #   0, 0, 0, 0, 0, 0, 0, 0, 0.04, 0,    0, 0, 0, 0, 0,
+        #   0, 0, 0, 0, 0, 0, 0, 0, 0,  0.01, 0, 0, 0, 0, 0,
+        #   0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0.01, 0, 0, 0, 0,
+        #   0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0.02, 0, 0, 0,
+        #   0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0.01, 0, 0,
+        #   0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0.01, 0,
+        #   0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0.005
+        # ]
+
+        # initial_estimate_covariance: [
+        #   1e-9, 0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0,
+        #   0, 1e-9, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0,
+        #   0, 0, 1e-9, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0,
+        #   0, 0, 0, 1e-9, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0,
+        #   0, 0, 0, 0, 1e-9, 0, 0, 0, 0, 0,    0, 0, 0, 0, 0,
+        #   0, 0, 0, 0, 0, 1e-9, 0, 0, 0, 0,    0, 0, 0, 0, 0,
+        #   0, 0, 0, 0, 0, 0, 1, 0, 0, 0,    0, 0, 0, 0, 0,
+        #   0, 0, 0, 0, 0, 0, 0, 1, 0, 0,    0, 0, 0, 0, 0,
+        #   0, 0, 0, 0, 0, 0, 0, 0, 1e-9, 0,    0, 0, 0, 0, 0,
+        #   0, 0, 0, 0, 0, 0, 0, 0, 0, 1,    0, 0, 0, 0, 0,
+        #   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    1, 0, 0, 0, 0,
+        #   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 1, 0, 0, 0,
+        #   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 1, 0, 0,
+        #   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 1e-9, 0,
+        #   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0, 0, 0, 0, 1e-9
+        # ]
