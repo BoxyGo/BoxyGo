@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <world name="asphalt_world">
+    <!-- Włącz standardowy ground_plane, ale z własnym materiałem -->
+    <include>
+      <uri>model://ground_plane</uri>
+      <name>asphalt_plane</name>
+    </include>
+
+    <gui>
+      <camera name="user_camera">
+        <pose>0 -2 0.1 0 0 1.57</pose>
+      </camera>
+    </gui>
+
+    <scene>
+      <grid>false</grid>
+      <origin_visual>false</origin_visual>
+      <ambient>0.85 0.85 0.85 1</ambient>
+      <sky/>
+      <background>0.35 0.35 0.35 1.0</background>
+    </scene>
+
+    <light type="directional" name="sun">
+      <pose>0 0 1000 0 0 0</pose>
+      <cast_shadows>false</cast_shadows>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.5 0.5 0.5 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.4</direction>
+    </light> 
+
+    <!-- Jeżeli chcesz dodać własny materiał, podmień model -->
+    <!-- lub dopisz kolejne elementy świata tutaj -->
+  </world>
+</sdf>

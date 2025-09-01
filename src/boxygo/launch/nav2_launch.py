@@ -11,8 +11,18 @@ def generate_launch_description():
     pkg_boxygo = get_package_share_directory('boxygo')
     map_file = os.path.join(pkg_boxygo, 'maps', 'playground_map.yaml') # small_city_map.yaml / playground_map.yaml
     params_file = os.path.join(pkg_boxygo, 'config', 'nav2_params.yaml')
+    ekf_config = os.path.join(pkg_boxygo, 'config', 'ekf.yaml')
+
 
     return LaunchDescription([
+
+        Node(
+            package='robot_localization',
+            executable='ekf_node',
+            name='ekf_filter_node',
+            output='screen',
+            parameters=[ekf_config, {'use_sim_time': True}],
+        ),
         
         TimerAction(
             period=5.0,
@@ -35,4 +45,5 @@ def generate_launch_description():
             arguments=['-d', os.path.join(pkg_boxygo, 'config', 'rviz_nav2.rviz')],
             parameters=[{'use_sim_time': True}]
         ),
+        
     ])
