@@ -8,11 +8,10 @@ import os
 
 def generate_launch_description():
     pkg_boxygo = get_package_share_directory('boxygo')
-    urdf_path = os.path.join(pkg_boxygo, 'urdf', '6_wheel_robot.urdf.xacro') # 6_wheel_robot.urdf.xacro / new_robot.urdf.xacro
+    urdf_path = os.path.join(pkg_boxygo, 'urdf', 'robot_luksusowy.urdf.xacro') # 6_wheel_robot.urdf.xacro / robot_luksusowy.urdf.xacro
     controller_config = os.path.join(pkg_boxygo, 'config', 'diff_drive_controller.yaml')
-    world_path = os.path.join(pkg_boxygo, 'worlds', 'playground.world') # small_city.world / playground.world
-    ekf_config = os.path.join(pkg_boxygo, 'config', 'ekf.yaml')
-
+    world_path = os.path.join(pkg_boxygo, 'worlds', 'playground.world') # small_city.world / playground.world / asphalt.world
+    
     return LaunchDescription([
 
         IncludeLaunchDescription(
@@ -44,7 +43,7 @@ def generate_launch_description():
                 '-z', '0.5',
                 '-R', '0.0',
                 '-P', '0.0',
-                '-Y', '3.14' 
+                '-Y', '0.0' 
             ],
             output='screen',
             parameters=[{'use_sim_time': True}]
@@ -71,14 +70,6 @@ def generate_launch_description():
                     parameters=[{'use_sim_time': True}]
                 ),
             ]
-        ),
-
-        Node(
-            package='robot_localization',
-            executable='ekf_node',
-            name='ekf_filter_node',
-            output='screen',
-            parameters=[ekf_config, {'use_sim_time': True}],
         ),
 
     ])

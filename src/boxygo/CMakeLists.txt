@@ -1,9 +1,11 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.5)
 project(boxygo)
+
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
+
 
 # wykryj dependencies
 find_package(ament_cmake REQUIRED)
@@ -21,10 +23,11 @@ find_package(slam_toolbox REQUIRED)
 find_package(gazebo_ros2_control REQUIRED)
 find_package(ros2_control REQUIRED)
 find_package(ros2_controllers REQUIRED)
-
-# dodatkowe pakiety do URDF/launch
 find_package(robot_state_publisher REQUIRED)
 find_package(xacro REQUIRED)
+find_package(moteus_msgs REQUIRED)
+
+ament_python_install_package(${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -33,9 +36,25 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-# -- tutaj możesz dodać np. targety lub biblioteki, jeśli będziesz kompilować node’y C++
 
-# instalacja plików URDF, świata, launchów i konfiguracji
+install(
+  PROGRAMS
+    boxygo/wheel_moteus.py
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME wheel_moteus
+)
+
+install(
+  FILES
+    package.xml
+  DESTINATION share/${PROJECT_NAME}
+)
+install(
+  FILES
+    resource/${PROJECT_NAME}
+  DESTINATION share/ament_index/resource_index/packages
+)
+
 install(
   DIRECTORY
     urdf

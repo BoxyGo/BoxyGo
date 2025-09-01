@@ -1,0 +1,286 @@
+<?xml version="1.0"?>
+<robot name="delivery_robot" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- Właściwości -->
+  <xacro:property name="pkg_path" value="$(find boxygo)"/>
+  <xacro:property name="body_length" value="0.81"/>
+  <xacro:property name="body_width" value="0.5927"/>
+  <xacro:property name="body_height" value="0.5"/>
+  <xacro:property name="body_mass" value="10"/>
+  <xacro:property name="body_x_offset" value="-0.015"/>
+  <xacro:property name="wheel_gap" value="0.26"/>
+  <xacro:property name="rocker_x_offset" value="${-wheel_gap/2}"/> 
+  <xacro:property name="rocker_y_offset" value="0.22085"/>  <!-- +/- (prawo/lewo) -->
+  <xacro:property name="rocker_z_offset" value="0.0876"/>
+  <xacro:property name="wheel_beam_y_offset" value="-0.05415"/> 
+  <xacro:property name="wheel_beam_x_offset" value="${wheel_gap/2}"/> <!-- +/- (srodek/tyl) -->
+  <xacro:property name="wheel_beam_z_offset" value="-0.0982"/> 
+  <xacro:property name="wheel_front_y_offset" value="0.275"/> 
+  <xacro:property name="wheel_front_x_offset" value="${wheel_gap}"/> 
+  <xacro:property name="wheel_front_z_offset" value="-0.0106"/> 
+
+
+  <!-- Materiały -->
+  <material name="black"><color rgba="0.0 0.0 0.0 1.0"/></material>
+  <material name="white"><color rgba="0.7 0.7 0.7 0.5"/></material>
+  <material name="grey"><color rgba="0.4 0.4 0.4 1.0"/></material>
+  <material name="darkgrey"><color rgba="0.05 0.05 0.05 1.0"/></material>
+
+
+  <!-- Rama -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://${pkg_path}/meshes/frame_full.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="darkgrey"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://${pkg_path}/meshes/frame_full.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="23.972607"/>
+      <origin xyz="-0.020386 0 0.075697" rpy="0 0 0"/>
+      <inertia ixx="1.293" ixy="-0.00005897" ixz="0.07241" iyy="1.521" iyz="0.0000000617" izz="2.615"/>
+    </inertial>
+  </link>
+
+
+  <!-- Korpus -->
+  <!-- <link name="body_link">
+    <visual>
+      <geometry>
+        <box size="${body_length} ${body_width} ${body_height}"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${body_length} ${body_width} ${body_height}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="${body_mass}"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.50108" iyy="0.75508" izz="0.83949" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>  
+  
+  <joint name="body_link_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="body_link"/>
+    <origin xyz="${body_x_offset} 0 ${body_height/2 + 0.1752}" rpy="0 0 0"/>
+  </joint> -->
+
+
+  <!-- Belki -->
+  <link name="right_rocker_beam">
+    <visual>
+      <geometry>
+        <mesh filename="file://${pkg_path}/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="file://${pkg_path}/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="3.38412"/>
+      <origin xyz="-0.000000009 -0.027628 -0.071329" rpy="0 0 0"/>
+      <inertia ixx="0.01030" ixy="1e-12" ixz="-5e-12" iyy="0.05174" iyz="-0.002614" izz="0.04833"/>
+    </inertial>
+  </link>
+
+  <joint name="right_rocker_beam_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="right_rocker_beam"/>
+    <origin xyz="${rocker_x_offset} ${-rocker_y_offset} ${rocker_z_offset}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="${-math.pi/12}" upper="${math.pi/12}" effort="50.0" velocity="10.0"/>
+    <dynamics damping="0.05" friction="0.005"/>
+  </joint>
+
+  <link name="left_rocker_beam">
+    <visual>
+      <geometry>
+        <mesh filename="file://${pkg_path}/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="file://${pkg_path}/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="3.38412"/>
+      <origin xyz="-0.000000009 -0.027628 -0.071329" rpy="0 0 0"/>
+      <inertia ixx="0.01030" ixy="1e-12" ixz="-5e-12" iyy="0.05174" iyz="-0.002614" izz="0.04833"/>
+    </inertial>
+  </link>
+
+  <joint name="left_rocker_beam_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="left_rocker_beam"/>
+    <origin xyz="${rocker_x_offset} ${rocker_y_offset} ${rocker_z_offset}" rpy="0 0 ${math.pi}"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="${-math.pi/12}" upper="${math.pi/12}" effort="50.0" velocity="10.0"/>
+    <dynamics damping="0.05" friction="0.005"/>
+  </joint>
+
+
+  <!-- Makro koła -->
+  <xacro:macro name="wheel" params="side parent_link sign wheel_side_sign index x_offset y_offset z_offset">
+    <link name="${side}_wheel_${index}">
+      <visual>
+        <geometry>
+          <mesh filename="file://${pkg_path}/meshes/wheel.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <material name="black"/>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="file://${pkg_path}/meshes/wheel.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+      </collision>
+      <inertial> 
+        <mass value="1.341411"/>
+        <origin xyz="0.000003 0.005392 0.000000" rpy="0 0 0"/>
+        <inertia ixx="0.002637" ixy="1.18e-9" ixz="8.32e-9" iyy="0.004379" iyz="-3.867e-9" izz="0.002637"/>
+      </inertial>
+    </link>
+    <gazebo reference="${side}_wheel_${index}">
+      <mu1>1.0</mu1>
+      <mu2>1.0</mu2>
+      <kp>100000.0</kp>
+      <kd>50.0</kd>
+      <minDepth>0.001</minDepth>
+      <maxVel>0.1</maxVel>
+    </gazebo>
+    <joint name="${side}_wheel_${index}_joint" type="continuous">
+      <parent link="${parent_link}"/>
+      <child link="${side}_wheel_${index}"/>
+      <origin xyz="${x_offset} ${y_offset} ${z_offset}" rpy="0 0 ${wheel_side_sign*math.pi}"/>
+      <axis xyz="0 ${sign} 0"/>
+      <limit effort="12.0" velocity="${8.0 * 2 * math.pi}"/>
+      <dynamics damping="0.01" friction="0.001"/>
+    </joint>
+    <transmission name="${side}_wheel_${index}_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${side}_wheel_${index}_joint">
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${side}_wheel_${index}_motor">
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+  </xacro:macro>
+
+  <!-- Koła -->
+  <xacro:wheel side="left" parent_link="base_link" sign="-1" wheel_side_sign="1" index="1" x_offset="${wheel_front_x_offset}" y_offset="${wheel_front_y_offset}" z_offset="${wheel_front_z_offset}"/>
+  <xacro:wheel side="left" parent_link="left_rocker_beam" sign="-1" wheel_side_sign="0" index="2" x_offset="${wheel_beam_x_offset}" y_offset="${wheel_beam_y_offset}" z_offset="${wheel_beam_z_offset}"/>
+  <xacro:wheel side="left" parent_link="left_rocker_beam" sign="-1" wheel_side_sign="0" index="3" x_offset="${-wheel_beam_x_offset}" y_offset="${wheel_beam_y_offset}" z_offset="${wheel_beam_z_offset}"/>
+  <xacro:wheel side="right" parent_link="base_link" sign="1" wheel_side_sign="0" index="1" x_offset="${wheel_front_x_offset}" y_offset="${-wheel_front_y_offset}" z_offset="${wheel_front_z_offset}"/>
+  <xacro:wheel side="right" parent_link="right_rocker_beam" sign="1" wheel_side_sign="0" index="2" x_offset="${wheel_beam_x_offset}" y_offset="${wheel_beam_y_offset}" z_offset="${wheel_beam_z_offset}"/>
+  <xacro:wheel side="right" parent_link="right_rocker_beam" sign="1" wheel_side_sign="0" index="3" x_offset="${-wheel_beam_x_offset}" y_offset="${wheel_beam_y_offset}" z_offset="${wheel_beam_z_offset}"/>
+
+
+  <!-- Gazebo - kolor -->
+  <gazebo reference="left_wheel_1">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="left_wheel_2">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="left_wheel_3">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="right_wheel_1">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="right_wheel_2">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="right_wheel_3">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="left_rocker_beam">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="right_rocker_beam">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="base_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+
+  <!-- Plugin ros2_control -->
+  <gazebo>
+    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+      <update_rate>60</update_rate>
+      <parameters>${pkg_path}/config/diff_drive_controller.yaml</parameters>
+    </plugin>
+  </gazebo>
+
+  <!-- ros2_control hardware -->
+  <ros2_control name="BoxyGoSystem" type="system">
+    <hardware>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+    </hardware>
+    <joint name="left_wheel_1_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="left_wheel_2_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="left_wheel_3_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="right_wheel_1_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="right_wheel_2_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="right_wheel_3_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="left_rocker_beam_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="right_rocker_beam_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+
+</robot>

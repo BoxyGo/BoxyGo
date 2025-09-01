@@ -7,6 +7,7 @@ import os
 def generate_launch_description():
     pkg_boxygo = get_package_share_directory('boxygo')
     slam_params = os.path.join(pkg_boxygo, 'config', 'slam_toolbox_params.yaml')
+    ekf_config = os.path.join(pkg_boxygo, 'config', 'ekf.yaml')
 
     return LaunchDescription([
 

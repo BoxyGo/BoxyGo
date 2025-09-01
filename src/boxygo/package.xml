@@ -19,8 +19,12 @@
   <exec_depend>joy</exec_depend>
   <exec_depend>teleop_twist_joy</exec_depend>
 
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
+  <exec_depend>python3</exec_depend>
 
-
+  <depend>moteus_msgs</depend>
+  <exec_depend>moteus_control</exec_depend>
+  
   <depend>rclcpp</depend>
   <depend>std_msgs</depend>
   <depend>gazebo_ros</depend>
