@@ -5,7 +5,7 @@
     <!--############### from small_city.world ###############-->
     <gui>
       <camera name="user_camera">
-        <pose>-18 0 30 0 1.57 0</pose>
+        <pose>-18 0 30 0 1.57 -3.14</pose>
       </camera>
     </gui>
 
@@ -18,18 +18,9 @@
     </scene>
 
     <physics name='default_physics' default='0' type='ode'>
-      <max_step_size>0.001</max_step_size>
+      <max_step_size>0.005</max_step_size>
       <real_time_factor>1</real_time_factor>
-      <real_time_update_rate>1000</real_time_update_rate>
-      <ode>
-        <!-- kontakt “miękki” zamiast idealnie sztywnego -->
-        <contact_surface_layer>0.001</contact_surface_layer>
-        <contact_max_correcting_vel>1.0</contact_max_correcting_vel>
-
-        <!-- solver (PGS) iteracje: im więcej, tym mniejszy błąd -->
-        <sor_pgs_iters>100</sor_pgs_iters>
-        <sor_pgs_w>1.3</sor_pgs_w>
-      </ode>
+      <real_time_update_rate>200</real_time_update_rate>
     </physics>
 
     <light type="directional" name="sun">
