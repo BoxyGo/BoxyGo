@@ -12,6 +12,7 @@ setup(
         'console_scripts': [
             # ta literałka to polecenie, którego szuka ros2 run
             'wheel_moteus = boxygo.wheel_moteus:main',
+            'multi_wheel_moteus = boxygo.multi_wheel_moteus:main',
         ],
     },
 )

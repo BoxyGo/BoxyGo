@@ -10,7 +10,7 @@ class WheelMoteus(Node):
     def __init__(self):
         super().__init__('wheel_moteus')
 
-        # Parametry: ID serwa, nazwa stawu i użycie velocity/position
+        # Parametry: ID , nazwa jointa i użycie velocity/position
         self.declare_parameter('servo_id', 1)
         self.declare_parameter('joint_name', 'left_wheel_1_joint')
         self.declare_parameter('use_velocity', True)
@@ -19,11 +19,11 @@ class WheelMoteus(Node):
         self.joint_name = self.get_parameter('joint_name').value
         self.use_velocity = self.get_parameter('use_velocity').value
 
-        # Publisher do kontrolera Moteus
+        # Publisher jednego ID
         moteus_topic = f'/boxygo_moteus/id_{servo_id}/cmd_position'
         self._pub = self.create_publisher(PositionCommand, moteus_topic, 10)
 
-        # Subskrypcja stanów stawów
+        # Subskrypcja joint_states
         self._joint_sub = self.create_subscription(
             JointState,
             '/joint_states',
