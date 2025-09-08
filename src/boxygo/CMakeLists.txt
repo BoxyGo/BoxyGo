@@ -52,6 +52,13 @@ install(
 )
 
 install(
+  PROGRAMS
+    boxygo/multi_wheel_from_cmdvel_out.py
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME multi_wheel_from_cmdvel_out
+)
+
+install(
   FILES
     package.xml
   DESTINATION share/${PROJECT_NAME}

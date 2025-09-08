@@ -10,6 +10,7 @@ diff_cont:
   ros__parameters:
     use_stamped_vel: false
     publish_rate: 60.0
+    publish_limited_velocity: true
     base_frame_id: base_link
     odom_frame_id: odometry/filtered # odom
     publish_odometry_tf: false

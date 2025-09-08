@@ -21,6 +21,7 @@ class MultiWheelMoteus(Node):
             'right_wheel_3_joint'
         ])
         self.declare_parameter('use_velocity', True)
+        
         self.use_velocity = self.get_parameter('use_velocity').value
         servo_ids = self.get_parameter('servo_ids').value
         joint_names = self.get_parameter('joint_names').value

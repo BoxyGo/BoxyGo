@@ -13,6 +13,7 @@ setup(
             # ta literałka to polecenie, którego szuka ros2 run
             'wheel_moteus = boxygo.wheel_moteus:main',
             'multi_wheel_moteus = boxygo.multi_wheel_moteus:main',
+            'multi_wheel_from_cmdvel_out = boxygo.multi_wheel_from_cmdvel_out:main',
         ],
     },
 )
