@@ -9,11 +9,15 @@ from ament_index_python.packages import get_package_share_directory
 def generate_launch_description():
     pkg_boxygo = get_package_share_directory('boxygo')
     gazebo_launch = os.path.join(pkg_boxygo, 'launch', 'gazebo_launch.py')
+    keyboard_launch = os.path.join(pkg_boxygo, 'launch', 'keyboard_launch.py')
 
     return LaunchDescription([
-        
+
         IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(gazebo_launch)
+        ),
+        IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(keyboard_launch)
         ),
         Node(
             package='moteus_control',
