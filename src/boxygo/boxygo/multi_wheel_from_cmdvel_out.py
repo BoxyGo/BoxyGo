@@ -41,6 +41,11 @@ class MultiWheelFromCmdVelOut(Node):
         if len(self.servo_ids) != len(self.joint_names):
             raise ValueError("servo_ids i joint_names muszą mieć tę samą długość")
 
+t        self.declare_parameter('dir_factors', [1, 1, 1, -1, -1, -1])  # domyślnie odwrócona prawa strona
+        self.dir_factors = self.get_parameter('dir_factors').value
+        self.dir_for_id = {sid: float(df) for sid, df in zip(self.servo_ids, self.dir_factors)}
+            
+
         # mapowanie side i publishery
         self.side_for_id, self.pubs = {}, {}
         for sid, jn in zip(self.servo_ids, self.joint_names):
@@ -93,6 +98,7 @@ class MultiWheelFromCmdVelOut(Node):
         for sid in self.servo_ids:
             side = self.side_for_id[sid]
             w = w_left if side == 'left' else w_right
+            w *= self.dir_for_id[sid]
             msg = PositionCommand()
             msg.position = [math.nan]   # velocity-only
             msg.velocity = [w]          # [rad/s]
