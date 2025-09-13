@@ -6,9 +6,9 @@ from rclpy.node import Node
 from geometry_msgs.msg import TwistStamped
 from moteus_msgs.msg import PositionCommand
 
-class MultiWheelFromCmdVelOut(Node):
+class BoxyGoMoteus(Node):
     def __init__(self):
-        super().__init__('multi_wheel_from_cmdvel_out')
+        super().__init__('boxygo_moteus')
 
         # --- Parametry ---
         self.declare_parameter('servo_ids', [1, 2, 3, 4, 5, 6])
@@ -41,7 +41,7 @@ class MultiWheelFromCmdVelOut(Node):
         if len(self.servo_ids) != len(self.joint_names):
             raise ValueError("servo_ids i joint_names muszą mieć tę samą długość")
 
-t        self.declare_parameter('dir_factors', [1, 1, 1, -1, -1, -1])  # domyślnie odwrócona prawa strona
+        self.declare_parameter('dir_factors', [1, 1, 1, -1, -1, -1])  # domyślnie odwrócona prawa strona
         self.dir_factors = self.get_parameter('dir_factors').value
         self.dir_for_id = {sid: float(df) for sid, df in zip(self.servo_ids, self.dir_factors)}
             
@@ -106,7 +106,7 @@ t        self.declare_parameter('dir_factors', [1, 1, 1, -1, -1, -1])  # domyśl
 
 def main(args=None):
     rclpy.init(args=args)
-    node = MultiWheelFromCmdVelOut()
+    node = BoxyGoMoteus()
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:

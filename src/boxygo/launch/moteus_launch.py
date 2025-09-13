@@ -15,53 +15,11 @@ def generate_launch_description():
         IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(gazebo_launch)
         ),
-        # Node(
-        #     package='moteus_control',
-        #     executable='moteus_node',
-        #     name='boxygo_moteus',
-        #     namespace='boxygo_moteus',
-        #     output='screen',
-        #     parameters=[{
-        #       'ids': [2],
-        #     }],
-        # ),
-        # Node(
-        #     package='boxygo',
-        #     executable='wheel_moteus',
-        #     name='wheel_moteus',
-        #     output='screen',
-        # ),
-        
-        # Node(
-        #     package='moteus_control',
-        #     executable='moteus_node',
-        #     name='boxygo_moteus',
-        #     namespace='boxygo_moteus',
-        #     output='screen',
-        #     parameters=[{
-        #       'ids': [2, 5],
-        #     }],
-        # ),
-        # Node(
-        #     package='boxygo',
-        #     executable='multi_wheel_moteus',
-        #     name='multi_wheel_moteus',
-        #     output='screen',
-        #     parameters=[{
-        #         'servo_ids': [2, 5],
-        #         'joint_names': [
-        #             'left_wheel_2_joint',
-        #             'right_wheel_2_joint',
-        #         ],
-        #         'use_velocity': True,
-        #     }],
-        # ),
-
         Node(
             package='moteus_control',
             executable='moteus_node',
-            name='boxygo_moteus',
-            namespace='boxygo_moteus',
+            name='mjbots_moteus',
+            namespace='mjbots_moteus',
             output='screen',
             parameters=[{
               'ids': [7,2,3,4,5,6],
@@ -69,8 +27,8 @@ def generate_launch_description():
         ),
         Node(
             package='boxygo',
-            executable='multi_wheel_from_cmdvel_out',
-            name='multi_wheel_from_cmdvel_out',
+            executable='boxygo_moteus',
+            name='boxygo_moteus',
             output='screen',
             parameters=[{
                 'servo_ids': [7,2,3,4,5,6],
@@ -89,12 +47,5 @@ def generate_launch_description():
                 'loop_rate_hz': 60.0,
                 'timeout_ms': 100,
             }],
-        ),
-
-        Node(
-            package='teleop_twist_keyboard',
-            executable='teleop_twist_keyboard',
-            name='teleop_keyboard',
-            output='screen',
         ),
     ])

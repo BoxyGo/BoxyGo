@@ -8,3 +8,10 @@
 - **Modernity:** A pioneering approach to logistics and parcel handling in gated communities.
 
 Boxygo sets a new standard in deliveries, benefiting both residents and service providers.
+
+
+# Usefull commads:
+
+**Run keyboard steering:**
+
+`ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/diff_cont/cmd_vel_unstamped` 
