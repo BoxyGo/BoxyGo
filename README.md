@@ -9,9 +9,24 @@
 
 Boxygo sets a new standard in deliveries, benefiting both residents and service providers.
 
+# Moteus configuration:
 
-# Usefull commads:
+**Wheels config:**
+`conf set aux1.spi.mode 1`      
+`conf set aux1.pins.0.mode 6`  
+`conf set aux1.pins.0.pull 1`  
+`conf set aux1.pins.2.mode 6`   
+`conf set aux1.pins.2.pull 1`   
+`conf set aux1.pins.3.mode 6` 
+`conf set aux1.pins.3.pull 1`  
+`conf set aux1.hall.enabled 1` 
+`conf set motor_position.sources.0.type 4`
 
-**Run keyboard steering:**
+**Wheels calibration command:**
+`python3 -m moteus.moteus_tool --target 1 --calibrate --cal-hall --call-motor-poles 30`
 
-`ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/diff_cont/cmd_vel_unstamped` 
+**Write config to wheel command:**
+`python3 -m moteus.moteus_tool --target 1 --write-config FILE`
+
+
+
