@@ -36,12 +36,11 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-
 install(
   PROGRAMS
-    boxygo/wheel_moteus.py
+    boxygo/boxygo_moteus.py
   DESTINATION lib/${PROJECT_NAME}
-  RENAME wheel_moteus
+  RENAME boxygo_moteus
 )
 
 install(

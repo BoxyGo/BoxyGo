@@ -18,26 +18,34 @@ def generate_launch_description():
         Node(
             package='moteus_control',
             executable='moteus_node',
-            name='boxygo_moteus',
-            namespace='boxygo_moteus',
+            name='mjbots_moteus',
+            namespace='mjbots_moteus',
             output='screen',
             parameters=[{
-              'servo.ids': [1],
-              'servo.update_rate': 50.0,
-              'servo.default_timeout_s': 0.1,
+              'ids': [7,2,3,4,5,6],
             }],
         ),
         Node(
             package='boxygo',
-            executable='wheel_moteus',
-            name='wheel_moteus',
+            executable='boxygo_moteus',
+            name='boxygo_moteus',
             output='screen',
-        ),
+            parameters=[{
+                'servo_ids': [7,2,3,4,5,6],
+                'joint_names': [
+                    'left_wheel_1_joint',
+                    'left_wheel_2_joint',
+                    'left_wheel_3_joint',
 
-        Node(
-            package='teleop_twist_keyboard',
-            executable='teleop_twist_keyboard',
-            name='teleop_keyboard',
-            output='screen',
+                    'right_wheel_1_joint',
+                    'right_wheel_2_joint',
+                    'right_wheel_3_joint'
+                ],
+                'wheel_radius': 0.085,
+                'wheel_separation': 0.55,
+                'cmd_topic': '/diff_cont/cmd_vel_out',
+                'loop_rate_hz': 60.0,
+                'timeout_ms': 100,
+            }],
         ),
     ])
