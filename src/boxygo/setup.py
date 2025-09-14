@@ -10,6 +10,7 @@ setup(
     entry_points={
         'console_scripts': [
             'boxygo_moteus = boxygo.boxygo_moteus:main',
+            'boxygo_stop_moteus = boxygo.boxygo_stop_moteus:main',
         ],
     },
 )

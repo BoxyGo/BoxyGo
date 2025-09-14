@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-
 import math, time
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import TwistStamped
 from moteus_msgs.msg import PositionCommand
+from rcl_interfaces.msg import SetParametersResult
 
 class BoxyGoMoteus(Node):
     def __init__(self):
@@ -25,8 +25,10 @@ class BoxyGoMoteus(Node):
         self.declare_parameter('cmd_topic', '/diff_cont/cmd_vel_out')
         self.declare_parameter('loop_rate_hz', 100.0)        # wysyłanie do sterowników
         self.declare_parameter('timeout_ms', 300)            # watchdog: brak komend => STOP
-        # (opcjonalnie) twarda saturacja prędkości koła
         self.declare_parameter('max_rpm', 0.0)               # 0 = wyłączona (brak saturacji)
+        self.declare_parameter('dir_factors', [1, 1, 1, -1, -1, -1])  # odwrócona prawa strona
+        # NOWE: globalny przełącznik publikacji
+        self.declare_parameter('enabled', True)
 
         self.servo_ids = self.get_parameter('servo_ids').value
         self.joint_names = self.get_parameter('joint_names').value
@@ -37,14 +39,15 @@ class BoxyGoMoteus(Node):
         self.timeout_ms = int(self.get_parameter('timeout_ms').value)
         self.max_rpm = float(self.get_parameter('max_rpm').value)
         self.max_radps = (self.max_rpm * 2.0 * math.pi / 60.0) if self.max_rpm > 0.0 else None
+        self.dir_factors = self.get_parameter('dir_factors').value
+        self.dir_for_id = {sid: float(df) for sid, df in zip(self.servo_ids, self.dir_factors)}
+        self.enabled = bool(self.get_parameter('enabled').value)
 
         if len(self.servo_ids) != len(self.joint_names):
             raise ValueError("servo_ids i joint_names muszą mieć tę samą długość")
 
-        self.declare_parameter('dir_factors', [1, 1, 1, -1, -1, -1])  # domyślnie odwrócona prawa strona
-        self.dir_factors = self.get_parameter('dir_factors').value
-        self.dir_for_id = {sid: float(df) for sid, df in zip(self.servo_ids, self.dir_factors)}
-            
+        # Reaguj na zmiany parametrów (enabled)
+        self.add_on_set_parameters_callback(self._on_set_params)
 
         # mapowanie side i publishery
         self.side_for_id, self.pubs = {}, {}
@@ -65,8 +68,15 @@ class BoxyGoMoteus(Node):
         self.create_timer(self.dt, self._tick)
 
         self.get_logger().info(
-            f"Using {self.cmd_topic} (TwistStamped), timeout={self.timeout_ms}ms, loop={self.loop_rate}Hz"
+            f"Using {self.cmd_topic} (TwistStamped), timeout={self.timeout_ms}ms, loop={self.loop_rate}Hz, enabled={self.enabled}"
         )
+
+    def _on_set_params(self, params):
+        for p in params:
+            if p.name == 'enabled':
+                self.enabled = bool(p.value)
+                self.get_logger().warn(f"[boxygo_moteus] enabled={self.enabled}")
+        return SetParametersResult(successful=True)
 
     def _cmd_cb(self, msg: TwistStamped):
         v = float(msg.twist.linear.x)   # [m/s]
@@ -86,6 +96,10 @@ class BoxyGoMoteus(Node):
         self.last_cmd_time = time.monotonic()
 
     def _tick(self):
+        # jeśli wyłączony, nie publikuj nic (watchdog Moteusa wyhamuje)
+        if not self.enabled:
+            return
+
         # watchdog: brak komend => STOP (0 rad/s)
         if (time.monotonic() - self.last_cmd_time) * 1000.0 > self.timeout_ms:
             w_left = 0.0

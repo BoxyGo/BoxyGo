@@ -44,6 +44,13 @@ install(
 )
 
 install(
+  PROGRAMS
+    boxygo/boxygo_stop_moteus.py
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME boxygo_stop_moteus
+)
+
+install(
   FILES
     package.xml
   DESTINATION share/${PROJECT_NAME}
