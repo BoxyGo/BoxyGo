@@ -12,21 +12,21 @@ def generate_launch_description():
     keyboard_launch = os.path.join(pkg_boxygo, 'launch', 'keyboard_launch.py')
 
     return LaunchDescription([
-
+        
         IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(gazebo_launch)
         ),
         IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(keyboard_launch)
+                 PythonLaunchDescriptionSource(keyboard_launch)
         ),
         Node(
             package='moteus_control',
             executable='moteus_node',
-            name='mjbots_moteus',
-            namespace='mjbots_moteus',
+            name='boxygo_moteus',
+            namespace='boxygo_moteus',
             output='screen',
             parameters=[{
-              'ids': [7,2,3,4,5,6],
+              'ids': [1,2,3,4,5,6],
             }],
         ),
         Node(
@@ -35,7 +35,7 @@ def generate_launch_description():
             name='boxygo_moteus',
             output='screen',
             parameters=[{
-                'servo_ids': [7,2,3,4,5,6],
+                'servo_ids': [1,2,3,4,5,6],
                 'joint_names': [
                     'left_wheel_1_joint',
                     'left_wheel_2_joint',

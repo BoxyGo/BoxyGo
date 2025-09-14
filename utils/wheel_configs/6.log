@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-09-13 16:22:28.206713",
+  "device_info": {
+    "serial_number": "AB4AO1IwUAIgNTBZ",
+    "model": "0",
+    "git_hash": "af9e99ec707003d1b6d4b0e8597c1665d7983f92",
+    "git_dirty": false,
+    "git_timestamp": 1753123071,
+    "uuid": "86a8c150-0c44-4963-b7ad-1d9baa79f755"
+  },
+  "calibration": {
+    "offset": -2,
+    "sign": -1,
+    "polarity": 0,
+    "phase_invert": 0
+  },
+  "winding_resistance": 0.33932312461830455,
+  "inductance": 0.0007044144803864732,
+  "pid_dq_kp": 0.8851933426657663,
+  "pid_dq_ki": 426.4060141975998,
+  "torque_bw_hz": 200.0,
+  "encoder_filter_bw_hz": 200.0,
+  "encoder_filter_kp": 1013.4169850289654,
+  "encoder_filter_ki": 256753.49638629958,
+  "kv": 44.54362053320878,
+  "unwrapped_position_scale": 1.0,
+  "motor_position_output_sign": 1.0,
+  "abi_version": 268,
+  "voltage_mode_control": false,
+  "py_version": "0.3.90"
+}
