@@ -144,14 +144,14 @@
     <link name="${side}_wheel_${index}">
       <visual>
         <geometry>
-          <mesh filename="file://${pkg_path}/meshes/wheel.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="file://${pkg_path}/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
         </geometry>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <material name="black"/>
       </visual>
       <collision>
         <geometry>
-          <mesh filename="file://${pkg_path}/meshes/wheel.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="file://${pkg_path}/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
         </geometry>
         <origin xyz="0 0 0" rpy="0 0 0"/>
       </collision>
