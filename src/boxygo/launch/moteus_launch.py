@@ -16,9 +16,9 @@ def generate_launch_description():
         IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(gazebo_launch)
         ),
-        IncludeLaunchDescription(
-                 PythonLaunchDescriptionSource(keyboard_launch)
-        ),
+        # IncludeLaunchDescription(
+        #          PythonLaunchDescriptionSource(keyboard_launch)
+        # ),
         Node(
             package='moteus_control',
             executable='moteus_node',
@@ -60,7 +60,7 @@ def generate_launch_description():
                 'servo_ids': [1, 2, 3, 4, 5, 6],
                 'cmd_topic': '/diff_cont/cmd_vel_out',
                 'cmd_prefix': '/boxygo_moteus/id_',
-                'state_prefix': '/moteus/id_',
+                'state_prefix': '/boxygo_moteus/id_',
                 'report_period_s': 1.0,
                 'stats_window_s': 5.0,
                 'warn_cmd_vel_hz_min': 20.0,
