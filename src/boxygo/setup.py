@@ -11,6 +11,7 @@ setup(
         'console_scripts': [
             'boxygo_moteus = boxygo.boxygo_moteus:main',
             'boxygo_stop_moteus = boxygo.boxygo_stop_moteus:main',
+            'boxygo_moteus_diagnostic = boxygo.boxygo_moteus_diagnostic:main',
         ],
     },
 )
