@@ -12,8 +12,8 @@ class Joy2Twist(Node):
         # <<< SKONFIGURUJ TUTAJ NUMERY OSI I PRZYCISKU ENABLE >>>
         self.axis_linear = 1        # Lewy drążek przód/tył (zwykle axis 1)
         self.axis_angular = 0       # Lewy drążek lewo/prawo (zwykle axis 0)
-        self.scale_linear = 2.0
-        self.scale_angular = 3.0
+        self.scale_linear = 0.1
+        self.scale_angular = 0.15
         self.enable_button = 4      # L1 lub inny wygodny przycisk (jstest-gtk!)
         self.require_enable = True  # Ustaw False, by nie wymagać przycisku
 

@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 import time
-import subprocess
-import re
 from collections import deque
 from typing import Deque, Dict, List, Optional, Tuple
 
@@ -18,45 +16,62 @@ except Exception:
     PositionCommand = None  # type: ignore
     ControllerState = None  # type: ignore
 
-FAULT_BITS = {
-    0: "ESTOP",
-    1: "ADC",
-    2: "BOOTLOADER",
-    3: "CONFIG",
-    4: "OVERVOLTAGE",
-    5: "UNDERVOLTAGE",
-    6: "DRV_FAULT",
-    7: "FOC",
-    8: "WATCHDOG",
-    9: "ESTOP2",
-    10: "MOSFET_OVERTEMP",
-    11: "MOTOR_OVERTEMP",
-    12: "ENCODER",
-    13: "POSITION_RANGE",
-    14: "OVERCURRENT",
-    15: "USB",
-    16: "BOOTLOADER_REQUEST",
-    17: "THERMISTOR",
-    18: "INITIALIZATION",
-    19: "MPU_FAULT",
-    20: "HALL",
-    21: "HALL_SEQUENCE",
-    22: "ABS_SPI",
-    23: "UART",
-    24: "I2C",
-    25: "CAN",
-    26: "MOTOR_NOT_CONFIGURED",
-    27: "UNKNOWN_MODE",
-    28: "INVALID_PARAM",
-    29: "UNALIGNED_DATA",
-    30: "POWER_SUPPLY",
-    31: "WATCHDOG2",
+# ---- Mode names (z dokumentacji) ----
+MODE_NAMES = {
+    0: "stopped (clears faults)",
+    1: "fault",
+    2: "preparing",
+    3: "preparing",
+    4: "preparing",
+    5: "pwm",
+    6: "voltage",
+    7: "voltage_foc",
+    8: "voltage_dq",
+    9: "current",
+    10: "position",
+    11: "timeout",
+    12: "zero_velocity",
+    13: "stay_within",
+    14: "measure_inductance",
+    15: "brake",
 }
 
-def decode_fault_bits(fault_code: Optional[int]) -> List[str]:
-    if fault_code is None:
-        return []
-    return [name for bit, name in FAULT_BITS.items() if fault_code & (1 << bit)]
+# ---- Fault codes (z dokumentacji) ----
+FAULT_CODES = {
+    # Real faults (aktywny przy mode=1)
+    32: "calibration fault – encoder nie wykrył magnesu podczas kalibracji",
+    33: "motor driver fault – typowo undervoltage lub inny błąd elektryczny",
+    34: "over voltage – bus > servo.max_voltage (np. regeneracja bez flux braking)",
+    35: "encoder fault – odczyty niezgodne z obecnością magnesu",
+    36: "motor not configured – brak kalibracji (moteus_tool --calibrate)",
+    37: "pwm cycle overrun – błąd wewnętrzny firmware",
+    38: "over temperature – przekroczona maksymalna temperatura",
+    39: "outside limit – start pozycji poza servopos.position_min/max",
+    40: "under voltage – zbyt niskie napięcie",
+    41: "config changed – zmiana konfiguracji wymagająca stopu",
+    42: "theta invalid – brak ważnego enkodera komutacji",
+    43: "position invalid – brak ważnego enkodera wyjściowego",
+    44: "driver enable fault – nie udało się włączyć sterownika MOSFET",
+    45: "stop position deprecated – użyto przestarzałej funkcji",
+    46: "timing violation – naruszenie ograniczenia czasowego",
+    47: "bemf feedforward no accel – włączone bez limitu przyspieszenia",
+    48: "invalid limits – position_min/max poza zakresem",
+    # Limity (nie muszą oznaczać fault, informują co ogranicza moc)
+    96: "limit active: servo.max_velocity",
+    97: "limit active: servo.max_power_W",
+    98: "limit active: maximum system voltage",
+    99: "limit active: servo.max_current_A",
+    100: "limit active: servo.fault_temperature",
+    101: "limit active: servo.motor_fault_temperature",
+    102: "limit active: commanded maximum torque",
+    103: "limit active: servopos.position_min/max",
+}
+
+def decode_fault_code(code: Optional[int]) -> str:
+    """Zwraca opis kodu fault/limitu, albo 'no fault' / 'unknown fault X'."""
+    if code is None or code == 0:
+        return "no fault"
+    return FAULT_CODES.get(code, f"unknown fault {code}")
 
 class RateMeter:
     def __init__(self, alpha: float = 0.2):
@@ -126,8 +141,6 @@ class BoxyGoMoteusDiagnostic(Node):
         self.declare_parameter('v_error', 20.0)
         self.declare_parameter('motor_temp_warn', 80.0)
         self.declare_parameter('motor_temp_error', 95.0)
-        self.declare_parameter('can_interface', 'can0')
-        self.declare_parameter('snapshot_on_incident', True)
         self.declare_parameter('enabled', True)
 
         self.servo_ids: List[int] = list(self.get_parameter('servo_ids').value)
@@ -143,12 +156,7 @@ class BoxyGoMoteusDiagnostic(Node):
         self.v_error: float = float(self.get_parameter('v_error').value)
         self.motor_temp_warn: float = float(self.get_parameter('motor_temp_warn').value)
         self.motor_temp_error: float = float(self.get_parameter('motor_temp_error').value)
-        self.can_interface: str = str(self.get_parameter('can_interface').value)
-        self.snapshot_on_incident: bool = bool(self.get_parameter('snapshot_on_incident').value)
         self.enabled: bool = bool(self.get_parameter('enabled').value)
-
-        # Adapter state flags
-        self.adapter_missing: bool = False
 
         self.add_on_set_parameters_callback(self._on_set_params)
 
@@ -198,7 +206,7 @@ class BoxyGoMoteusDiagnostic(Node):
                 self.get_logger().warn(f"[diagnostic] enabled={self.enabled}")
         return SetParametersResult(successful=True)
 
-    def _on_cmd_vel(self, msg: TwistStamped):
+    def _on_cmd_vel(self, _msg: TwistStamped):
         if not self.enabled:
             return
         t = time.monotonic()
@@ -231,34 +239,25 @@ class BoxyGoMoteusDiagnostic(Node):
             fault = getattr(msg, 'fault_code', None)
             mode = getattr(msg, 'mode', None)
             voltage = getattr(msg, 'voltage', None)
-            mtemp = getattr(msg, 'motor_temperature', None)
+            mtemp = getattr(msg, 'temperature', None)
 
+            # zapamiętaj poprzedni i aktualny kod
             self.prev_fault[sid] = self.latest_fault.get(sid)
             if fault is not None:
-                self.latest_fault[sid] = int(fault)
+                try:
+                    self.latest_fault[sid] = int(fault)
+                except Exception:
+                    # jeśli przyjdzie nie-liczba, oznacz jako unknown
+                    self.latest_fault[sid] = None
 
+            # mapowanie trybu
             if mode is not None:
                 try:
                     mode_int = int(mode)
-                    mode_names = {
-                        0: "FAULT",
-                        1: "STOPPED",
-                        2: "POSITION",
-                        3: "VELOCITY",
-                        4: "TORQUE",
-                        5: "VOLTAGELIMITED",
-                        6: "CURRENT",
-                        7: "PWM",
-                        8: "IMPEDANCE",
-                        9: "SERVO",
-                        10: "HARDWARE_INIT",
-                        11: "CALIBRATION",
-                        12: "TIMEOUT",
-                        13: "POSITION_WITH_VEL",
-                        14: "SYSTEM",
-                        15: "IDLE",
-                    }
-                    self.latest_mode[sid] = f"{mode_int}:{mode_names.get(mode_int, 'UNKNOWN')}"
+                    mode_name = MODE_NAMES.get(mode_int, "UNKNOWN")
+                    self.latest_mode[sid] = f"{mode_int}:{mode_name}"
+                    if mode_int == 1:
+                        self.get_logger().error(f"id {sid}: MODE=1 (fault)")
                 except Exception:
                     self.latest_mode[sid] = str(mode)
 
@@ -267,49 +266,13 @@ class BoxyGoMoteusDiagnostic(Node):
             if mtemp is not None:
                 self.latest_motor_temp[sid] = float(mtemp)
 
+            # latency
             if self.last_cmd_ts is not None:
                 lat = t - self.last_cmd_ts
                 self.lat_ema = self.lat_alpha * lat + (1 - self.lat_alpha) * self.lat_ema
                 if lat > self.lat_max:
                     self.lat_max = lat
         return _cb
-
-    # ---- Adapter / interface checks ----
-    def _check_adapter(self) -> bool:
-        """Returns True if a severe adapter incident is detected (missing/BUS-OFF/DOWN)."""
-        iface = self.can_interface
-        try:
-            proc = subprocess.run(['bash','-lc', f'ip -details -statistics link show {iface}'],
-                                  capture_output=True, text=True, timeout=2.0)
-        except Exception as e:
-            self.get_logger().error(f"adapter check failed: {e}")
-            return False
-
-        if proc.returncode != 0:
-            self.adapter_missing = True
-            self.get_logger().error(f"FDCAN adapter disconnected: interface {iface} missing")
-            return True
-
-        out = proc.stdout
-        # interface exists
-        self.adapter_missing = False
-        # Netdev state (e.g., "state DOWN" on first line)
-        first_line = out.splitlines()[0] if out else ''
-        if ' state DOWN' in first_line:
-            self.get_logger().error(f"FDCAN adapter present but interface {iface} is DOWN")
-            return True
-
-        # CAN controller state (ERROR-PASSIVE/WARNING/BUS-OFF)
-        # Try to find a token like: state BUS-OFF or state ERROR-PASSIVE
-        m = re.search(r'\bstate\s+([A-Z\-]+)', out)
-        if m:
-            can_state = m.group(1)
-            if can_state == 'BUS-OFF':
-                self.get_logger().error(f"FDCAN controller state BUS-OFF on {iface}")
-                return True
-            elif can_state in ('ERROR-PASSIVE', 'ERROR-WARNING'):
-                self.get_logger().warn(f"FDCAN controller degraded: {can_state} on {iface}")
-        return False
 
     # ---- Topic existence helpers ----
     def _topic_exists(self, name: str, typ: Optional[str] = None) -> bool:
@@ -326,13 +289,6 @@ class BoxyGoMoteusDiagnostic(Node):
             return
         now = time.monotonic()
 
-        # Adapter check
-        adapter_bad = self._check_adapter()
-
-        # If adapter is physically missing, avoid noisy per-ID logs and snapshot
-        if self.adapter_missing:
-            return
-
         # Check presence of key topics
         if not self._topic_exists(self.cmd_topic, 'geometry_msgs/msg/TwistStamped'):
             self.get_logger().error(f"topic missing: {self.cmd_topic} (geometry_msgs/msg/TwistStamped)")
@@ -344,18 +300,20 @@ class BoxyGoMoteusDiagnostic(Node):
             if not self._topic_exists(state_t, 'moteus_msgs/msg/ControllerState'):
                 self.get_logger().error(f"topic missing: {state_t} (moteus_msgs/msg/ControllerState)")
 
-        # cmd_vel stats
+        # cmd_vel stats (EXPICIT if/else — bez dynamicznej metody)
         cmd_hz_win = self.cmd_vel_win.hz()
         cmd_age = float('inf') if self.last_seen_cmd_vel is None else (now - self.last_seen_cmd_vel)
         jmin, jmax = self.cmd_vel_win.jitter_minmax()
         if self.last_seen_cmd_vel is None:
             self.get_logger().error(f"no messages received on {self.cmd_topic} since start")
         else:
-            lvl = self.get_logger().warn if cmd_hz_win < self.warn_cmd_vel_hz_min or cmd_age > 0.5 else self.get_logger().info
-            lvl(f"cmd_vel_out: {cmd_hz_win:.1f} Hz (age {cmd_age:.3f}s, jitter {jmin:.3f}-{jmax:.3f}s)")
+            msg = f"cmd_vel_out: {cmd_hz_win:.1f} Hz (age {cmd_age:.3f}s, jitter {jmin:.3f}-{jmax:.3f}s)"
+            if cmd_hz_win < self.warn_cmd_vel_hz_min or cmd_age > 0.5:
+                self.get_logger().warn(msg)
+            else:
+                self.get_logger().info(msg)
 
         stale_count = 0
-        new_incident = adapter_bad
 
         for sid in self.servo_ids:
             hz = self.can_rm_by_id[sid].value()
@@ -371,60 +329,49 @@ class BoxyGoMoteusDiagnostic(Node):
             if state_age > self.heartbeat_timeout_s:
                 stale_count += 1
 
-            fault = self.latest_fault.get(sid)
-            fault_names = decode_fault_bits(fault) if fault is not None else []
+            fault_code = self.latest_fault.get(sid)
+            fault_name = decode_fault_code(fault_code)
             mode = self.latest_mode.get(sid)
             v = self.latest_voltage.get(sid)
             mt = self.latest_motor_temp.get(sid)
 
+            # Log zmiany kodu fault
+            pf = self.prev_fault.get(sid)
+            if pf != fault_code:
+                if fault_code not in (None, 0):
+                    self.get_logger().error(f"id {sid}: FAULT set {fault_code} ({fault_name})")
+                elif pf not in (None, 0):
+                    self.get_logger().info(f"id {sid}: fault cleared (prev {pf})")
+
+            # Progi napięcia i temperatury
             if v is not None and (v < self.v_error):
                 self.get_logger().error(f"id {sid}: LOW VOLTAGE {v:.2f}V < {self.v_error:.2f}V")
-                new_incident = True
             elif v is not None and (v < self.v_warn):
                 self.get_logger().warn(f"id {sid}: Low voltage {v:.2f}V < {self.v_warn:.2f}V")
 
             if mt is not None and (mt > self.motor_temp_error):
                 self.get_logger().error(f"id {sid}: MOTOR HOT {mt:.1f}C > {self.motor_temp_error:.1f}C")
-                new_incident = True
             elif mt is not None and (mt > self.motor_temp_warn):
                 self.get_logger().warn(f"id {sid}: motor warm {mt:.1f}C > {self.motor_temp_warn:.1f}C")
 
-            pf = self.prev_fault.get(sid)
-            if pf is not None and fault is not None and pf != fault:
-                added = [n for n in decode_fault_bits(fault) if n not in decode_fault_bits(pf)]
-                cleared = [n for n in decode_fault_bits(pf) if n not in decode_fault_bits(fault)]
-                if added:
-                    self.get_logger().error(f"id {sid}: FAULT added {added} (code {fault})")
-                    new_incident = True
-                if cleared:
-                    self.get_logger().info(f"id {sid}: fault cleared {cleared} (code {fault})")
-
-            warn_line = (self.can_win_by_id[sid].hz() < self.warn_can_hz_min) or \
-                        (self.last_seen_can[sid] is not None and (now - self.last_seen_can[sid]) > 0.5)
+            # Linia zbiorcza (EXPICIT if/else — bez dynamicznej metody)
             line = (
                 f"id {sid}: {hz:.1f}Hz (win {hzw:.1f}Hz) age {age:.3f}s state_age {state_age:.3f}s "
-                f"fault={fault} {fault_names} mode={mode} V={v if v is not None else 'NA'} Tm={mt if mt is not None else 'NA'}"
+                f"fault={fault_code} ({fault_name}) mode={mode} V={v if v is not None else 'NA'} Tm={mt if mt is not None else 'NA'}"
             )
-            (self.get_logger().warn if warn_line else self.get_logger().info)(line)
+            warn_line = (self.can_win_by_id[sid].hz() < self.warn_can_hz_min) or \
+                        (self.last_seen_can[sid] is not None and (now - self.last_seen_can[sid]) > 0.5)
+            if warn_line:
+                self.get_logger().warn(line)
+            else:
+                self.get_logger().info(line)
 
         if stale_count >= max(2, len(self.servo_ids)//2):
-            self.get_logger().error(f"Suspected bus problem: {stale_count}/{len(self.servo_ids)} state heartbeats stale > {self.heartbeat_timeout_s}s")
-            new_incident = True
+            self.get_logger().error(
+                f"Suspected bus problem: {stale_count}/{len(self.servo_ids)} state heartbeats stale > {self.heartbeat_timeout_s}s"
+            )
 
         self.get_logger().info(f"cmd→state latency: ema {self.lat_ema*1000:.1f} ms, max {self.lat_max*1000:.1f} ms")
-
-        if new_incident and self.snapshot_on_incident:
-            self._snapshot_can_stats()
-
-    def _snapshot_can_stats(self):
-        try:
-            cmd = ['bash', '-lc', f"ip -details -statistics link show {self.can_interface} || true"]
-            out = subprocess.check_output(cmd, stderr=subprocess.STDOUT, timeout=2.0, text=True)
-            head = '\n'.join(out.splitlines()[:40])
-            self.get_logger().error("CAN snapshot (ip -details):\n" + head)
-        except Exception as e:
-            self.get_logger().warn(f"snapshot failed: {e}")
-
 
 def main(args=None):
     rclpy.init(args=args)
