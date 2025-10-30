@@ -1,0 +1,27 @@
+version: "3.9"
+
+x-common: &common
+  image: boxygo/base:latest
+  env_file: ../.env
+  network_mode: host
+  environment:
+    - DISPLAY=${DISPLAY}
+    - QT_X11_NO_MITSHM=1
+  volumes:
+    - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    # montujemy kod źródłowy – możesz edytować lokalnie
+    - ../src:/BoxyGo/src:rw
+    # konfiguracje (DDS, paramy)
+    - ../overlays:/BoxyGo/overlays:rw
+    # dane (rosbagi, logi)
+    - ../bags:/bags:rw
+  # GPU na PC lub w chmurze
+  # runtime: nvidia
+  # deploy:
+  #   resources:
+  #     reservations:
+  #       devices: [ { capabilities: [gpu] } ]
+services:
+  dev:
+    <<: *common
+    command: ["/bin/bash"]

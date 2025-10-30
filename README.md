@@ -28,5 +28,16 @@ Boxygo sets a new standard in deliveries, benefiting both residents and service 
 **Write config to wheel command:**
 `python3 -m moteus.moteus_tool --target 1 --write-config FILE`
 
+**Create Dev Docker Image**
+
+sudo docker build -f docker/Dockerfile.base -t boxygo/base:latest .
+
+**Compose Dev Docker Image**
+
+sudo docker-compose -f docker/compose.dev.yml run --rm dev
+
+
+
+
 
 
