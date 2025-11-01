@@ -1,7 +1,5 @@
-# 1) Baza obrazu (system + ROS)
 FROM ros:humble-ros-base
 
-# 2) Instalacja zależności systemowych i pakietów ROS
 RUN apt-get update && apt-get install -y \
     python3-vcstool build-essential git \
     ros-humble-gazebo-ros-pkgs \
@@ -10,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     ros-humble-slam-toolbox \
     ros-humble-robot-state-publisher \
     ros-humble-joint-state-publisher \
+    ros-humble-robot-localization \
     ros-humble-xacro \
     ros-humble-tf2-ros \
     ros-humble-ros2-control \
@@ -22,27 +21,17 @@ RUN apt-get update && apt-get install -y \
     ros-humble-rosbag2-storage-mcap \
     ros-humble-gazebo-ros2-control \
     ros-humble-rviz2 \
-    ros-humble-rmw-cyclonedds-cpp \
     && rm -rf /var/lib/apt/lists/*
 
-# 3) Ustawienie katalogu roboczego wewnątrz obrazu
 WORKDIR /BoxyGo
 
-# 4) Skopiowanie źródeł i konfiguracji do obrazu
 COPY src/ src/
 COPY overlays/ overlays/
 
-# 5) Budowa workspacu ROS 2
 RUN bash -lc "source /opt/ros/humble/setup.bash && colcon build --symlink-install"
+ENV ROS_DOMAIN_ID=1
 
-# 6) Zmienne środowiskowe (domyślne; możesz nadpisać w docker run / compose)
-ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-ENV ROS_DOMAIN_ID=2
-ENV CYCLONEDDS_URI=file:///BoxyGo/overlays/dds/cyclonedds.xml
-
-# 7) Domyślna komenda po starcie kontenera (tu: tylko powłoka)
 CMD ["/bin/bash"]
 
 RUN echo "source /opt/ros/humble/setup.bash" >> /root/.bashrc && \
-    echo "if [ -f /BoxyGo/install/setup.bash ]; then source /BoxyGo/install/setup.bash; fi" >> /root/.bashrc && \
-    echo "alias keyboard='ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/diff_cont/cmd_vel_unstamped'" >> /root/.bashrc
+    echo "if [ -f /BoxyGo/install/setup.bash ]; then source /BoxyGo/install/setup.bash; fi" >> /root/.bashrc

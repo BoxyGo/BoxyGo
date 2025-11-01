@@ -28,15 +28,20 @@ Boxygo sets a new standard in deliveries, benefiting both residents and service 
 **Write config to wheel command:**
 `python3 -m moteus.moteus_tool --target 1 --write-config FILE`
 
-**Create Dev Docker Image**
+# Docker
 
-sudo docker build -f docker/Dockerfile.base -t boxygo/base:latest .
+## Usefull commands
+
+**Create Dev Docker Image**
+`sudo docker build -f docker/Dockerfile.dev -t boxygo/dev:latest`
 
 **Compose Dev Docker Image**
+`sudo docker-compose -f docker/compose.dev.yml run --rm dev`
 
-sudo docker-compose -f docker/compose.dev.yml run --rm dev
+## Working on dev container
 
-
+**If you want to use Gazbo or Rviz (any GUI) you have give acces 11 by following command in terminal**
+`xhost +local:`
 
 
 
