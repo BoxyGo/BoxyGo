@@ -2,6 +2,17 @@
 
 **Boxygo** is an innovative solution for residential complexes – an autonomous parcel delivery robot that is part of an integrated package delivery system. It enables contactless delivery of parcels directly to the residents' doorsteps.
 
+## Configure environment
+
+1. Create workspaces directory: `mkdir -p ~/workspaces`
+2. Clone repo into this directory: `git clone https://github.com/BoxyGo/BoxyGo.git ~/workspaces`
+3. Run configure script: `./~workspaces/BoxyGo/scripts/configure_environment.sh`
+
+## Useful aliases
+`r` - run developer container
+`k` - run teleop keyboard sterring
+
+
 ## Key Features
 - **Autonomy:** The robot navigates independently within residential areas.
 - **Convenience:** Secure and effortless parcel delivery without the involvement of traditional couriers.
@@ -27,21 +38,6 @@ Boxygo sets a new standard in deliveries, benefiting both residents and service 
 
 **Write config to wheel command:**
 `python3 -m moteus.moteus_tool --target 1 --write-config FILE`
-
-# Docker
-
-## Usefull commands
-
-**Create Dev Docker Image**
-`sudo docker build -f docker/Dockerfile.dev -t boxygo/dev:latest`
-
-**Compose Dev Docker Image**
-`sudo docker-compose -f docker/compose.dev.yml run --rm dev`
-
-## Working on dev container
-
-**If you want to use Gazbo or Rviz (any GUI) you have give acces 11 by following command in terminal**
-`xhost +local:`
 
 
 

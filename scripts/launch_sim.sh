@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-
+set -e
 source ~/BoxyGo/install/setup.bash
 
 # Ścieżka do katalogu z plikami launch w pakiecie boxygo

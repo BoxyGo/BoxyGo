@@ -1,4 +1,7 @@
-FROM ros:humble-ros-base
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
     python3-vcstool build-essential git \
@@ -23,15 +26,4 @@ RUN apt-get update && apt-get install -y \
     ros-humble-rviz2 \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /BoxyGo
-
-COPY src/ src/
-COPY overlays/ overlays/
-
-RUN bash -lc "source /opt/ros/humble/setup.bash && colcon build --symlink-install"
-ENV ROS_DOMAIN_ID=1
-
-CMD ["/bin/bash"]
-
-RUN echo "source /opt/ros/humble/setup.bash" >> /root/.bashrc && \
-    echo "if [ -f /BoxyGo/install/setup.bash ]; then source /BoxyGo/install/setup.bash; fi" >> /root/.bashrc
+RUN echo 'alias b="cd /workspaces/isaac_ros-dev && colcon build --symlink-install && source install/setup.bash && cd -"' >> /etc/skel/.bashrc
