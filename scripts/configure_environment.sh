@@ -24,7 +24,7 @@ git fetch origin
 git checkout "$BRANCH"
 git submodule update --init --recursive
 
-# 3. Add environment variables and alias to ~/.bashrc
+# 3. Add environment variables and aliases to ~/.bashrc
 
 # PATH_TO_ISAAC_ROS_COMMON
 if ! grep -q "PATH_TO_ISAAC_ROS_COMMON" "$HOME/.bashrc"; then
@@ -50,6 +50,18 @@ else
   echo ">>> ISAAC_ROS_WS already exists in ~/.bashrc, skipping"
 fi
 
+# alias r – run Isaac ROS dev container with BoxyGo
+if ! grep -q "alias r=" "$HOME/.bashrc"; then
+  echo ">>> Adding alias r to ~/.bashrc"
+  cat >> "$HOME/.bashrc" << 'EOF'
+
+# Quick alias to run Isaac ROS dev container with BoxyGo
+alias r='$PATH_TO_ISAAC_ROS_COMMON/scripts/run_dev.sh -d $ISAAC_ROS_WS'
+EOF
+else
+  echo ">>> Alias r already exists in ~/.bashrc, skipping"
+fi
+
 # alias k – teleop to control robot in Gazebo
 if ! grep -q "alias k=" "$HOME/.bashrc"; then
   echo ">>> Adding alias k to ~/.bashrc"
@@ -62,14 +74,15 @@ else
   echo ">>> Alias k already exists in ~/.bashrc, skipping"
 fi
 
-# 4. Set variables and alias in current session
+# 4. Set variables and aliases in current session
 export PATH_TO_ISAAC_ROS_COMMON="$HOME/isaac_ros/isaac_ros_common"
 export ISAAC_ROS_WS="$HOME/workspaces/BoxyGo"
+alias r="$PATH_TO_ISAAC_ROS_COMMON/scripts/run_dev.sh -d $ISAAC_ROS_WS"
 alias k='ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/diff_cont/cmd_vel_unstamped'
 
 echo ">>> PATH_TO_ISAAC_ROS_COMMON set to: $PATH_TO_ISAAC_ROS_COMMON"
 echo ">>> ISAAC_ROS_WS set to: $ISAAC_ROS_WS"
-echo ">>> Alias k available in current session"
+echo ">>> Alias r and k available in this session"
 
 # 5. Create ~/.isaac_ros_common-config
 echo ">>> Creating ~/.isaac_ros_common-config"

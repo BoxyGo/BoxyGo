@@ -4,6 +4,7 @@
 
 ## Configure environment
 
+1. Download docker and git lfs ``
 1. Create workspaces directory: `mkdir -p ~/workspaces`
 2. Clone repo into this directory: `git clone https://github.com/BoxyGo/BoxyGo.git ~/workspaces`
 3. Run configure script: `./~workspaces/BoxyGo/scripts/configure_environment.sh`
