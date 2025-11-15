@@ -5,7 +5,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
     python3-vcstool build-essential git \
-    ros-humble-gazebo-ros-pkgs \
     ros-humble-navigation2 \
     ros-humble-nav2-bringup \
     ros-humble-slam-toolbox \
@@ -22,7 +21,6 @@ RUN apt-get update && apt-get install -y \
     ros-humble-teleop-twist-joy \
     ros-humble-teleop-twist-keyboard \
     ros-humble-rosbag2-storage-mcap \
-    ros-humble-gazebo-ros2-control \
     ros-humble-rviz2 \
     && rm -rf /var/lib/apt/lists/*
 
