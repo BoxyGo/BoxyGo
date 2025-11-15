@@ -1,4 +1,4 @@
-ARG BASE_IMAGE
+ARG BASE_IMAGE=nvcr.io/nvidia/isaac/ros:aarch64-ros2_humble
 FROM ${BASE_IMAGE}
 
 ENV DEBIAN_FRONTEND=noninteractive
