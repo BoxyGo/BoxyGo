@@ -2,24 +2,50 @@
 
 **Boxygo** is an innovative solution for residential complexes – an autonomous parcel delivery robot that is part of an integrated package delivery system. It enables contactless delivery of parcels directly to the residents' doorsteps.
 
-## Configure environment
+# Configure environment
 
-1. Download docker and git lfs ``
-1. Create workspaces directory: `mkdir -p ~/workspaces`
-2. Clone repo into this directory: `git clone https://github.com/BoxyGo/BoxyGo.git ~/workspaces`
-3. Run configure script: `./~workspaces/BoxyGo/scripts/configure_environment.sh`
+1. Install docker:
+```
+sudo apt-get update
+sudo apt-get install -y docker.io
+sudo systemctl enable --now docker
+sudo usermod -aG docker $USER
+newgrp docker
+```
+2. Install git lfs: `sudo apt-get install -y git-lfs`
+3. Create workspaces directory: `mkdir -p ~/workspaces`
+4. Clone repo into this directory: `git clone https://github.com/BoxyGo/BoxyGo.git ~/workspaces`
+5. Clone issac ros common: `git clone --branch release-3.2 --depth 1 https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_common.git ~/isaac_ros/isaac_ros_common`
+6. Create config file: .issac_common-config:
 
-## Useful aliases
-`r` - run developer container
-`k` - run teleop keyboard sterring
+For x86_64:
 
+```
+cat << 'EOF' > isaac_common-config
+CONFIG_IMAGE_KEY="ros2_humble.boxygo.dev"
+CONFIG_DOCKER_SEARCH_DIRS=(~/workspaces/BoxyGo/docker)
 
-## Key Features
-- **Autonomy:** The robot navigates independently within residential areas.
-- **Convenience:** Secure and effortless parcel delivery without the involvement of traditional couriers.
-- **Modernity:** A pioneering approach to logistics and parcel handling in gated communities.
+ADDITIONAL_RUN_ARGS=(
+  "--privileged"
+  "--device=/dev:/dev"
+)
+EOF
+```
+For aarch64 on Jetson:
+```
+cat << 'EOF' > isaac_common-config
+CONFIG_IMAGE_KEY="ros2_humble.boxygo.robot"
+CONFIG_DOCKER_SEARCH_DIRS=(~/workspaces/BoxyGo/docker)
 
-Boxygo sets a new standard in deliveries, benefiting both residents and service providers.
+ADDITIONAL_RUN_ARGS=(
+  "--privileged"
+  "--device=/dev:/dev"
+)
+EOF
+```
+7. Go to workspace: `cd ~/workspaces/BoxyGo`
+8. Run script: `./run_dev_container.sh`
+9. If container started without problems, run script: `./configure_dev_container.sh`
 
 # Moteus configuration:
 

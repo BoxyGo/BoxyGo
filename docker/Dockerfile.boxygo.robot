@@ -3,10 +3,8 @@ FROM ${BASE_IMAGE}
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get -o Acquire::AllowReleaseInfoChange::Origin=true \
-            -o Acquire::AllowReleaseInfoChange::Label=true \
-        update && \
-        apt-get install -y \
+RUN apt-get update --allow-releaseinfo-change && \
+    apt-get install -y \
         git \
         nano \
         python3-pip \
@@ -19,8 +17,6 @@ RUN apt-get -o Acquire::AllowReleaseInfoChange::Origin=true \
         ros-humble-xacro \
         ros-humble-tf2-ros \
         ros-humble-robot-state-publisher \
-        ros-humble-rosbag2-storage-mcap \
-    && rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/*
     
-RUN pip3 install --upgrade pip && \
-    pip3 install --no-cache-dir moteus
+RUN pip3 install --upgrade pip && pip3 install moteus
