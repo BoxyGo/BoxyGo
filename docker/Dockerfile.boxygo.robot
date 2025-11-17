@@ -17,6 +17,6 @@ RUN apt-get update --allow-releaseinfo-change && \
         ros-humble-xacro \
         ros-humble-tf2-ros \
         ros-humble-robot-state-publisher \
-    rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*
     
 RUN pip3 install --upgrade pip && pip3 install moteus
