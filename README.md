@@ -4,6 +4,12 @@
 
 # Configure environment
 
+1. Create workspaces directory: `mkdir -p ~/workspaces`
+2. Clone repo into this directory: `git clone https://github.com/BoxyGo/BoxyGo.git ~/workspaces`
+3. Run `./setup_dev_environment.sh`.
+
+If you want set it by yourself, below is recommended guide:
+
 1. Install docker:
 ```
 sudo apt-get update
@@ -13,8 +19,6 @@ sudo usermod -aG docker $USER
 newgrp docker
 ```
 2. Install git lfs: `sudo apt-get install -y git-lfs`
-3. Create workspaces directory: `mkdir -p ~/workspaces`
-4. Clone repo into this directory: `git clone https://github.com/BoxyGo/BoxyGo.git ~/workspaces`
 5. Clone issac ros common: `git clone --branch release-3.2 --depth 1 https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_common.git ~/isaac_ros/isaac_ros_common`
 6. Create config file: .issac_common-config:
 
