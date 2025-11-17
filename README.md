@@ -4,9 +4,10 @@
 
 # Configure environment
 
-1. Create workspaces directory: `mkdir -p ~/workspaces`
-2. Clone repo into this directory: `git clone https://github.com/BoxyGo/BoxyGo.git ~/workspaces`
-3. Run `./setup_dev_environment.sh`.
+1. Clone repo into this directory: `git clone https://github.com/BoxyGo/BoxyGo.git ~/workspaces/BoxyGo`
+2. Go to workspace: `cd ~/workspaces/BoxyGo`
+3. Run script: `./setup_dev_environment.sh`
+4. If container started without problems, run script: `./configure_dev_container.sh`
 
 If you want set it by yourself, below is recommended guide:
 
