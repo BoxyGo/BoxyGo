@@ -18,7 +18,7 @@ class Joy2Twist(Node):
         self.require_enable = True  # Ustaw False, by nie wymagać przycisku
 
         self.joy_sub = self.create_subscription(Joy, 'joy', self.joy_callback, 10)
-        self.cmd_pub = self.create_publisher(Twist, '/diff_cont/cmd_vel_unstamped', 10)
+        self.cmd_pub = self.create_publisher(Twist, '/diff_cont/cmd_vel', 10)
 
 
 

@@ -1,9 +1,8 @@
-import os
 import glob
-
+import os
 from setuptools import find_packages, setup
 
-package_name = 'boxygo_joy2twist'
+package_name = 'boxygo_description'
 
 setup(
     name=package_name,
@@ -14,18 +13,16 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
         (os.path.join('share', package_name, 'launch'),
-         glob.glob(os.path.join('launch', '*launch.[pxy][yma]*')))
+         glob.glob(os.path.join('launch', '*launch.[pxy][yma]*'))),
+        (os.path.join('share', package_name, 'urdf'),
+         glob.glob(os.path.join('urdf', '*.xacro'))),
+         (os.path.join('share', package_name, 'meshes'),
+         glob.glob(os.path.join('meshes', '*'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='Boxygo Team',
     maintainer_email='boxygo.mail@gmail.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
-    tests_require=['pytest'],
-    entry_points={
-        'console_scripts': [
-            'joy2twist = boxygo_joy2twist.joy2twist:main',
-        ],
-    },
+    description='BoxyGo description package containing URDF and related files',
+    license='Apache-2.0',
 )

@@ -2,13 +2,18 @@
 
 **Boxygo** is an innovative solution for residential complexes – an autonomous parcel delivery robot that is part of an integrated package delivery system. It enables contactless delivery of parcels directly to the residents' doorsteps.
 
-## Key Features
-- **Autonomy:** The robot navigates independently within residential areas.
-- **Convenience:** Secure and effortless parcel delivery without the involvement of traditional couriers.
-- **Modernity:** A pioneering approach to logistics and parcel handling in gated communities.
+# Configure environment
 
-Boxygo sets a new standard in deliveries, benefiting both residents and service providers.
+1. Clone repo into this directory: `git clone https://github.com/BoxyGo/BoxyGo.git ~/workspaces/BoxyGo`
+2. Go to workspace: `cd ~/workspaces/BoxyGo`
+3. Run script: `./setup_dev_environment.sh`
+4. Run script: `./run_dev_container.sh`
+5. If container started without problems, run script: `./configure_dev_container.sh`
 
+# Aliases
+Aliases added to container with `configure_dev_container.sh`
+`b` - build workspace
+`k` - run teleop keyboard
 # Moteus configuration:
 
 **Wheels config:**
@@ -27,6 +32,7 @@ Boxygo sets a new standard in deliveries, benefiting both residents and service 
 
 **Write config to wheel command:**
 `python3 -m moteus.moteus_tool --target 1 --write-config FILE`
+
 
 
 
