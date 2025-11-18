@@ -7,51 +7,13 @@
 1. Clone repo into this directory: `git clone https://github.com/BoxyGo/BoxyGo.git ~/workspaces/BoxyGo`
 2. Go to workspace: `cd ~/workspaces/BoxyGo`
 3. Run script: `./setup_dev_environment.sh`
-4. If container started without problems, run script: `./configure_dev_container.sh`
+4. Run script: `./run_dev_container.sh`
+5. If container started without problems, run script: `./configure_dev_container.sh`
 
-If you want set it by yourself, below is recommended guide:
-
-1. Install docker:
-```
-sudo apt-get update
-sudo apt-get install -y docker.io
-sudo systemctl enable --now docker
-sudo usermod -aG docker $USER
-newgrp docker
-```
-2. Install git lfs: `sudo apt-get install -y git-lfs`
-5. Clone issac ros common: `git clone --branch release-3.2 --depth 1 https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_common.git ~/isaac_ros/isaac_ros_common`
-6. Create config file: .issac_common-config:
-
-For x86_64:
-
-```
-cat << 'EOF' > isaac_common-config
-CONFIG_IMAGE_KEY="ros2_humble.boxygo.dev"
-CONFIG_DOCKER_SEARCH_DIRS=(~/workspaces/BoxyGo/docker)
-
-ADDITIONAL_RUN_ARGS=(
-  "--privileged"
-  "--device=/dev:/dev"
-)
-EOF
-```
-For aarch64 on Jetson:
-```
-cat << 'EOF' > isaac_common-config
-CONFIG_IMAGE_KEY="ros2_humble.boxygo.robot"
-CONFIG_DOCKER_SEARCH_DIRS=(~/workspaces/BoxyGo/docker)
-
-ADDITIONAL_RUN_ARGS=(
-  "--privileged"
-  "--device=/dev:/dev"
-)
-EOF
-```
-7. Go to workspace: `cd ~/workspaces/BoxyGo`
-8. Run script: `./run_dev_container.sh`
-9. If container started without problems, run script: `./configure_dev_container.sh`
-
+# Aliases
+Aliases added to container with `configure_dev_container.sh`
+`b` - build workspace
+`k` - run teleop keyboard
 # Moteus configuration:
 
 **Wheels config:**

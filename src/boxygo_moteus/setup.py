@@ -1,9 +1,8 @@
-import os
 import glob
-
+import os
 from setuptools import find_packages, setup
 
-package_name = 'boxygo_joy2twist'
+package_name = 'boxygo_moteus'
 
 setup(
     name=package_name,
@@ -14,18 +13,18 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
         (os.path.join('share', package_name, 'launch'),
-         glob.glob(os.path.join('launch', '*launch.[pxy][yma]*')))
+         glob.glob(os.path.join('launch', '*launch.[pxy][yma]*'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='Boxygo Team',
     maintainer_email='boxygo.mail@gmail.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    description='BoxyGo Moteus controller interface for controlling motors',
+    license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'joy2twist = boxygo_joy2twist.joy2twist:main',
+            'boxygo_moteus = boxygo_moteus.boxygo_moteus:main',  # Funkcja main() w boxygo_moteus.py
         ],
     },
 )

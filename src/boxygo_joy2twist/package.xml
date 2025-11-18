@@ -4,7 +4,7 @@
   <name>boxygo_joy2twist</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="k.gicala1324@gmail.com">jakub</maintainer>
+  <maintainer email="boxygo.mail@gmail.com">BoxyGo Team</maintainer>
   <license>TODO: License declaration</license>
 
   <test_depend>ament_copyright</test_depend>
