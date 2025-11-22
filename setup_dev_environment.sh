@@ -51,17 +51,16 @@ else
   echo "Isaac ROS Common already exists in $ISAAC_COMMON_DIR, skipping."
 fi
 
-echo "=== Creating ~/.isaac_common-config ==="
 CONFIG_PATH="$HOME/.isaac_ros_common-config"
 
 ARCH="$(uname -m || echo unknown)"
 
 case "$ARCH" in
   x86_64)
-    CONFIG_IMAGE_KEY="ros2_humble.boxygo.dev"
+    CONFIG_IMAGE_KEY="ros2_humble.realsense.boxygo.dev"
     ;;
   aarch64|arm64)
-    CONFIG_IMAGE_KEY="ros2_humble.boxygo.robot"
+    CONFIG_IMAGE_KEY="ros2_humble.realsense.boxygo.robot"
     ;;
   *)
     echo "Warning: unsupported architecture '$ARCH'. Defaulting to x86_64 image."
@@ -69,12 +68,9 @@ case "$ARCH" in
     ;;
 esac
 
-if [ -f "$CONFIG_PATH" ]; then
-  echo "Config file already exists: $CONFIG_PATH"
-  echo "Skipping creation."
-else
-  echo "Creating new config file at: $CONFIG_PATH"
-  cat > "$CONFIG_PATH" << EOF
+echo "Writing config file to: $CONFIG_PATH"
+
+cat > "$CONFIG_PATH" << EOF
 CONFIG_IMAGE_KEY="$CONFIG_IMAGE_KEY"
 CONFIG_DOCKER_SEARCH_DIRS=(~/workspaces/BoxyGo/docker)
 
@@ -83,10 +79,6 @@ ADDITIONAL_RUN_ARGS=(
   "--device=/dev:/dev"
 )
 EOF
-
-  echo "Config created:"
-  cat "$CONFIG_PATH"
-fi
 
 echo
 echo "=== Setup complete ==="
