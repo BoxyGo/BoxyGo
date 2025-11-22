@@ -20,32 +20,30 @@
   <xacro:property name="wheel_front_x_offset" value="${wheel_gap}"/> 
   <xacro:property name="wheel_front_z_offset" value="-0.0106"/> 
 
-
   <!-- Materiały -->
   <material name="black"><color rgba="0.0 0.0 0.0 1.0"/></material>
   <material name="white"><color rgba="0.7 0.7 0.7 0.5"/></material>
   <material name="grey"><color rgba="0.4 0.4 0.4 1.0"/></material>
   <material name="darkgrey"><color rgba="0.05 0.05 0.05 1.0"/></material>
 
-
   <xacro:include filename="$(find boxygo_description)/urdf/sensors.urdf.xacro"/>
   <xacro:add_sensors parent="base_link"
-                    body_length="${body_length}"
-                    body_height="${body_height}"/>
+                     body_length="${body_length}"
+                     body_height="${body_height}"/>
 
   <!-- Rama -->
   <link name="base_link">
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="file://${boxygo_description_pkg}/meshes/frame_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="meshes/frame_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="darkgrey"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="file://${boxygo_description_pkg}/meshes/frame_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="meshes/frame_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
     <inertial>
@@ -55,46 +53,18 @@
     </inertial>
   </link>
 
-
-  <!-- Korpus -->
-  <!-- <link name="body_link">
-    <visual>
-      <geometry>
-        <box size="${body_length} ${body_width} ${body_height}"/>
-      </geometry>
-      <material name="white"/>
-    </visual>
-    <collision>
-      <geometry>
-        <box size="${body_length} ${body_width} ${body_height}"/>
-      </geometry>
-    </collision>
-    <inertial>
-      <mass value="${body_mass}"/>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <inertia ixx="0.50108" iyy="0.75508" izz="0.83949" ixy="0" ixz="0" iyz="0"/>
-    </inertial>
-  </link>  
-  
-  <joint name="body_link_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="body_link"/>
-    <origin xyz="${body_x_offset} 0 ${body_height/2 + 0.1752}" rpy="0 0 0"/>
-  </joint> -->
-
-
   <!-- Belki -->
   <link name="right_rocker_beam">
     <visual>
       <geometry>
-        <mesh filename="file://${boxygo_description_pkg}/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <material name="black"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="file://${boxygo_description_pkg}/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin xyz="0 0 0" rpy="0 0 0"/>
     </collision>
@@ -117,14 +87,14 @@
   <link name="left_rocker_beam">
     <visual>
       <geometry>
-        <mesh filename="file://${boxygo_description_pkg}/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <material name="black"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="file://${boxygo_description_pkg}/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin xyz="0 0 0" rpy="0 0 0"/>
     </collision>
@@ -144,20 +114,19 @@
     <dynamics damping="0.05" friction="0.005"/>
   </joint>
 
-
   <!-- Makro koła -->
   <xacro:macro name="wheel" params="side parent_link sign wheel_side_sign index x_offset y_offset z_offset">
     <link name="${side}_wheel_${index}">
       <visual>
         <geometry>
-          <mesh filename="file://${boxygo_description_pkg}/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+          <mesh filename="meshes/wheel.dae" scale="0.001 0.001 0.001"/>
         </geometry>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <material name="black"/>
       </visual>
       <collision>
         <geometry>
-          <mesh filename="file://${boxygo_description_pkg}/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+          <mesh filename="meshes/wheel.dae" scale="0.001 0.001 0.001"/>
         </geometry>
         <origin xyz="0 0 0" rpy="0 0 0"/>
       </collision>
@@ -202,7 +171,6 @@
   <xacro:wheel side="right" parent_link="base_link" sign="1" wheel_side_sign="0" index="1" x_offset="${wheel_front_x_offset}" y_offset="${-wheel_front_y_offset}" z_offset="${wheel_front_z_offset}"/>
   <xacro:wheel side="right" parent_link="right_rocker_beam" sign="1" wheel_side_sign="0" index="2" x_offset="${wheel_beam_x_offset}" y_offset="${wheel_beam_y_offset}" z_offset="${wheel_beam_z_offset}"/>
   <xacro:wheel side="right" parent_link="right_rocker_beam" sign="1" wheel_side_sign="0" index="3" x_offset="${-wheel_beam_x_offset}" y_offset="${wheel_beam_y_offset}" z_offset="${wheel_beam_z_offset}"/>
-
 
   <!-- Gazebo - kolor -->
   <gazebo reference="left_wheel_1">

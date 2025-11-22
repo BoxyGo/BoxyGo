@@ -3,3 +3,12 @@ repositories:
     type: git
     url: https://github.com/mjbots/moteus_ros2.git
     version: main
+  YDLidar-SDK:
+    type: git
+    url: https://github.com/BoxyGo/YDLidar-SDK.git
+    version: master
+  ydlidar_ros2_driver-humble:
+    type: git
+    url: https://github.com/BoxyGo/ydlidar_ros2_driver-humble.git
+    version: main
+  
