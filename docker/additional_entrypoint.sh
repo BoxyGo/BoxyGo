@@ -6,6 +6,7 @@ REPOS_FILE="$WS/boxygo.repos"
 cd $WS
 
 usermod -aG dialout admin || true
+usermod -aG plocate admin || true
 
 git config --global --add safe.directory "$WS" || true
 git config --global --add safe.directory "$WS/src/moteus_ros2" || true

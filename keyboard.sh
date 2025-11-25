@@ -1,13 +1,13 @@
 #!/bin/bash
 
 echo "Select the topic to publish to:"
-echo "1) /cmd_vel"
+echo "1) /cmd_vel_out"
 echo "2) /cmd_vel_unstamped"
 read -p "Your choice (1/2): " CHOICE
 
 case $CHOICE in
   1)
-    TOPIC="/cmd_vel"
+    TOPIC="/diff_cont/cmd_vel_out"
     ;;
   2)
     TOPIC="/cmd_vel_unstamped"

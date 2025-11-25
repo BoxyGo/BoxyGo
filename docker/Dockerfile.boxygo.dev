@@ -30,6 +30,8 @@ RUN apt-get update --allow-releaseinfo-change && apt-get install -y \
         ros-humble-isaac-ros-visual-slam \
         ros-humble-isaac-ros-realsense \
         ros-humble-isaac-ros-examples \
+        ros-humble-joy \
+        ros-humble-teleop-twist-joy \
         ros-humble-isaac-ros-nvblox \
     && rm -rf /var/lib/apt/lists/*
 
