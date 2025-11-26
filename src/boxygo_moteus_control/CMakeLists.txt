@@ -95,7 +95,7 @@ install(
 
 install(
   DIRECTORY launch/
-  DESTINATION share/${PROJECT_NAME}
+  DESTINATION share/${PROJECT_NAME}/launch
 )
 
 if(BUILD_TESTING)

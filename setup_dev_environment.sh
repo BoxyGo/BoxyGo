@@ -78,6 +78,8 @@ ADDITIONAL_RUN_ARGS=(
   "--privileged"
   "--device=/dev/ttyUSB0:/dev/ttyUSB0"
   "--device=/dev/input/js0:/dev/input/js0"
+  "--device=/dev/ttyACM0:/dev/ttyACM0"
+
 )
 EOF
 
