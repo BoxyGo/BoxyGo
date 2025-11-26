@@ -77,6 +77,7 @@ CONFIG_DOCKER_SEARCH_DIRS=(~/workspaces/BoxyGo/docker)
 ADDITIONAL_RUN_ARGS=(
   "--privileged"
   "--device=/dev/ttyUSB0:/dev/ttyUSB0"
+  "--device=/dev/input/js0:/dev/input/js0"
 )
 EOF
 
