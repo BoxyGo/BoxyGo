@@ -1,16 +1,20 @@
 #!/bin/bash
 
 echo "Select the topic to publish to:"
-echo "1) /cmd_vel"
-echo "2) /cmd_vel_unstamped"
+echo "1) /diff_cont/cmd_vel"
+echo "2) /diff_cont/cmd_vel_unstamped"
+echo "3) /diff_cont/cmd_vel_out"
 read -p "Your choice (1/2): " CHOICE
 
 case $CHOICE in
   1)
-    TOPIC="/cmd_vel"
+    TOPIC="/diff_cont/cmd_vel"
     ;;
   2)
-    TOPIC="/cmd_vel_unstamped"
+    TOPIC="/diff_cont/cmd_vel_unstamped"
+    ;;
+  3)
+    TOPIC="/diff_cont/cmd_vel_out"
     ;;
   *)
     echo "Invalid choice"

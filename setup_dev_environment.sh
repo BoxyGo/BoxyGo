@@ -77,8 +77,22 @@ CONFIG_DOCKER_SEARCH_DIRS=(~/workspaces/BoxyGo/docker)
 ADDITIONAL_RUN_ARGS=(
   "--privileged"
   "--device=/dev/ttyUSB0:/dev/ttyUSB0"
+  "--device=/dev/input/js0:/dev/input/js0"
 )
 EOF
+
+DOCKERARGS_FILE="$HOME/.isaac_ros_dev-dockerargs"
+
+echo "Writing docker args file to: $DOCKERARGS_FILE"
+
+cat > "$DOCKERARGS_FILE" << EOF
+--cap-add=SYS_NICE
+--cap-add=IPC_LOCK
+--ulimit rtprio=99
+--ulimit memlock=-1
+EOF
+
+echo "Config written to $DOCKERARGS_FILE"
 
 echo
 echo "=== Setup complete ==="
