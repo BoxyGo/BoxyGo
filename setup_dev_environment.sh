@@ -80,6 +80,19 @@ ADDITIONAL_RUN_ARGS=(
 )
 EOF
 
+DOCKERARGS_FILE="$HOME/.isaac_ros_dev-dockerargs"
+
+echo "Writing docker args file to: $DOCKERARGS_FILE"
+
+cat > "$DOCKERARGS_FILE" << EOF
+--cap-add=SYS_NICE
+--cap-add=IPC_LOCK
+--ulimit rtprio=99
+--ulimit memlock=-1
+EOF
+
+echo "Config written to $DOCKERARGS_FILE"
+
 echo
 echo "=== Setup complete ==="
 echo "If this is the first time adding yourself to the docker group, log out and log in again."

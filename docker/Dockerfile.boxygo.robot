@@ -22,6 +22,7 @@ RUN apt-get update --allow-releaseinfo-change && \
         ros-humble-isaac-ros-realsense \
         ros-humble-isaac-ros-examples \
         ros-humble-isaac-ros-nvblox \
+        ros-humble-pinocchio \
     && rm -rf /var/lib/apt/lists/*
 
 RUN rosdep update && rosdep install isaac_ros_nvblox

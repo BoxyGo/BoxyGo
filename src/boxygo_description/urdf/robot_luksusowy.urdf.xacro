@@ -209,7 +209,76 @@
     </plugin>
   </gazebo>
 
-  <!-- ros2_control hardware -->
+  <ros2_control name="BoxygoMoteusSystem" type="system">
+  <hardware>
+    <plugin>moteus_hardware_interface/MoteusHardwareInterface</plugin>
+  </hardware>
+
+  <!-- Koła lewe -->
+  <joint name="left_wheel_1_joint">
+    <param name="can_protocol">moteus</param>
+    <param name="can_id">1</param>
+    <param name="axis_direction">-1</param>
+    <param name="gear_ratio">1.0</param>
+    <command_interface name="velocity"/>
+    <state_interface name="position"/>
+    <state_interface name="velocity"/>
+  </joint>
+
+  <joint name="left_wheel_2_joint">
+    <param name="can_protocol">moteus</param>
+    <param name="can_id">2</param>
+    <param name="axis_direction">-1</param>
+    <param name="gear_ratio">1.0</param>
+    <command_interface name="velocity"/>
+    <state_interface name="position"/>
+    <state_interface name="velocity"/>
+  </joint>
+
+  <joint name="left_wheel_3_joint">
+    <param name="can_protocol">moteus</param>
+    <param name="can_id">3</param>
+    <param name="axis_direction">-1</param>
+    <param name="gear_ratio">1.0</param>
+    <command_interface name="velocity"/>
+    <state_interface name="position"/>
+    <state_interface name="velocity"/>
+  </joint>
+
+  <!-- Koła prawe -->
+  <joint name="right_wheel_1_joint">
+    <param name="can_protocol">moteus</param>
+    <param name="can_id">4</param>
+    <param name="axis_direction">1</param>
+    <param name="gear_ratio">1.0</param>
+    <command_interface name="velocity"/>
+    <state_interface name="position"/>
+    <state_interface name="velocity"/>
+  </joint>
+
+  <joint name="right_wheel_2_joint">
+    <param name="can_protocol">moteus</param>
+    <param name="can_id">5</param>
+    <param name="axis_direction">1</param>
+    <param name="gear_ratio">1.0</param>
+    <command_interface name="velocity"/>
+    <state_interface name="position"/>
+    <state_interface name="velocity"/>
+  </joint>
+
+  <joint name="right_wheel_3_joint">
+   <param name="can_protocol">moteus</param>
+    <param name="can_id">6</param>
+    <param name="axis_direction">1</param>
+    <param name="gear_ratio">1.0</param>
+    <command_interface name="velocity"/>
+    <state_interface name="position"/>
+    <state_interface name="velocity"/>
+  </joint>
+
+ </ros2_control>
+
+ <!-- ros2_control simulation
   <ros2_control name="BoxyGoSystem" type="system">
     <hardware>
       <plugin>gazebo_ros2_control/GazeboSystem</plugin>
@@ -255,6 +324,6 @@
       <state_interface name="position"/>
       <state_interface name="velocity"/>
     </joint>
-  </ros2_control>
+  </ros2_control> -->
 
 </robot>
