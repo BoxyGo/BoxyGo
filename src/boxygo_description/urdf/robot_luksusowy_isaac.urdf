@@ -378,4 +378,6 @@
     <parent link="camera_gyro_frame"/>
     <child link="camera_gyro_optical_frame"/>
   </joint>
+  
+
 </robot>
