@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:property name="boxygo_description_pkg" value="$(find boxygo_description)"/>
+  
+  <xacro:property name="body_length" value="0.81"/>
+  <xacro:property name="body_width" value="0.5927"/>
+  <xacro:property name="body_height" value="0.5"/>
+  <xacro:property name="body_mass" value="10"/>
+  <xacro:property name="body_x_offset" value="-0.015"/>
+  
+  <xacro:property name="wheel_gap" value="0.26"/>
+  <xacro:property name="rocker_x_offset" value="${-wheel_gap/2}"/> 
+  <xacro:property name="rocker_y_offset" value="0.22085"/>
+  <xacro:property name="rocker_z_offset" value="0.0876"/>
+  
+  <xacro:property name="wheel_beam_y_offset" value="-0.05415"/> 
+  <xacro:property name="wheel_beam_x_offset" value="${wheel_gap/2}"/>
+  <xacro:property name="wheel_beam_z_offset" value="-0.0982"/> 
+  
+  <xacro:property name="wheel_front_y_offset" value="0.275"/> 
+  <xacro:property name="wheel_front_x_offset" value="${wheel_gap}"/> 
+  <xacro:property name="wheel_front_z_offset" value="-0.0106"/> 
+
+  <material name="black"><color rgba="0.0 0.0 0.0 1.0"/></material>
+  <material name="white"><color rgba="0.7 0.7 0.7 0.5"/></material>
+  <material name="grey"><color rgba="0.4 0.4 0.4 1.0"/></material>
+  <material name="darkgrey"><color rgba="0.05 0.05 0.05 1.0"/></material>
+
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://${boxygo_description_pkg}/meshes/frame_full.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="darkgrey"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://${boxygo_description_pkg}/meshes/frame_full.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="23.972607"/>
+      <origin xyz="-0.020386 0 0.075697" rpy="0 0 0"/>
+      <inertia ixx="1.293" ixy="-0.00005897" ixz="0.07241" iyy="1.521" iyz="0.0000000617" izz="2.615"/>
+    </inertial>
+  </link>
+
+  <link name="right_rocker_beam">
+    <visual>
+      <geometry>
+        <mesh filename="file://${boxygo_description_pkg}/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="file://${boxygo_description_pkg}/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="3.38412"/>
+      <origin xyz="-0.000000009 -0.027628 -0.071329" rpy="0 0 0"/>
+      <inertia ixx="0.01030" ixy="1e-12" ixz="-5e-12" iyy="0.05174" iyz="-0.002614" izz="0.04833"/>
+    </inertial>
+  </link>
+
+  <link name="left_rocker_beam">
+    <visual>
+      <geometry>
+        <mesh filename="file://${boxygo_description_pkg}/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="file://${boxygo_description_pkg}/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="3.38412"/>
+      <origin xyz="-0.000000009 -0.027628 -0.071329" rpy="0 0 0"/>
+      <inertia ixx="0.01030" ixy="1e-12" ixz="-5e-12" iyy="0.05174" iyz="-0.002614" izz="0.04833"/>
+    </inertial>
+  </link>
+
+  <xacro:macro name="wheel_link" params="prefix index">
+    <link name="${prefix}_wheel_${index}">
+      <visual>
+        <geometry>
+          <mesh filename="file://${boxygo_description_pkg}/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <material name="black"/>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="file://${boxygo_description_pkg}/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+      </collision>
+      <inertial> 
+        <mass value="1.341411"/>
+        <origin xyz="0.000003 0.005392 0.000000" rpy="0 0 0"/>
+        <inertia ixx="0.002637" ixy="1.18e-9" ixz="8.32e-9" iyy="0.004379" iyz="-3.867e-9" izz="0.002637"/>
+      </inertial>
+    </link>
+  </xacro:macro>
+
+</robot>
