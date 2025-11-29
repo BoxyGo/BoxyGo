@@ -20,6 +20,6 @@
 
   <xacro:include filename="$(find boxygo_description)/urdf/common/lidar.xacro"/>
   
-  <xacro:sensor_ydlidar parent_link="base_link" x_offset="0.0" y_offset="0.0" z_offset="0.4"/>
+  <xacro:sensor_ydlidar parent_link="base_link" x_offset="0.06" y_offset="0.0" z_offset="0.32"/>
 
 </robot>

@@ -8,7 +8,7 @@
 2. Go to workspace: `cd ~/workspaces/BoxyGo`
 3. Run script: `./setup_dev_environment.sh`
 4. Run script: `./run_dev_container.sh`
-5. If container started without problems, run script: `./configure_dev_container.sh`
+5. If run was successfull you can start development
 
 # Aliases
 Aliases added to container with `configure_dev_container.sh`

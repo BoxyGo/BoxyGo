@@ -10,7 +10,7 @@ usermod -aG plocate admin || true
 
 git config --global --add safe.directory "$WS" || true
 git config --global --add safe.directory "$WS/src/moteus_ros2" || true
-git config --global --add safe.directory /workspaces/isaac_ros-dev/src/yydlidar_ros2_driver-humble || true
+git config --global --add safe.directory /workspaces/isaac_ros-dev/src/ydlidar_ros2_driver-humble || true
 git config --global --add safe.directory /workspaces/isaac_ros-dev/src/YDLidar-SDK || true
 git config --global --add safe.directory /workspaces/isaac_ros-dev/src/isaac_ros_nvblox || true
 

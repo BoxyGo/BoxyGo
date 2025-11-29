@@ -34,24 +34,21 @@ urdf_path = os.path.join(get_package_share_directory('boxygo_description'), 'urd
 
 def generate_launch_description():
 
-    
-
     robot_controller = LaunchConfiguration("robot_controller")
 
-    # Get URDF via xacro
-    robot_description_content = Command(
-        [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
-            " ",
-            PathJoinSubstitution(
-                [
-                    FindPackageShare("boxygo_description"),
-                    "urdf",
-                    "robot_luksusowy.urdf.xacro",
-                ]
-            ),
-        ]
-    )
+    robot_description_content = Command([
+    PathJoinSubstitution([
+        FindExecutable(name='xacro')
+    ]),
+    " ",
+    PathJoinSubstitution([
+        FindPackageShare("boxygo_description"),
+        "urdf",
+        "luksusowy.urdf.xacro",
+    ]),
+    " ",
+    "sim_mode:=real",
+    ])
 
     robot_description = {
        "robot_description": ParameterValue(
