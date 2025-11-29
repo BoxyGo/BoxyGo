@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <joint name="right_rocker_beam_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="right_rocker_beam"/>
+    <origin xyz="${rocker_x_offset} ${-rocker_y_offset} ${rocker_z_offset}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="${-math.pi/12}" upper="${math.pi/12}" effort="50.0" velocity="10.0"/>
+    <dynamics damping="0.05" friction="0.005"/>
+  </joint>
+
+  <joint name="left_rocker_beam_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="left_rocker_beam"/>
+    <origin xyz="${rocker_x_offset} ${rocker_y_offset} ${rocker_z_offset}" rpy="0 0 ${math.pi}"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="${-math.pi/12}" upper="${math.pi/12}" effort="50.0" velocity="10.0"/>
+    <dynamics damping="0.05" friction="0.005"/>
+  </joint>
+
+  <xacro:macro name="wheel_assembly" params="side parent_link sign wheel_side_sign index x_offset y_offset z_offset">
+    
+    <xacro:wheel_link prefix="${side}" index="${index}"/>
+
+    <joint name="${side}_wheel_${index}_joint" type="continuous">
+      <parent link="${parent_link}"/>
+      <child link="${side}_wheel_${index}"/>
+      <origin xyz="${x_offset} ${y_offset} ${z_offset}" rpy="0 0 ${wheel_side_sign*math.pi}"/>
+      <axis xyz="0 ${sign} 0"/>
+      <limit effort="12.0" velocity="${8.0 * 2 * math.pi}"/>
+      <dynamics damping="0.01" friction="0.001"/>
+    </joint>
+    
+  </xacro:macro>
+
+  <xacro:wheel_assembly side="left" parent_link="base_link" sign="-1" wheel_side_sign="1" index="1" 
+    x_offset="${wheel_front_x_offset}" y_offset="${wheel_front_y_offset}" z_offset="${wheel_front_z_offset}"/>
+  
+  <xacro:wheel_assembly side="left" parent_link="left_rocker_beam" sign="-1" wheel_side_sign="0" index="2" 
+    x_offset="${wheel_beam_x_offset}" y_offset="${wheel_beam_y_offset}" z_offset="${wheel_beam_z_offset}"/>
+  
+  <xacro:wheel_assembly side="left" parent_link="left_rocker_beam" sign="-1" wheel_side_sign="0" index="3" 
+    x_offset="${-wheel_beam_x_offset}" y_offset="${wheel_beam_y_offset}" z_offset="${wheel_beam_z_offset}"/>
+
+  <xacro:wheel_assembly side="right" parent_link="base_link" sign="1" wheel_side_sign="0" index="1" 
+    x_offset="${wheel_front_x_offset}" y_offset="${-wheel_front_y_offset}" z_offset="${wheel_front_z_offset}"/>
+  
+  <xacro:wheel_assembly side="right" parent_link="right_rocker_beam" sign="1" wheel_side_sign="0" index="2" 
+    x_offset="${wheel_beam_x_offset}" y_offset="${wheel_beam_y_offset}" z_offset="${wheel_beam_z_offset}"/>
+  
+  <xacro:wheel_assembly side="right" parent_link="right_rocker_beam" sign="1" wheel_side_sign="0" index="3" 
+    x_offset="${-wheel_beam_x_offset}" y_offset="${wheel_beam_y_offset}" z_offset="${wheel_beam_z_offset}"/>
+
+</robot>

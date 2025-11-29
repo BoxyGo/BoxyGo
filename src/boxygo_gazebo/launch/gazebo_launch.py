@@ -12,9 +12,11 @@ def generate_launch_description():
     pkg_boxygo_controllers = get_package_share_directory('boxygo_controllers')
     pkg_boxygo_gazebo = get_package_share_directory('boxygo_gazebo')
 
-    urdf_path = os.path.join(pkg_boxygo_description, 'urdf', 'robot_luksusowy.urdf.xacro') # 6_wheel_robot.urdf.xacro / robot_luksusowy.urdf.xacro
+
+    urdf_path = os.path.join(pkg_boxygo_description, 'urdf', 'luksusowy.urdf.xacro') 
+    
     controller_config = os.path.join(pkg_boxygo_controllers, 'config', 'diff_drive_controller.yaml')
-    world_path = os.path.join(pkg_boxygo_gazebo, 'worlds', 'playground.world') # small_city.world / playground.world / asphalt.world
+    world_path = os.path.join(pkg_boxygo_gazebo, 'worlds', 'playground.world')
     
     return LaunchDescription([
 
@@ -31,7 +33,8 @@ def generate_launch_description():
             name='robot_state_publisher',
             output='screen',
             parameters=[{
-                'robot_description': Command(['xacro ', urdf_path]),
+
+                'robot_description': Command(['xacro ', urdf_path, ' sim_mode:=gazebo']),
                 'use_sim_time': True
             }]
         ),
