@@ -38,6 +38,39 @@ else
   echo "BoxyGo repo already exists in $BOXYGO_DIR, skipping."
 fi
 
+RULES_FILE="/etc/udev/rules.d/99-robot-usb.rules"
+
+echo "=== [AUTOSETUP] Check udev rules ==="
+
+NEED_SETUP=false
+
+if [ ! -e /dev/ydlidar ]; then
+  echo "[AUTOSETUP] Brak /dev/ydlidar"
+  NEED_SETUP=true
+fi
+
+if [ ! -e /dev/can_usb ]; then
+  echo "[AUTOSETUP] Brak /dev/can_usb"
+  NEED_SETUP=true
+fi
+
+if [ "${NEED_SETUP}" = true ]; then
+  echo "[AUTOSETUP] Create ${RULES_FILE}"
+
+  sudo bash -c "cat > ${RULES_FILE}" << 'EOF'
+# LIDAR: vendor 0483, product 5740, serial 00000000001A
+SUBSYSTEM=="tty", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", ATTRS{serial}=="00000000001A", SYMLINK+="ydlidar"
+
+# CAN: vendor 0483, product 5740, serial 12BB92BE
+SUBSYSTEM=="tty", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", ATTRS{serial}=="12BB92BE", SYMLINK+="can_usb"
+EOF
+
+  echo "[AUTOSETUP] Realoading udev rules"
+  sudo udevadm control --reload-rules
+  sudo udevadm trigger
+  sleep 1
+fi
+
 echo "=== Cloning Isaac ROS Common ==="
 ISAAC_ROOT="$HOME/isaac_ros"
 ISAAC_COMMON_DIR="$ISAAC_ROOT/isaac_ros_common"
@@ -73,14 +106,6 @@ echo "Writing config file to: $CONFIG_PATH"
 cat > "$CONFIG_PATH" << EOF
 CONFIG_IMAGE_KEY="$CONFIG_IMAGE_KEY"
 CONFIG_DOCKER_SEARCH_DIRS=(~/workspaces/BoxyGo/docker)
-
-ADDITIONAL_RUN_ARGS=(
-  "--privileged"
-  "--device=/dev/ttyUSB0:/dev/ttyUSB0"
-  "--device=/dev/input/js0:/dev/input/js0"
-  "--device=/dev/ttyACM0:/dev/ttyACM0"
-
-)
 EOF
 
 DOCKERARGS_FILE="$HOME/.isaac_ros_dev-dockerargs"
@@ -92,15 +117,12 @@ cat > "$DOCKERARGS_FILE" << EOF
 --cap-add=IPC_LOCK
 --ulimit rtprio=99
 --ulimit memlock=-1
+--privileged
+-v /dev:/dev
 EOF
 
 echo "Config written to $DOCKERARGS_FILE"
 
-echo
-echo "=== Setup complete ==="
-echo "If this is the first time adding yourself to the docker group, log out and log in again."
-echo
 echo "Next steps:"
 echo "  cd \$HOME/workspaces/BoxyGo"
 echo "  ./run_dev_container.sh"
-echo "  ./configure_dev_container.sh"

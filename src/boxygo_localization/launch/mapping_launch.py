@@ -6,24 +6,19 @@ import os
 def generate_launch_description():
     pkg = get_package_share_directory('boxygo_localization')
     slam_params = os.path.join(pkg, 'config', 'mapping_params.yaml')
+    rviz_config = os.path.join(pkg, 'config', 'rviz_slam.rviz')
 
     slam_node = Node(
-            package='slam_toolbox',
-            executable='async_slam_toolbox_node',   
-            name='slam_toolbox',
-            output='screen',
-            parameters=[slam_params]
-        )
-    
-    rviz_node = Node(
-            package='rviz2',
-            executable='rviz2',
-            name='rviz2',
-            output='screen',
-            arguments=['-d', os.path.join(pkg, 'config', 'rviz_slam.rviz')],
-        )
-    
+        package='slam_toolbox',
+        executable='async_slam_toolbox_node',
+        name='slam_toolbox',
+        output='screen',
+        parameters=[slam_params],
+        remappings=[
+            ('scan', '/scan'),
+        ]
+    )
+
     return LaunchDescription([
-                              rviz_node,
-                              slam_node
-                            ])
+        slam_node
+    ])
