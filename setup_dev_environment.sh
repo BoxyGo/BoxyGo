@@ -45,27 +45,36 @@ echo "=== [AUTOSETUP] Check udev rules ==="
 NEED_SETUP=false
 
 if [ ! -e /dev/ydlidar ]; then
-  echo "[AUTOSETUP] Brak /dev/ydlidar"
   NEED_SETUP=true
 fi
 
 if [ ! -e /dev/can_usb ]; then
-  echo "[AUTOSETUP] Brak /dev/can_usb"
+  NEED_SETUP=true
+fi
+
+if ! lsusb | grep -qi "Intel Corp."; then
+  true
+fi
+
+if [ ! -f /etc/udev/rules.d/99-realsense-libusb.rules ]; then
   NEED_SETUP=true
 fi
 
 if [ "${NEED_SETUP}" = true ]; then
-  echo "[AUTOSETUP] Create ${RULES_FILE}"
-
   sudo bash -c "cat > ${RULES_FILE}" << 'EOF'
-# LIDAR: vendor 0483, product 5740, serial 00000000001A
 SUBSYSTEM=="tty", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", ATTRS{serial}=="00000000001A", SYMLINK+="ydlidar"
-
-# CAN: vendor 0483, product 5740, serial 12BB92BE
 SUBSYSTEM=="tty", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", ATTRS{serial}=="12BB92BE", SYMLINK+="can_usb"
+
+SUBSYSTEM=="usb", ATTRS{idVendor}=="8086", MODE="0666"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="8086", ATTRS{idProduct}=="0ad5", MODE="0666"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="8086", ATTRS{idProduct}=="0ad3", MODE="0666"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="8086", ATTRS{idProduct}=="0ad4", MODE="0666"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="8086", ATTRS{idProduct}=="0ad2", MODE="0666"
+
+KERNEL=="video[0-9]*", SUBSYSTEMS=="usb", ATTRS{idVendor}=="8086", MODE="0666"
+KERNEL=="bus", SUBSYSTEMS=="usb", ATTRS{idVendor}=="8086", MODE="0666"
 EOF
 
-  echo "[AUTOSETUP] Realoading udev rules"
   sudo udevadm control --reload-rules
   sudo udevadm trigger
   sleep 1
