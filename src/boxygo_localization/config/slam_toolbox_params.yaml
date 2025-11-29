@@ -9,7 +9,7 @@ slam_toolbox:
     odom_frame: odom
     base_frame: base_link
     scan_topic: /scan
-    odom_topic: /odometry/filtered
+    odom_topic: /odom
 
     # Parametry skanera
     resolution: 0.05
