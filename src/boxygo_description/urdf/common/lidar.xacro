@@ -6,7 +6,7 @@
     <joint name="laser_joint" type="fixed">
       <parent link="${parent_link}"/>
       <child link="laser_frame"/>
-      <origin xyz="${x_offset} ${y_offset} ${z_offset}" rpy="0 0 0"/>
+      <origin xyz="${x_offset} ${y_offset} ${z_offset}" rpy="0 0 ${-math.pi/2}"/>
     </joint>
 
     <link name="laser_frame">

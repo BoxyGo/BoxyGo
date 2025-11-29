@@ -1,22 +1,33 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <joint name="right_rocker_beam_joint" type="revolute">
+  <xacro:arg name="sim_mode" default="gazebo"/>
+  <xacro:property name="sim_mode_prop" value="$(arg sim_mode)"/>
+  <xacro:property name="rocker_joint_type" value="revolute"/>
+  <xacro:if value="${sim_mode_prop == 'real'}">
+    <xacro:property name="rocker_joint_type" value="fixed"/>
+  </xacro:if>
+
+  <joint name="right_rocker_beam_joint" type="${rocker_joint_type}">
     <parent link="base_link"/>
     <child link="right_rocker_beam"/>
     <origin xyz="${rocker_x_offset} ${-rocker_y_offset} ${rocker_z_offset}" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
-    <limit lower="${-math.pi/12}" upper="${math.pi/12}" effort="50.0" velocity="10.0"/>
-    <dynamics damping="0.05" friction="0.005"/>
+    <xacro:if value="${rocker_joint_type != 'fixed'}">
+      <limit lower="${-math.pi/12}" upper="${math.pi/12}" effort="50.0" velocity="10.0"/>
+      <dynamics damping="0.05" friction="0.005"/>
+    </xacro:if>
   </joint>
 
-  <joint name="left_rocker_beam_joint" type="revolute">
+  <joint name="left_rocker_beam_joint" type="${rocker_joint_type}">
     <parent link="base_link"/>
     <child link="left_rocker_beam"/>
     <origin xyz="${rocker_x_offset} ${rocker_y_offset} ${rocker_z_offset}" rpy="0 0 ${math.pi}"/>
     <axis xyz="0 1 0"/>
-    <limit lower="${-math.pi/12}" upper="${math.pi/12}" effort="50.0" velocity="10.0"/>
-    <dynamics damping="0.05" friction="0.005"/>
+    <xacro:if value="${rocker_joint_type != 'fixed'}">
+      <limit lower="${-math.pi/12}" upper="${math.pi/12}" effort="50.0" velocity="10.0"/>
+      <dynamics damping="0.05" friction="0.005"/>
+    </xacro:if>
   </joint>
 
   <xacro:macro name="wheel_assembly" params="side parent_link sign wheel_side_sign index x_offset y_offset z_offset">
