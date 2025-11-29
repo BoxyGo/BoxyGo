@@ -22,10 +22,6 @@ def generate_launch_description():
                     parameters=[
                         slam_params,
                         {'use_sim_time': True}
-                    ],
-                    remappings=[
-                        ('scan', '/scan'),
-                        ('odom', '/odometry/filtered'),
                     ]
                 ),
             ]

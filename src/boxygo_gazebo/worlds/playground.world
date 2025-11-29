@@ -5,7 +5,7 @@
     <!--############### from small_city.world ###############-->
     <gui>
       <camera name="user_camera">
-        <pose>-18 0 30 0 1.57 -3.14</pose>
+        <pose>0 0 30 0 1.57 0</pose>
       </camera>
     </gui>
 
@@ -59,23 +59,23 @@
       </link>
     </model> 
 
-    <!-- trawniki -->
+    <!-- trawniki 
     <model name="grass1">
       <static>true</static>
       <link name="link">
-        <pose>-18 0 0 0 0 0</pose>
+        <pose>0 0 0 0 0 0</pose>
         <collision name="collision">
-          <geometry><box><size>22 22 0.005</size></box></geometry>
+          <geometry><box><size>20 20 0.005</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>22 22 0.005</size></box></geometry>
+          <geometry><box><size>20 20 0.005</size></box></geometry>
           <material><script>
             <uri>file://media/materials/scripts/gazebo.material</uri>
             <name>Gazebo/Grass</name>
           </script></material>
         </visual>
       </link>
-    </model> 
+    </model> -->
 
     <!--############### from small_city.world ###############-->
 
@@ -84,7 +84,7 @@
     <model name="asphalt_base">
       <static>true</static>
       <link name="asphalt_link">
-        <pose>-18 0 -0.01 0 0 0</pose>
+        <pose>0 0 -0.01 0 0 0</pose>
         <visual name="asphalt_visual">
           <geometry>
             <box>
@@ -99,33 +99,33 @@
       </link>
     </model>
 
-    <!-- Static room walls (20x20m, height 1.5m, centered at -18,0), black -->
+    <!-- Static room walls (20x20m, height 1.5m, centered at 0,0), black -->
     <model name="room_walls">
       <static>true</static>
       <link name="walls_link">
         <!-- North wall -->
         <visual name="wall_north_visual">
-          <pose>-18 10 0.75 0 0 0</pose>
+          <pose>0 10 0.75 0 0 0</pose>
           <geometry><box><size>20 0.2 1.5</size></box></geometry>
           <material><script><name>Gazebo/Black</name></script></material>
         </visual>
         <collision name="wall_north_collision">
-          <pose>-18 10 0.75 0 0 0</pose>
+          <pose>0 10 0.75 0 0 0</pose>
           <geometry><box><size>20 0.2 1.5</size></box></geometry>
         </collision>
         <!-- South wall -->
         <visual name="wall_south_visual">
-          <pose>-18 -10 0.75 0 0 0</pose>
+          <pose>0 -10 0.75 0 0 0</pose>
           <geometry><box><size>20 0.2 1.5</size></box></geometry>
           <material><script><name>Gazebo/Black</name></script></material>
         </visual>
         <collision name="wall_south_collision">
-          <pose>-18 -10 0.75 0 0 0</pose>
+          <pose>0 -10 0.75 0 0 0</pose>
           <geometry><box><size>20 0.2 1.5</size></box></geometry>
         </collision>
         <!-- East wall -->
         <visual name="wall_east_visual">
-          <pose>-8 0 0.75 0 0 0</pose>
+          <pose>10 0 0.75 0 0 0</pose>
           <geometry><box><size>0.2 20 1.5</size></box></geometry>
           <material><script><name>Gazebo/Black</name></script></material>
         </visual>
@@ -135,23 +135,23 @@
         </collision>
         <!-- West wall -->
         <visual name="wall_west_visual">
-          <pose>-28 0 0.75 0 0 0</pose>
+          <pose>-10 0 0.75 0 0 0</pose>
           <geometry><box><size>0.2 20 1.5</size></box></geometry>
           <material><script><name>Gazebo/Black</name></script></material>
         </visual>
         <collision name="wall_west_collision">
-          <pose>-28 0 0.75 0 0 0</pose>
+          <pose>-10 0 0.75 0 0 0</pose>
           <geometry><box><size>0.2 20 1.5</size></box></geometry>
         </collision>
       </link>
     </model>
 
-    <!-- Nine pillars (3x3 grid, 0.5x0.5x1.5m), black, spaced 6m apart, center at -18,0 -->
-    <!-- Row 1 (x=-24) -->
+    <!-- Nine pillars (3x3 grid, 0.5x0.5x1.5m), black, spaced 6m apart, center at 0,0 -->
+    <!-- Row 1 (x=-6) -->
     <model name="pillar_1_1">
       <static>true</static>
       <link name="link">
-        <pose>-24 -6 0.75 0 0 0</pose>
+        <pose>-6 -6 0.75 0 0 0</pose>
         <visual name="vis">
           <geometry><box><size>0.5 0.5 1.5</size></box></geometry>
           <material><script><name>Gazebo/Black</name></script></material>
@@ -164,7 +164,7 @@
     <model name="pillar_1_2">
       <static>true</static>
       <link name="link">
-        <pose>-24 0 0.75 0 0 0</pose>
+        <pose>-6 0 0.75 0 0 0</pose>
         <visual name="vis">
           <geometry><box><size>0.5 0.5 1.5</size></box></geometry>
           <material><script><name>Gazebo/Black</name></script></material>
@@ -177,7 +177,7 @@
     <model name="pillar_1_3">
       <static>true</static>
       <link name="link">
-        <pose>-24 6 0.75 0 0 0</pose>
+        <pose>-6 6 0.75 0 0 0</pose>
         <visual name="vis">
           <geometry><box><size>0.5 0.5 1.5</size></box></geometry>
           <material><script><name>Gazebo/Black</name></script></material>
@@ -187,11 +187,11 @@
         </collision>
       </link>
     </model>
-    <!-- Row 2 (x=-18) -->
+    <!-- Row 2 (x=-0) -->
     <model name="pillar_2_1">
       <static>true</static>
       <link name="link">
-        <pose>-18 -6 0.75 0 0 0</pose>
+        <pose>-0 -6 0.75 0 0 0</pose>
         <visual name="vis">
           <geometry><box><size>0.5 0.5 1.5</size></box></geometry>
           <material><script><name>Gazebo/Black</name></script></material>
@@ -204,7 +204,7 @@
     <model name="pillar_2_2">
       <static>true</static>
       <link name="link">
-        <pose>-18 0 0.75 0 0 0</pose>
+        <pose>-0 0 0.75 0 0 0</pose>
         <visual name="vis">
           <geometry><box><size>0.5 0.5 1.5</size></box></geometry>
           <material><script><name>Gazebo/Black</name></script></material>
@@ -217,7 +217,7 @@
     <model name="pillar_2_3">
       <static>true</static>
       <link name="link">
-        <pose>-18 6 0.75 0 0 0</pose>
+        <pose>-0 6 0.75 0 0 0</pose>
         <visual name="vis">
           <geometry><box><size>0.5 0.5 1.5</size></box></geometry>
           <material><script><name>Gazebo/Black</name></script></material>
@@ -227,11 +227,11 @@
         </collision>
       </link>
     </model>
-    <!-- Row 3 (x=-12) -->
+    <!-- Row 3 (x=6) -->
     <model name="pillar_3_1">
       <static>true</static>
       <link name="link">
-        <pose>-12 -6 0.75 0 0 0</pose>
+        <pose>6 -6 0.75 0 0 0</pose>
         <visual name="vis">
           <geometry><box><size>0.5 0.5 1.5</size></box></geometry>
           <material><script><name>Gazebo/Black</name></script></material>
@@ -244,7 +244,7 @@
     <model name="pillar_3_2">
       <static>true</static>
       <link name="link">
-        <pose>-12 0 0.75 0 0 0</pose>
+        <pose>6 0 0.75 0 0 0</pose>
         <visual name="vis">
           <geometry><box><size>0.5 0.5 1.5</size></box></geometry>
           <material><script><name>Gazebo/Black</name></script></material>
@@ -257,7 +257,7 @@
     <model name="pillar_3_3">
       <static>true</static>
       <link name="link">
-        <pose>-12 6 0.75 0 0 0</pose>
+        <pose>6 6 0.75 0 0 0</pose>
         <visual name="vis">
           <geometry><box><size>0.5 0.5 1.5</size></box></geometry>
           <material><script><name>Gazebo/Black</name></script></material>
