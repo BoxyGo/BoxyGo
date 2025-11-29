@@ -7,16 +7,23 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.actions import TimerAction
 from launch_ros.actions import SetRemap
 
+
 def generate_launch_description():
     boxygo_navigation_pkg = get_package_share_directory('boxygo_navigation')
     boxygo_localization_pkg = get_package_share_directory('boxygo_localization')
     boxygo_gazebo_pkg = get_package_share_directory('boxygo_gazebo')
     map_file = os.path.join(boxygo_localization_pkg, 'maps', 'playground_map.yaml') # small_city_map.yaml / playground_map.yaml
-    params_file = os.path.join(boxygo_navigation_pkg, 'config', 'nav2_params.yaml')
+    params_file = os.path.join(boxygo_navigation_pkg, 'config', 'nav2_params_h_2.yaml')
     ekf_config = os.path.join(boxygo_localization_pkg, 'config', 'ekf.yaml')
 
 
     return LaunchDescription([
+
+        IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(
+                    os.path.join(boxygo_gazebo_pkg, 'launch', 'gazebo_launch.py')
+                )
+            ),
 
         Node(
             package='robot_localization',

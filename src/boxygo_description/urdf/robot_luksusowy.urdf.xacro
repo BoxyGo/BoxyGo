@@ -36,14 +36,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/frame_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://${boxygo_description_pkg}/meshes/frame_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="darkgrey"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="meshes/frame_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://${boxygo_description_pkg}/meshes/frame_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
     <inertial>
@@ -57,14 +57,14 @@
   <link name="right_rocker_beam">
     <visual>
       <geometry>
-        <mesh filename="meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://${boxygo_description_pkg}/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <material name="black"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://${boxygo_description_pkg}/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin xyz="0 0 0" rpy="0 0 0"/>
     </collision>
@@ -87,14 +87,14 @@
   <link name="left_rocker_beam">
     <visual>
       <geometry>
-        <mesh filename="meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://${boxygo_description_pkg}/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <material name="black"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://${boxygo_description_pkg}/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin xyz="0 0 0" rpy="0 0 0"/>
     </collision>
@@ -119,14 +119,14 @@
     <link name="${side}_wheel_${index}">
       <visual>
         <geometry>
-          <mesh filename="meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+          <mesh filename="file://${boxygo_description_pkg}/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
         </geometry>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <material name="black"/>
       </visual>
       <collision>
         <geometry>
-          <mesh filename="meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+          <mesh filename="file://${boxygo_description_pkg}/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
         </geometry>
         <origin xyz="0 0 0" rpy="0 0 0"/>
       </collision>
