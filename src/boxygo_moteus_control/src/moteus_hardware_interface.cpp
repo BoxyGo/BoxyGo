@@ -178,11 +178,29 @@ namespace moteus_hardware_interface
         // i.e. min max endpoints, max vel torques etc, pid parameters
         // maybe omit safety critical params to be only changed on moteus directly via tview
 
+        for (const auto& pair : controllers_) {
+            auto ctrl = pair.second;
+
+            // exact = 0 → aktualna mechaniczna pozycja staje się zerem
+            ctrl->DiagnosticWrite("d exact 0.0\n");
+            ctrl->DiagnosticFlush();
+
+            RCLCPP_INFO(
+                rclcpp::get_logger("MoteusHardwareInterface"),
+                "Temporary zero offset set for actuator id=%d",
+                ctrl->options().id
+            );
+        }
+
         // We did not specify a transport so the default one was used when
         // constructing our Controller instances.  We need to get access to
         // that in order to send commands simultaneously to multiple servos.
         transport_ = mjbots::moteus::Controller::MakeSingletonTransport({});
+        
+
+
 #endif
+
 
         RCLCPP_INFO(rclcpp::get_logger("MoteusHardwareInterface"), "MoteusHardwareInterface successfully initialized!");
         return hardware_interface::CallbackReturn::SUCCESS;
