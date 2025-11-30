@@ -6,7 +6,11 @@
     <joint name="laser_joint" type="fixed">
       <parent link="${parent_link}"/>
       <child link="laser_frame"/>
+<<<<<<< HEAD
       <origin xyz="${x_offset} ${y_offset} ${z_offset}" rpy="0 0 ${-math.pi/2}"/>
+=======
+      <origin xyz="${x_offset} ${y_offset} ${z_offset}" rpy="0 0 ${pi}"/>
+>>>>>>> 52327ee (add position reset)
     </joint>
 
     <link name="laser_frame">
