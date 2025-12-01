@@ -30,6 +30,7 @@ make
 sudo make install
 cd ..
 pip install .
+
 export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/workspaces/isaac_ros-dev/install/boxygo_description/share/boxygo_description
 
 cd $WS
