@@ -40,6 +40,8 @@ if ! grep -q "# BoxyGo aliases" ~/.bashrc; then
     echo "alias k=\"ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r cmd_vel:=/diff_cont/cmd_vel_unstamped\"" >> ~/.bashrc
 fi
 
+export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/workspaces/isaac_ros-dev/install/boxygo_description/share/boxygo_description
+
 cd $WS
 
 echo "Environment setup for BoxyGo complete."
