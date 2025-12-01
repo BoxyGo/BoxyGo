@@ -13,10 +13,11 @@ def generate_launch_description():
 
     lidar_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('ydlidar_ros2_driver'), 'launch', 'ydlidar_launch.py')))
 
-    realsense_splitter_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('isaac_ros_nvblox'), 'nvblox_examples', 'nvblox_examples_bringup' , 'launch', 'realsense_example.launch.py')))
+    vslam_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('boxygo_vslam'), 'launch', 'vslam_launch.py')))
 
     return LaunchDescription([
         contoller_launch,
         slam_toolbox_launch,
         lidar_launch,
+        vslam_launch
     ])

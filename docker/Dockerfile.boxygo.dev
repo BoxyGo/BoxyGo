@@ -20,7 +20,6 @@ RUN apt-get update --allow-releaseinfo-change && apt-get install -y \
         ros-humble-foxglove-bridge \
         ros-humble-teleop-twist-keyboard \
         ros-humble-ros2-control \
-        # ros-humble-ros2-controllers \
         ros-humble-joint-state-publisher \
         ros-humble-controller-manager \
         ros-humble-controller-manager-msgs \
