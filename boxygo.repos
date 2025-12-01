@@ -16,4 +16,9 @@ repositories:
     url: https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_nvblox.git
     version: release-3.2
     recursive: true
+  ros2_controllers:
+    type: git
+    url: https://github.com/BoxyGo/diff_drive_controller.git
+    version: main
+
   
