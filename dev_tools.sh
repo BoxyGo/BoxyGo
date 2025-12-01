@@ -123,7 +123,9 @@ _b_completions()
 }
 complete -F _b_completions b
 
-echo "Dev tools loaded. Commands:"
+export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/workspaces/isaac_ros-dev/install/boxygo_description/share
+
+
 echo "   b [-r] [-p pkg] -> Build (Full or Single Pkg)"
 echo "   l               -> Launch Menu"
 echo "   s               -> Source setup.bash"

@@ -1,44 +1,45 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <xacro:property name="boxygo_description_pkg" value="$(find boxygo_description)"/>
-  
+  <!-- PARAMETRY -->
   <xacro:property name="body_length" value="0.81"/>
   <xacro:property name="body_width" value="0.5927"/>
   <xacro:property name="body_height" value="0.5"/>
   <xacro:property name="body_mass" value="10"/>
   <xacro:property name="body_x_offset" value="-0.015"/>
-  
+
   <xacro:property name="wheel_gap" value="0.26"/>
   <xacro:property name="rocker_x_offset" value="${-wheel_gap/2}"/> 
   <xacro:property name="rocker_y_offset" value="0.22085"/>
   <xacro:property name="rocker_z_offset" value="0.0876"/>
-  
+
   <xacro:property name="wheel_beam_y_offset" value="-0.05415"/> 
   <xacro:property name="wheel_beam_x_offset" value="${wheel_gap/2}"/>
   <xacro:property name="wheel_beam_z_offset" value="-0.0982"/> 
-  
+
   <xacro:property name="wheel_front_y_offset" value="0.275"/> 
   <xacro:property name="wheel_front_x_offset" value="${wheel_gap}"/> 
   <xacro:property name="wheel_front_z_offset" value="-0.0106"/> 
 
+  <!-- MATERIAŁY -->
   <material name="black"><color rgba="0.0 0.0 0.0 1.0"/></material>
   <material name="white"><color rgba="0.7 0.7 0.7 0.5"/></material>
   <material name="grey"><color rgba="0.4 0.4 0.4 1.0"/></material>
   <material name="darkgrey"><color rgba="0.05 0.05 0.05 1.0"/></material>
 
+  <!-- BASE LINK -->
   <link name="base_link">
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="file://${boxygo_description_pkg}/meshes/frame_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/frame_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="darkgrey"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="file://${boxygo_description_pkg}/meshes/frame_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/frame_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
     <inertial>
@@ -48,17 +49,18 @@
     </inertial>
   </link>
 
+  <!-- RIGHT ROCKER BEAM -->
   <link name="right_rocker_beam">
     <visual>
       <geometry>
-        <mesh filename="file://${boxygo_description_pkg}/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <material name="black"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="file://${boxygo_description_pkg}/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin xyz="0 0 0" rpy="0 0 0"/>
     </collision>
@@ -69,17 +71,18 @@
     </inertial>
   </link>
 
+  <!-- LEFT ROCKER BEAM -->
   <link name="left_rocker_beam">
     <visual>
       <geometry>
-        <mesh filename="file://${boxygo_description_pkg}/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <material name="black"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="file://${boxygo_description_pkg}/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin xyz="0 0 0" rpy="0 0 0"/>
     </collision>
@@ -90,18 +93,19 @@
     </inertial>
   </link>
 
+  <!-- KOŁA -->
   <xacro:macro name="wheel_link" params="prefix index">
     <link name="${prefix}_wheel_${index}">
       <visual>
         <geometry>
-          <mesh filename="file://${boxygo_description_pkg}/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
         </geometry>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <material name="black"/>
       </visual>
       <collision>
         <geometry>
-          <mesh filename="file://${boxygo_description_pkg}/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
         </geometry>
         <origin xyz="0 0 0" rpy="0 0 0"/>
       </collision>

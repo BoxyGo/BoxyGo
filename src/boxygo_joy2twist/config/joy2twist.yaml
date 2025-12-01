@@ -1,0 +1,22 @@
+joy2twist:
+  ros__parameters:
+    axis_linear: 1
+    axis_angular: 0
+
+    scale_linear: 0.2
+    scale_angular: 0.4
+
+    enable_drive_button: 4      # L1
+    enable_config_button: 5     # R1
+    require_enable_button: true
+
+    inc_step_linear: 0.05
+    inc_step_angular: 0.05
+
+    min_linear: 0.0
+    max_linear: 1.5
+
+    min_angular: 0.0
+    max_angular: 3.0
+
+    joy_timeout: 0.5

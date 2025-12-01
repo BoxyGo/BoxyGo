@@ -4,6 +4,7 @@
 <!-- |    EDITING THIS FILE BY HAND IS NOT RECOMMENDED                                 | -->
 <!-- =================================================================================== -->
 <robot name="delivery_robot">
+  <!-- MATERIAŁY -->
   <material name="black">
     <color rgba="0.0 0.0 0.0 1.0"/>
   </material>
@@ -16,18 +17,19 @@
   <material name="darkgrey">
     <color rgba="0.05 0.05 0.05 1.0"/>
   </material>
+  <!-- BASE LINK -->
   <link name="base_link">
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="file:///workspaces/isaac_ros-dev/install/boxygo_description/share/boxygo_description/meshes/frame_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/frame_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="darkgrey"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="file:///workspaces/isaac_ros-dev/install/boxygo_description/share/boxygo_description/meshes/frame_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/frame_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
     <inertial>
@@ -36,17 +38,18 @@
       <inertia ixx="1.293" ixy="-0.00005897" ixz="0.07241" iyy="1.521" iyz="0.0000000617" izz="2.615"/>
     </inertial>
   </link>
+  <!-- RIGHT ROCKER BEAM -->
   <link name="right_rocker_beam">
     <visual>
       <geometry>
-        <mesh filename="file:///workspaces/isaac_ros-dev/install/boxygo_description/share/boxygo_description/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <material name="black"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="file:///workspaces/isaac_ros-dev/install/boxygo_description/share/boxygo_description/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
     </collision>
@@ -56,17 +59,18 @@
       <inertia ixx="0.01030" ixy="1e-12" ixz="-5e-12" iyy="0.05174" iyz="-0.002614" izz="0.04833"/>
     </inertial>
   </link>
+  <!-- LEFT ROCKER BEAM -->
   <link name="left_rocker_beam">
     <visual>
       <geometry>
-        <mesh filename="file:///workspaces/isaac_ros-dev/install/boxygo_description/share/boxygo_description/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <material name="black"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="file:///workspaces/isaac_ros-dev/install/boxygo_description/share/boxygo_description/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/beam_full.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
     </collision>
@@ -95,14 +99,14 @@
   <link name="left_wheel_1">
     <visual>
       <geometry>
-        <mesh filename="file:///workspaces/isaac_ros-dev/install/boxygo_description/share/boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <material name="black"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="file:///workspaces/isaac_ros-dev/install/boxygo_description/share/boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
     </collision>
@@ -123,14 +127,14 @@
   <link name="left_wheel_2">
     <visual>
       <geometry>
-        <mesh filename="file:///workspaces/isaac_ros-dev/install/boxygo_description/share/boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <material name="black"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="file:///workspaces/isaac_ros-dev/install/boxygo_description/share/boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
     </collision>
@@ -151,14 +155,14 @@
   <link name="left_wheel_3">
     <visual>
       <geometry>
-        <mesh filename="file:///workspaces/isaac_ros-dev/install/boxygo_description/share/boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <material name="black"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="file:///workspaces/isaac_ros-dev/install/boxygo_description/share/boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
     </collision>
@@ -179,14 +183,14 @@
   <link name="right_wheel_1">
     <visual>
       <geometry>
-        <mesh filename="file:///workspaces/isaac_ros-dev/install/boxygo_description/share/boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <material name="black"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="file:///workspaces/isaac_ros-dev/install/boxygo_description/share/boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
     </collision>
@@ -207,14 +211,14 @@
   <link name="right_wheel_2">
     <visual>
       <geometry>
-        <mesh filename="file:///workspaces/isaac_ros-dev/install/boxygo_description/share/boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <material name="black"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="file:///workspaces/isaac_ros-dev/install/boxygo_description/share/boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
     </collision>
@@ -235,14 +239,14 @@
   <link name="right_wheel_3">
     <visual>
       <geometry>
-        <mesh filename="file:///workspaces/isaac_ros-dev/install/boxygo_description/share/boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <material name="black"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="file:///workspaces/isaac_ros-dev/install/boxygo_description/share/boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
     </collision>
