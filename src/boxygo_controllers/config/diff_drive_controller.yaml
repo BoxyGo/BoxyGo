@@ -19,5 +19,7 @@ diff_cont:
     right_wheel_names: ["right_wheel_1_joint", "right_wheel_2_joint", "right_wheel_3_joint"]
     wheel_separation: 0.55  # 6_wheel_robot.urdf.xacro 0.657    robot_luksusowy.urdf.xacro 0.55
     wheel_radius: 0.085     # 6_wheel_robot.urdf.xacro 0.1016   robot_luksusowy.urdf.xacro 0.085
+    wheels_per_side: 3
+    odom_middle_wheel_calc: true
     
 
