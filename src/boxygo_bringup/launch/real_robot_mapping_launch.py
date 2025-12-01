@@ -11,7 +11,7 @@ def generate_launch_description():
 
     slam_toolbox_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('boxygo_localization'), 'launch', 'mapping_launch.py')))
 
-    lidar_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('ydlidar_ros2_driver'), 'launch', 'ydlidar_launch_view.py')))
+    lidar_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('ydlidar_ros2_driver'), 'launch', 'ydlidar_launch.py')))
 
     realsense_splitter_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('isaac_ros_nvblox'), 'nvblox_examples', 'nvblox_examples_bringup' , 'launch', 'realsense_example.launch.py')))
 
