@@ -31,17 +31,7 @@ sudo make install
 cd ..
 pip install .
 
-if ! grep -q "# BoxyGo aliases" ~/.bashrc; then
-    echo "" >> ~/.bashrc
-    echo "# BoxyGo aliases" >> ~/.bashrc
-
-    echo "alias b='cd $WS && colcon build --symlink-install && source install/setup.bash'" >> ~/.bashrc
-
-    echo "alias k=\"ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r cmd_vel:=/diff_cont/cmd_vel_unstamped\"" >> ~/.bashrc
-fi
-
 cd $WS
 
 echo "Environment setup for BoxyGo complete."
 echo "Run 'source ~/.bashrc' to load new aliases."
-

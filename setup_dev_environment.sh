@@ -38,48 +38,6 @@ else
   echo "BoxyGo repo already exists in $BOXYGO_DIR, skipping."
 fi
 
-RULES_FILE="/etc/udev/rules.d/99-robot-usb.rules"
-
-echo "=== [AUTOSETUP] Check udev rules ==="
-
-NEED_SETUP=false
-
-if [ ! -e /dev/ydlidar ]; then
-  NEED_SETUP=true
-fi
-
-if [ ! -e /dev/can_usb ]; then
-  NEED_SETUP=true
-fi
-
-if ! lsusb | grep -qi "Intel Corp."; then
-  true
-fi
-
-if [ ! -f /etc/udev/rules.d/99-realsense-libusb.rules ]; then
-  NEED_SETUP=true
-fi
-
-if [ "${NEED_SETUP}" = true ]; then
-  sudo bash -c "cat > ${RULES_FILE}" << 'EOF'
-SUBSYSTEM=="tty", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", ATTRS{serial}=="00000000001A", SYMLINK+="ydlidar"
-SUBSYSTEM=="tty", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", ATTRS{serial}=="12BB92BE", SYMLINK+="can_usb"
-
-SUBSYSTEM=="usb", ATTRS{idVendor}=="8086", MODE="0666"
-SUBSYSTEM=="usb", ATTRS{idVendor}=="8086", ATTRS{idProduct}=="0ad5", MODE="0666"
-SUBSYSTEM=="usb", ATTRS{idVendor}=="8086", ATTRS{idProduct}=="0ad3", MODE="0666"
-SUBSYSTEM=="usb", ATTRS{idVendor}=="8086", ATTRS{idProduct}=="0ad4", MODE="0666"
-SUBSYSTEM=="usb", ATTRS{idVendor}=="8086", ATTRS{idProduct}=="0ad2", MODE="0666"
-
-KERNEL=="video[0-9]*", SUBSYSTEMS=="usb", ATTRS{idVendor}=="8086", MODE="0666"
-KERNEL=="bus", SUBSYSTEMS=="usb", ATTRS{idVendor}=="8086", MODE="0666"
-EOF
-
-  sudo udevadm control --reload-rules
-  sudo udevadm trigger
-  sleep 1
-fi
-
 echo "=== Cloning Isaac ROS Common ==="
 ISAAC_ROOT="$HOME/isaac_ros"
 ISAAC_COMMON_DIR="$ISAAC_ROOT/isaac_ros_common"
@@ -122,12 +80,21 @@ DOCKERARGS_FILE="$HOME/.isaac_ros_dev-dockerargs"
 echo "Writing docker args file to: $DOCKERARGS_FILE"
 
 cat > "$DOCKERARGS_FILE" << EOF
---cap-add=SYS_NICE
 --cap-add=IPC_LOCK
 --ulimit rtprio=99
 --ulimit memlock=-1
---privileged
--v /dev:/dev
+-v=/dev/ydlidar:/dev/ydlidar
+-v=/dev/fdcanusb:/dev/fdcanusb
+-v=/dev/gamepad_js:/dev/gamepad_js
+-v=/dev/gamepad_event:/dev/gamepad_event
+-v=/dev/realsense-video0:/dev/realsense-video0
+-v=/dev/realsense-video1:/dev/realsense-video1
+-v=/dev/realsense-video2:/dev/realsense-video2
+-v=/dev/realsense-video3:/dev/realsense-video3
+-v=/dev/realsense-video4:/dev/realsense-video4
+-v=/dev/realsense-video5:/dev/realsense-video5
+-v=/dev/realsense-media1:/dev/realsense-media1
+-v=/dev/realsense-media2:/dev/realsense-media2
 EOF
 
 echo "Config written to $DOCKERARGS_FILE"
