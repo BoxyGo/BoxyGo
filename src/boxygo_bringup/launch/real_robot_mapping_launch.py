@@ -19,5 +19,4 @@ def generate_launch_description():
         contoller_launch,
         slam_toolbox_launch,
         lidar_launch,
-        #realsense_splitter_launch
     ])

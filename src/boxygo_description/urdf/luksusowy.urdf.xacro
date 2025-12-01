@@ -19,7 +19,9 @@
   </xacro:if>
 
   <xacro:include filename="$(find boxygo_description)/urdf/common/lidar.xacro"/>
+  <xacro:include filename="$(find boxygo_description)/urdf/common/_d435i.urdf.xacro"/>
   
   <xacro:sensor_ydlidar parent_link="base_link" x_offset="0.06" y_offset="0.0" z_offset="0.32"/>
+  <xacro:sensor_d435i parent="base_link" use_nominal_extrinsics="true"> <origin xyz="0.38 0.0 0.225" rpy="0 0 0"/></xacro:sensor_d435i>
 
 </robot>
