@@ -1,8 +1,0 @@
-teleop_twist_joy:
-  ros__parameters:
-    axis_linear: 1         # Lewy drążek przód/tył (np. Axis 1)
-    axis_angular: 0        # Lewy drążek lewo/prawo (np. Axis 0)
-    scale_linear: 2.0      # Ustal według potrzeb (np. 2.0)
-    scale_angular: 4.0
-    enable_button: 4       # Numer przycisku enable (np. L1)
-    require_enable_button: true

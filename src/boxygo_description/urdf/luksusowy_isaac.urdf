@@ -4,6 +4,7 @@
 <!-- |    EDITING THIS FILE BY HAND IS NOT RECOMMENDED                                 | -->
 <!-- =================================================================================== -->
 <robot name="delivery_robot">
+  <!-- MATERIAŁY -->
   <material name="black">
     <color rgba="0.0 0.0 0.0 1.0"/>
   </material>
@@ -16,6 +17,7 @@
   <material name="darkgrey">
     <color rgba="0.05 0.05 0.05 1.0"/>
   </material>
+  <!-- BASE LINK -->
   <link name="base_link">
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -36,6 +38,7 @@
       <inertia ixx="1.293" ixy="-0.00005897" ixz="0.07241" iyy="1.521" iyz="0.0000000617" izz="2.615"/>
     </inertial>
   </link>
+  <!-- RIGHT ROCKER BEAM -->
   <link name="right_rocker_beam">
     <visual>
       <geometry>
@@ -56,6 +59,7 @@
       <inertia ixx="0.01030" ixy="1e-12" ixz="-5e-12" iyy="0.05174" iyz="-0.002614" izz="0.04833"/>
     </inertial>
   </link>
+  <!-- LEFT ROCKER BEAM -->
   <link name="left_rocker_beam">
     <visual>
       <geometry>
@@ -301,7 +305,7 @@
   <joint name="laser_joint" type="fixed">
     <parent link="base_link"/>
     <child link="laser_frame"/>
-    <origin rpy="0 0 0" xyz="0.06 0.0 0.32"/>
+    <origin rpy="0 0 3.141592653589793" xyz="0.06 0.0 0.32"/>
   </joint>
   <link name="laser_frame">
     <visual>
