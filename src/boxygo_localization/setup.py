@@ -20,13 +20,16 @@ setup(
          glob.glob(os.path.join('rviz', '*.rviz'))),
         (os.path.join('share', package_name, 'maps'),
          glob.glob(os.path.join('maps', '*'))),
-       
-
     ],
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='Boxygo Team',
     maintainer_email='boxygo.mail@gmail.com',
     description='BoxyGo slam package',
-    license='Apache-2.0'
+    license='Apache-2.0',
+    entry_points={
+        'console_scripts': [
+            'realsense_imu_remap = boxygo_localization.realsense_imu_remap:main',
+        ],
+    },
 )
