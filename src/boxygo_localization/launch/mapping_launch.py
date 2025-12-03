@@ -7,6 +7,7 @@ def generate_launch_description():
     pkg = get_package_share_directory('boxygo_localization')
     slam_params = os.path.join(pkg, 'config', 'mapping_params.yaml')
     rviz_config = os.path.join(pkg, 'config', 'rviz_slam.rviz')
+    ekf_params = os.path.join(pkg, 'config', 'ekf.yaml')
 
     slam_node = Node(
         package='slam_toolbox',
@@ -38,7 +39,7 @@ def generate_launch_description():
         executable='ekf_node',
         name='ekf_filter_node',
         output='screen',
-        parameters=[os.path.join(pkg, 'config', 'ekf.yaml')]
+        parameters=[ekf_params]
     )
 
     return LaunchDescription([
