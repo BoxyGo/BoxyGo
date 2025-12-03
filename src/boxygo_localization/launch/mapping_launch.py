@@ -19,6 +19,30 @@ def generate_launch_description():
         ]
     )
 
+    imu_node = Node(
+    package='imu_filter_madgwick',
+    executable='imu_filter_madgwick_node',
+    name='imu_filter_madgwick',
+    output='screen',
+    parameters=[
+        {"use_mag": False},
+        {"fixed_frame": "camera_link"}   # dodany parametr
+    ],
+    remappings=[
+        ("/imu/data_raw", "/camera/imu")
+    ]
+    )
+
+    ekf_node = Node(
+        package='robot_localization',
+        executable='ekf_node',
+        name='ekf_filter_node',
+        output='screen',
+        parameters=[os.path.join(pkg, 'config', 'ekf.yaml')]
+    )
+
     return LaunchDescription([
-        slam_node
+        slam_node,
+        ekf_node,
+        imu_node
     ])
