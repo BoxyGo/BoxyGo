@@ -1,6 +1,19 @@
-# colcon artifacts
+# ROS 2 colcon artifacts
 build/
 install/
 log/
 
+# Python bytecode
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+
+# CMake / build cache
+**/CMakeCache.txt
+**/CMakeFiles/
+**/cmake_install.cmake
+**/Makefile
+
+# VSCode settings
 .vscode/

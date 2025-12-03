@@ -14,7 +14,7 @@ def generate_launch_description():
 
     lidar_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('ydlidar_ros2_driver'), 'launch', 'ydlidar_launch.py')))
 
-    realsense_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('boxygo_bringup'), 'launch', 'realsense_launch.py')))
+    realsense_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('boxygo_bringup'), 'launch', 'realsense_camera_launch.py')))
 
     vslam_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('boxygo_vslam'), 'launch', 'vslam_launch.py')))
 

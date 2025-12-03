@@ -16,15 +16,13 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import launch
-from launch_ros.actions import ComposableNodeContainer, Node
-from launch_ros.descriptions import ComposableNode
-
+from launch_ros.actions import Node
 
 def generate_launch_description():
     """Launch file which brings up visual slam node configured for RealSense."""
     realsense_camera_node = Node(
         name='camera',
-        namespace='camera',
+        namespace='',
         package='realsense2_camera',
         executable='realsense2_camera_node',
         parameters=[{
@@ -33,13 +31,14 @@ def generate_launch_description():
             'enable_color': False,
             'enable_depth': False,
             'depth_module.emitter_enabled': 0,
-            'depth_module.profile': '640x360x90',
+            'depth_module.infra_profile': '640x360x90',
+            'depth_module.profile': '640x360x90',  # For backwards compatibility
             'enable_gyro': True,
             'enable_accel': True,
             'gyro_fps': 200,
-            'accel_fps': 200,
+            'accel_fps': 250,  # set to 250 for rs d435i
             'unite_imu_method': 2,
-            'publish_tf' : False
+            'publish_tf': False
         }],
     )
 
