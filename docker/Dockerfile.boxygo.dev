@@ -31,6 +31,7 @@ RUN apt-get update --allow-releaseinfo-change && apt-get install -y \
         ros-humble-isaac-ros-examples \
         ros-humble-isaac-ros-nvblox \
         ros-humble-pinocchio \
+        ros-humble-imu-tools \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install --upgrade pip && pip3 install moteus

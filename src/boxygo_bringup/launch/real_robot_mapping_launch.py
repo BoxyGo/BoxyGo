@@ -10,18 +10,18 @@ def generate_launch_description():
 
     contoller_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('boxygo_moteus_control'), 'launch', 'joint_controller_launch.py')))
 
-    imu_remap_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('boxygo_localization'), 'launch', 'realsense_imu_remap_launch.py')))
-
     slam_toolbox_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('boxygo_localization'), 'launch', 'mapping_launch.py')))
 
     lidar_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('ydlidar_ros2_driver'), 'launch', 'ydlidar_launch.py')))
+
+    realsense_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('boxygo_bringup'), 'launch', 'realsense_launch.py')))
 
     vslam_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('boxygo_vslam'), 'launch', 'vslam_launch.py')))
 
     return LaunchDescription([
         contoller_launch,
-        imu_remap_launch,
         slam_toolbox_launch,
         lidar_launch,
-        vslam_launch,
+        realsense_launch,
+        #vslam_launch,
     ])

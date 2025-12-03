@@ -30,7 +30,7 @@ class RealsenseImuRemap(Node):
 
         msg_out.linear_acceleration.x =  az      # X_bl
         msg_out.linear_acceleration.y = -ax      # Y_bl
-        msg_out.linear_acceleration.z = ay      # Z_bl
+        msg_out.linear_acceleration.z = -ay      # Z_bl
 
         gx = msg_in.angular_velocity.x
         gy = msg_in.angular_velocity.y
@@ -38,7 +38,7 @@ class RealsenseImuRemap(Node):
 
         msg_out.angular_velocity.x =  gz         # X_bl
         msg_out.angular_velocity.y = -gx         # Y_bl
-        msg_out.angular_velocity.z = gy         # Z_bl
+        msg_out.angular_velocity.z = -gy         # Z_bl
 
         self.pub.publish(msg_out)
 
