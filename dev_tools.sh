@@ -1,6 +1,7 @@
 #!/bin/bash
 
 function g() {
+    s
     if [ -z "$ROS_DISTRO" ]; then return 1; fi
 
     local MODE="isaac"
@@ -83,6 +84,7 @@ function b() {
 }
 
 function l() {
+    s
     if [ ! -d "install" ]; then return 1; fi
     
     local i=1; local packages=(); local files=()
@@ -105,6 +107,16 @@ function l() {
     
     local idx=$((choice-1))
     ros2 launch "${packages[$idx]}" "${files[$idx]}"
+}
+
+function t() {
+    s
+    rqt -p tftree
+}
+
+function k() {
+    s
+    ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:="/diff_cont/cmd_vel_unstamped"
 }
 
 _b_completions()
@@ -130,3 +142,5 @@ echo "   b [-r] [-p pkg] -> Build (Full or Single Pkg)"
 echo "   l               -> Launch Menu"
 echo "   s               -> Source setup.bash"
 echo "   g               -> Generate URDF"
+echo "   t               -> Open rqt TF Tree"
+echo "   k               -> Teleop Twist Keyboard"
