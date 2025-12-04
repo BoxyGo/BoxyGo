@@ -33,18 +33,18 @@ def generate_launch_description():
     )
 
     imu_node = Node(
-    package='imu_filter_madgwick',
-    executable='imu_filter_madgwick_node',
-    name='imu_filter_madgwick',
-    output='screen',
-    parameters=[
-        {"use_mag": False},
-        {"fixed_frame": "camera_link"},   # dodany parametr
-        {'use_sim_time': use_sim_time}
-    ],
-    remappings=[
-        ("/imu/data_raw", "/camera/imu")
-    ]
+        package='imu_filter_madgwick',
+        executable='imu_filter_madgwick_node',
+        name='imu_filter_madgwick',
+        output='screen',
+        parameters=[
+            {"use_mag": False},
+            {"fixed_frame": "camera_link"},   # dodany parametr
+            {'use_sim_time': use_sim_time}
+        ],
+        remappings=[
+            ("/imu/data_raw", "/camera/imu")
+        ]
     )
 
     ekf_node = Node(
@@ -57,6 +57,7 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        declare_use_sim_time,
         slam_node,
         ekf_node,
         imu_node
