@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function g() {
+function u() {
     s
     if [ -z "$ROS_DISTRO" ]; then return 1; fi
 
@@ -155,6 +155,16 @@ function r() {
     rqt --perspective-file "$selected"
 }
 
+function g() {
+    s || return 1
+
+    if ros2 pkg list | grep -q "^greenwave_monitor$"; then
+        ros2 run greenwave_monitor ncurses_dashboard
+    else
+        echo "Greenwave Monitor is not built!"
+    fi
+}
+
 
 function k() {
     s
@@ -183,6 +193,7 @@ export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/workspaces/isaac_ros-dev/install/bo
 echo "   b [-r] [-p pkg] -> Build (Full or Single Pkg)"
 echo "   l               -> Launch Menu"
 echo "   s               -> Source setup.bash"
-echo "   g               -> Generate URDF"
+echo "   g               -> Run Greenwave Monitor"
 echo "   r               -> Open rqt panels"
 echo "   k               -> Teleop Twist Keyboard"
+echo "   u               -> Generate URDF for Isaac Sim"
