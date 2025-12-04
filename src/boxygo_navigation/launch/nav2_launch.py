@@ -2,9 +2,9 @@ from launch import LaunchDescription
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 import os
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, TimerAction, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.actions import TimerAction
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import SetRemap
 
 
@@ -12,28 +12,28 @@ def generate_launch_description():
     boxygo_navigation_pkg = get_package_share_directory('boxygo_navigation')
     boxygo_localization_pkg = get_package_share_directory('boxygo_localization')
     boxygo_gazebo_pkg = get_package_share_directory('boxygo_gazebo')
+    
     map_file = os.path.join(boxygo_localization_pkg, 'maps', 'playground_map.yaml') # small_city_map.yaml / playground_map.yaml
     params_file = os.path.join(boxygo_navigation_pkg, 'config', 'nav2_params_h_2.yaml')
     ekf_config = os.path.join(boxygo_localization_pkg, 'config', 'ekf.yaml')
 
+    use_sim_time = LaunchConfiguration('use_sim_time')
 
-    return LaunchDescription([
+    declare_use_sim_time = DeclareLaunchArgument(
+        'use_sim_time',
+        default_value='true',  # dla navigation_gazebo
+        description='Use simulation time if true'
+    )
 
-        IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(
-                    os.path.join(boxygo_gazebo_pkg, 'launch', 'gazebo_launch.py')
-                )
-            ),
+    ekf_node = Node(
+        package='robot_localization',
+        executable='ekf_node',
+        name='ekf_filter_node',
+        output='screen',
+        parameters=[ekf_config, {'use_sim_time': use_sim_time}],
+    ),
 
-        Node(
-            package='robot_localization',
-            executable='ekf_node',
-            name='ekf_filter_node',
-            output='screen',
-            parameters=[ekf_config, {'use_sim_time': True}],
-        ),
-        
-        TimerAction(
+    nav2_node = TimerAction(
             period=5.0,
             actions=[
                 SetRemap(src='/cmd_vel', dst='/diff_cont/cmd_vel_unstamped'),
@@ -41,18 +41,13 @@ def generate_launch_description():
                     PythonLaunchDescriptionSource(
                         os.path.join(get_package_share_directory('nav2_bringup'), 'launch', 'bringup_launch.py')
                     ),
-                    launch_arguments={'params_file': params_file, 'map': map_file, 'use_sim_time': 'true', 'autostart': 'true'}.items()
+                    launch_arguments={'params_file': params_file, 'map': map_file, 'use_sim_time': use_sim_time, 'autostart': 'true'}.items()
                 ),
             ]
         ),
 
-        Node(
-            package='rviz2',
-            executable='rviz2',
-            name='rviz2',
-            output='screen',
-            arguments=['-d', os.path.join(boxygo_navigation_pkg, 'rviz', 'rviz_nav2.rviz')],
-            parameters=[{'use_sim_time': True}]
-        ),
-        
+    return LaunchDescription([
+        declare_use_sim_time,
+        ekf_node,
+        nav2_node
     ])
