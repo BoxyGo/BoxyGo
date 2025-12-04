@@ -93,7 +93,6 @@ function l() {
         pkg_name=$(echo "$filepath" | cut -d'/' -f2)
         file_name=$(basename "$filepath")
         packages+=("$pkg_name"); files+=("$file_name")
-        # To echo musi zostać, żebyś widział menu
         echo -e "  \033[1;32m[$i]\033[0m Pkg: \033[1;34m$pkg_name\033[0m -> File: $file_name"
         ((i++))
     done < <(find -L install -type f \( -name "*launch.py" -o -name "*launch.xml" -o -name "*launch.yaml" \) | grep "/share/" | sort)
@@ -109,10 +108,53 @@ function l() {
     ros2 launch "${packages[$idx]}" "${files[$idx]}"
 }
 
-function t() {
-    s
-    rqt -p tftree
+function r() {
+    s 
+
+    local PANEL_DIR="rqt_panels"
+    local -a files=()
+
+    if [ ! -d "$PANEL_DIR" ]; then
+        echo "Folder '$PANEL_DIR' nie istnieje."
+        return 1
+    fi
+
+    echo -e "\nDostępne perspektywy RQt:\n"
+
+    local i=1
+    while IFS= read -r file; do
+        files+=("$file")
+        echo -e "  \033[1;32m[$i]\033[0m $(basename "$file")"
+        ((i++))
+    done < <(find "$PANEL_DIR" -maxdepth 1 -type f -name "*.perspective" | sort)
+
+    if [ ${#files[@]} -eq 0 ]; then
+        echo "Brak plików .perspective w $PANEL_DIR"
+        return 1
+    fi
+
+    echo ""
+    read -p "Wybierz numer (q=wyjście): " choice
+
+    if [[ "$choice" == "q" ]]; then
+        return 0
+    fi
+
+    if ! [[ "$choice" =~ ^[0-9]+$ ]]; then
+        echo "Niepoprawny numer."
+        return 1
+    fi
+
+    if (( choice < 1 || choice > ${#files[@]} )); then
+        echo "Numer poza zakresem."
+        return 1
+    fi
+
+    local idx=$((choice-1))
+    local selected="${files[$idx]}"
+    rqt --perspective-file "$selected"
 }
+
 
 function k() {
     s
@@ -142,5 +184,5 @@ echo "   b [-r] [-p pkg] -> Build (Full or Single Pkg)"
 echo "   l               -> Launch Menu"
 echo "   s               -> Source setup.bash"
 echo "   g               -> Generate URDF"
-echo "   t               -> Open rqt TF Tree"
+echo "   r               -> Open rqt panels"
 echo "   k               -> Teleop Twist Keyboard"
