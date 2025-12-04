@@ -16,12 +16,9 @@ def generate_launch_description():
 
     realsense_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('boxygo_bringup'), 'launch', 'realsense_camera_launch.py')))
 
-    vslam_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('boxygo_vslam'), 'launch', 'vslam_launch.py')))
-
     return LaunchDescription([
         contoller_launch,
         slam_toolbox_launch,
         lidar_launch,
         realsense_launch,
-        #vslam_launch,
     ])
