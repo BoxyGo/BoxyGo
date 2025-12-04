@@ -12,11 +12,11 @@ def generate_launch_description():
     
     realsense_launch = IncludeLaunchDescription(
     PythonLaunchDescriptionSource(
-        PathJoinSubstitution([ FindPackageShare('boxygo_bringup'), 'launch', 'realsense_camera_launch.py'])))
+        PathJoinSubstitution([ FindPackageShare('boxygo_localization'), 'launch', 'realsense_camera_launch.py'])))
    
     vslam_launch = IncludeLaunchDescription(
     PythonLaunchDescriptionSource(
-        PathJoinSubstitution([ FindPackageShare('boxygo_bringup'), 'launch', 'vslam_launch.py'])))
+        PathJoinSubstitution([ FindPackageShare('boxygo_localization'), 'launch', 'vslam_launch.py'])))
    
     return LaunchDescription([GroupAction([moteus_controller_launch, realsense_launch, vslam_launch])])
       
