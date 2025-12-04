@@ -356,12 +356,12 @@ namespace moteus_hardware_interface
     hardware_interface::return_type MoteusHardwareInterface::write(
         const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
     {
-        RCLCPP_INFO(
-            rclcpp::get_logger("MoteusHardwareInterface"),
-            "%f %f %f | %f %f %f | %f %f %f",
-            hw_command_efforts_[0], hw_command_efforts_[1], hw_command_efforts_[2],
-            hw_command_velocities_[0], hw_command_velocities_[1], hw_command_velocities_[2],
-            hw_command_positions_[0], hw_command_positions_[1], hw_command_positions_[2]);
+        // RCLCPP_INFO(
+        //     rclcpp::get_logger("MoteusHardwareInterface"),
+        //     "%f %f %f | %f %f %f | %f %f %f",
+        //     hw_command_efforts_[0], hw_command_efforts_[1], hw_command_efforts_[2],
+        //     hw_command_velocities_[0], hw_command_velocities_[1], hw_command_velocities_[2],
+        //     hw_command_positions_[0], hw_command_positions_[1], hw_command_positions_[2]);
 
         command_frames_.clear();
         replies_.clear();
@@ -373,9 +373,9 @@ namespace moteus_hardware_interface
 
             if (!std::isnan(hw_command_velocities_[i]))
             {
-                RCLCPP_INFO(
-                    rclcpp::get_logger("MoteusHardwareInterface"),
-                    "vel %d = %f", i, hw_command_velocities_[i]);
+                // RCLCPP_INFO(
+                //     rclcpp::get_logger("MoteusHardwareInterface"),
+                //     "vel %d = %f", i, hw_command_velocities_[i]);
 
                 const double wheel_vel_rad_s = hw_command_velocities_[i];
                 const double dir = static_cast<double>(hw_actuator_axis_directions_[i]);
@@ -388,9 +388,9 @@ namespace moteus_hardware_interface
             }
             else
             {
-                RCLCPP_INFO(
-                    rclcpp::get_logger("MoteusHardwareInterface"),
-                    "no cmd %d", i);
+                // RCLCPP_INFO(
+                //     rclcpp::get_logger("MoteusHardwareInterface"),
+                //     "no cmd %d", i);
 
                 position_command.position = std::numeric_limits<float>::quiet_NaN();
                 position_command.velocity = 0.0f;

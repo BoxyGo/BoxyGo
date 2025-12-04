@@ -35,7 +35,7 @@ def generate_launch_description():
             'accel_noise_density': 0.001862,
             'accel_random_walk': 0.003,
             'calibration_frequency': 200.0,
-            'image_jitter_threshold_ms': 22.00,
+            'image_jitter_threshold_ms': 50.00,
             'base_frame': 'camera_link',
             'imu_frame': 'camera_gyro_optical_frame',
             'enable_slam_visualization': True,
@@ -45,6 +45,10 @@ def generate_launch_description():
                 'camera_infra1_optical_frame',
                 'camera_infra2_optical_frame',
             ],
+            'enable_ground_constraint_in_odometry': False,
+            'enable_ground_constraint_in_slam': True,
+            'enable_localization_n_mapping': False,
+            'verbosity': 1
         }],
         remappings=[
             ('visual_slam/image_0', 'camera/infra1/image_rect_raw'),

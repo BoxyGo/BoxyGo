@@ -22,7 +22,7 @@ def generate_launch_description():
     """Launch file which brings up visual slam node configured for RealSense."""
     realsense_camera_node = Node(
         name='camera',
-        namespace='',
+        namespace='camera',
         package='realsense2_camera',
         executable='realsense2_camera_node',
         parameters=[{
