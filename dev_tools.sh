@@ -1,6 +1,7 @@
 #!/bin/bash
 
-function g() {
+function u() {
+    s
     if [ -z "$ROS_DISTRO" ]; then return 1; fi
 
     local MODE="isaac"
@@ -83,6 +84,7 @@ function b() {
 }
 
 function l() {
+    s
     if [ ! -d "install" ]; then return 1; fi
     
     local i=1; local packages=(); local files=()
@@ -91,7 +93,6 @@ function l() {
         pkg_name=$(echo "$filepath" | cut -d'/' -f2)
         file_name=$(basename "$filepath")
         packages+=("$pkg_name"); files+=("$file_name")
-        # To echo musi zostać, żebyś widział menu
         echo -e "  \033[1;32m[$i]\033[0m Pkg: \033[1;34m$pkg_name\033[0m -> File: $file_name"
         ((i++))
     done < <(find -L install -type f \( -name "*launch.py" -o -name "*launch.xml" -o -name "*launch.yaml" \) | grep "/share/" | sort)
@@ -105,6 +106,69 @@ function l() {
     
     local idx=$((choice-1))
     ros2 launch "${packages[$idx]}" "${files[$idx]}"
+}
+
+function r() {
+    s 
+
+    local PANEL_DIR="rqt_panels"
+    local -a files=()
+
+    if [ ! -d "$PANEL_DIR" ]; then
+        echo "Folder '$PANEL_DIR' nie istnieje."
+        return 1
+    fi
+
+    echo -e "\nDostępne perspektywy RQt:\n"
+
+    local i=1
+    while IFS= read -r file; do
+        files+=("$file")
+        echo -e "  \033[1;32m[$i]\033[0m $(basename "$file")"
+        ((i++))
+    done < <(find "$PANEL_DIR" -maxdepth 1 -type f -name "*.perspective" | sort)
+
+    if [ ${#files[@]} -eq 0 ]; then
+        echo "Brak plików .perspective w $PANEL_DIR"
+        return 1
+    fi
+
+    echo ""
+    read -p "Wybierz numer (q=wyjście): " choice
+
+    if [[ "$choice" == "q" ]]; then
+        return 0
+    fi
+
+    if ! [[ "$choice" =~ ^[0-9]+$ ]]; then
+        echo "Niepoprawny numer."
+        return 1
+    fi
+
+    if (( choice < 1 || choice > ${#files[@]} )); then
+        echo "Numer poza zakresem."
+        return 1
+    fi
+
+    local idx=$((choice-1))
+    local selected="${files[$idx]}"
+    rqt --perspective-file "$selected"
+}
+
+function g() {
+    s || return 1
+
+    if ros2 pkg list | grep -q "^greenwave_monitor$"; then
+        ros2 run greenwave_monitor ncurses_dashboard
+    else
+        echo "Greenwave Monitor is not built!"
+    fi
+}
+
+
+function k() {
+    s
+    ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:="/diff_cont/cmd_vel_unstamped"
 }
 
 _b_completions()
@@ -129,4 +193,7 @@ export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/workspaces/isaac_ros-dev/install/bo
 echo "   b [-r] [-p pkg] -> Build (Full or Single Pkg)"
 echo "   l               -> Launch Menu"
 echo "   s               -> Source setup.bash"
-echo "   g               -> Generate URDF"
+echo "   g               -> Run Greenwave Monitor"
+echo "   r               -> Open rqt panels"
+echo "   k               -> Teleop Twist Keyboard"
+echo "   u               -> Generate URDF for Isaac Sim"
