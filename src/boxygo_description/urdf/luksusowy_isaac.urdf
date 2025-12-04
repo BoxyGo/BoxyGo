@@ -147,7 +147,7 @@
   <joint name="left_wheel_2_joint" type="continuous">
     <parent link="left_rocker_beam"/>
     <child link="left_wheel_2"/>
-    <origin rpy="0 0 0.0" xyz="0.13 -0.05415 -0.0982"/>
+    <origin rpy="0 0 0.0" xyz="-0.13 -0.05415 -0.0982"/>
     <axis xyz="0 -1 0"/>
     <limit effort="12.0" velocity="50.26548245743669"/>
     <dynamics damping="0.01" friction="0.001"/>
@@ -175,7 +175,7 @@
   <joint name="left_wheel_3_joint" type="continuous">
     <parent link="left_rocker_beam"/>
     <child link="left_wheel_3"/>
-    <origin rpy="0 0 0.0" xyz="-0.13 -0.05415 -0.0982"/>
+    <origin rpy="0 0 0.0" xyz="0.13 -0.05415 -0.0982"/>
     <axis xyz="0 -1 0"/>
     <limit effort="12.0" velocity="50.26548245743669"/>
     <dynamics damping="0.01" friction="0.001"/>

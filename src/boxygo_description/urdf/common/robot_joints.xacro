@@ -47,12 +47,12 @@
 
   <xacro:wheel_assembly side="left" parent_link="base_link" sign="-1" wheel_side_sign="1" index="1" 
     x_offset="${wheel_front_x_offset}" y_offset="${wheel_front_y_offset}" z_offset="${wheel_front_z_offset}"/>
-  
+    
   <xacro:wheel_assembly side="left" parent_link="left_rocker_beam" sign="-1" wheel_side_sign="0" index="2" 
-    x_offset="${wheel_beam_x_offset}" y_offset="${wheel_beam_y_offset}" z_offset="${wheel_beam_z_offset}"/>
-  
-  <xacro:wheel_assembly side="left" parent_link="left_rocker_beam" sign="-1" wheel_side_sign="0" index="3" 
     x_offset="${-wheel_beam_x_offset}" y_offset="${wheel_beam_y_offset}" z_offset="${wheel_beam_z_offset}"/>
+
+  <xacro:wheel_assembly side="left" parent_link="left_rocker_beam" sign="-1" wheel_side_sign="0" index="3" 
+    x_offset="${wheel_beam_x_offset}" y_offset="${wheel_beam_y_offset}" z_offset="${wheel_beam_z_offset}"/>
 
   <xacro:wheel_assembly side="right" parent_link="base_link" sign="1" wheel_side_sign="0" index="1" 
     x_offset="${wheel_front_x_offset}" y_offset="${-wheel_front_y_offset}" z_offset="${wheel_front_z_offset}"/>
