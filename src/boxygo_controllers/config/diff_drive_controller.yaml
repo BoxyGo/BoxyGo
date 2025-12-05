@@ -21,13 +21,13 @@ diff_cont:
     wheel_radius: 0.085     # 6_wheel_robot.urdf.xacro 0.1016   robot_luksusowy.urdf.xacro 0.085
     wheels_per_side: 3
     odom_middle_wheel_calc: false
-    # pose_covariance_diagonal: [
-    #   0.1, 0.1, 0.1,    # x, y, z 
-    #   0.1, 0.1, 0.1,    # roll, pitch, yaw 
-    #   ]
-    # twist_covariance_diagonal: [
-    #   0.1, 0.1, 0.1,    # vx, vy, vz 
-    #   0.1, 0.1, 0.1,    # vroll, vpitch, vyaw
-    #   ]
+    pose_covariance_diagonal: [
+      0.1, 0.1, 0.1,    # x, y, z 
+      0.1, 0.1, 0.1,    # roll, pitch, yaw 
+      ]
+    twist_covariance_diagonal: [
+      0.1, 0.1, 0.1,    # vx, vy, vz 
+      0.1, 0.1, 0.1,    # vroll, vpitch, vyaw
+      ]
     
 

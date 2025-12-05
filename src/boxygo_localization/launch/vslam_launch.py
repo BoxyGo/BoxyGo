@@ -45,6 +45,8 @@ def generate_launch_description():
                 'camera_infra1_optical_frame',
                 'camera_infra2_optical_frame',
             ],
+            'publish_map_to_odom_tf' : False,
+            'publish_odom_to_base_tf' : False
         }],
         remappings=[
             ('visual_slam/image_0', 'camera/infra1/image_rect_raw'),

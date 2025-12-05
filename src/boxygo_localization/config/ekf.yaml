@@ -21,6 +21,13 @@ ekf_filter_node:
                    false, false, false,    # vroll, vpitch, vyaw
                    false, false, false]   # ax, ay, az
 
+    vision0: visual_slam/tracking/vo_pose_covariance
+    vision0_config: [true,  true,  false,    # x, y, z
+                     false, false, true,     # roll, pitch, yaw
+                     false, false, false,    # vx, vy, vz
+                     false, false, false,    # vroll, vpitch, vyaw
+                     false, false, false]    # ax, ay, az
+
     imu0: camera/imu
     imu0_config: [false, false, false,   # x, y, z
                   false, false, false,    # roll, pitch, yaw (tylko yaw)

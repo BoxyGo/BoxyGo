@@ -23,5 +23,5 @@ def generate_launch_description():
         slam_toolbox_launch,
         lidar_launch,
         realsense_launch,
-        #vslam_launch
+        vslam_launch
     ])
