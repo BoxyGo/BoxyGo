@@ -171,6 +171,11 @@ function k() {
     ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:="/diff_cont/cmd_vel_unstamped"
 }
 
+function f(){
+    s
+    ros2 launch foxglove_bridge foxglove_bridge_launch.xml port:=8765
+}
+
 _b_completions()
 {
   local cur prev
