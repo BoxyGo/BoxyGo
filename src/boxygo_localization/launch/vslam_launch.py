@@ -27,7 +27,7 @@ def generate_launch_description():
         package='isaac_ros_visual_slam',
         plugin='nvidia::isaac_ros::visual_slam::VisualSlamNode',
         parameters=[{
-            'enable_image_denoising': False,
+            'enable_image_denoising': True,
             'rectified_images': True,
             'enable_imu_fusion': True,
             'gyro_noise_density': 0.000244,
@@ -35,7 +35,7 @@ def generate_launch_description():
             'accel_noise_density': 0.001862,
             'accel_random_walk': 0.003,
             'calibration_frequency': 200.0,
-            'image_jitter_threshold_ms': 22.00,
+            'image_jitter_threshold_ms': 70.00,
             'base_frame': 'camera_link',
             'imu_frame': 'camera_gyro_optical_frame',
             'enable_slam_visualization': True,
@@ -45,6 +45,7 @@ def generate_launch_description():
                 'camera_infra1_optical_frame',
                 'camera_infra2_optical_frame',
             ],
+            'force_planar_mode' : True,
             'publish_map_to_odom_tf' : False,
             'publish_odom_to_base_tf' : False
         }],

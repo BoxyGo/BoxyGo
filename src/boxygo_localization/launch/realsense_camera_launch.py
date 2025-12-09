@@ -31,15 +31,28 @@ def generate_launch_description():
             'enable_color': False,
             'enable_depth': False,
             'depth_module.emitter_enabled': 0,
-            'depth_module.infra_profile': '640x360x90',
-            'depth_module.profile': '640x360x90',  # For backwards compatibility
+            'depth_module.profile': '640x360x30',
             'enable_gyro': True,
             'enable_accel': True,
             'gyro_fps': 200,
-            'accel_fps': 250,  # set to 250 for rs d435i
+            'accel_fps': 250,
             'unite_imu_method': 2,
-            'publish_tf': False
+            'publish_tf' : False
         }],
     )
 
-    return launch.LaunchDescription([realsense_camera_node])
+    static_tf = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='static_tf_camera',
+        arguments=[
+            '0.38', '0', '0.225',
+            '1.5708', '3.1416', '1.5708',
+            'base_link',
+            'camera_imu_optical_frame'
+        ]
+    )
+
+    return launch.LaunchDescription([realsense_camera_node, 
+                                     static_tf
+                                     ])

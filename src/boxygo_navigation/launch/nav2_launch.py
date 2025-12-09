@@ -11,15 +11,15 @@ def generate_launch_description():
     boxygo_navigation_pkg = get_package_share_directory('boxygo_navigation')
     boxygo_localization_pkg = get_package_share_directory('boxygo_localization')
     
-    map_file = os.path.join(boxygo_localization_pkg, 'maps', 'playground_map.yaml') # small_city_map.yaml / playground_map.yaml
-    params_file = os.path.join(boxygo_navigation_pkg, 'config', 'nav2_params_h_2.yaml')
+    map_file = os.path.join(boxygo_localization_pkg, 'maps', 'mapa.yaml') # small_city_map.yaml / playground_map.yaml
+    params_file = os.path.join(boxygo_navigation_pkg, 'config', 'nav2_real_param.yaml')
     ekf_config = os.path.join(boxygo_localization_pkg, 'config', 'ekf.yaml')
 
     use_sim_time = LaunchConfiguration('use_sim_time')
 
     declare_use_sim_time = DeclareLaunchArgument(
         'use_sim_time',
-        default_value='true',  # dla navigation_gazebo
+        default_value='false',
         description='Use simulation time if true'
     )
 
