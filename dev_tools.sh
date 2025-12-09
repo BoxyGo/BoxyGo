@@ -75,7 +75,7 @@ function b() {
                     local CHANGED_FILES=$(find "$MAIN_XACRO" "$URDF_SRC_DIR/common" "$URDF_SRC_DIR/config" -type f -newer "$TARGET_URDF" 2>/dev/null)
                     if [ -n "$CHANGED_FILES" ]; then NEED_GEN=true; fi
                 fi
-                if $NEED_GEN; then g "$MAIN_XACRO"; fi
+                if $NEED_GEN; then u "$MAIN_XACRO"; fi
             fi
         fi
     else

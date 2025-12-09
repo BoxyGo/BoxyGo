@@ -3,6 +3,7 @@ build/
 install/
 log/
 rosbag/
+isaac-ros-assets/
 
 # Python bytecode
 **/__pycache__/

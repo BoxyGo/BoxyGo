@@ -204,7 +204,7 @@
   <!-- Plugin ros2_control -->
   <gazebo>
     <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
-      <update_rate>60</update_rate>
+      <update_rate>30</update_rate>
       <parameters>${boxygo_controllers_pkg}/config/diff_drive_controller.yaml</parameters>
     </plugin>
   </gazebo>

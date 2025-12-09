@@ -9,8 +9,8 @@ from ament_index_python.packages import get_package_share_directory
 def generate_launch_description():
 
     contoller_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('boxygo_moteus_control'), 'launch', 'moteus_controller_launch.py')))
-
-    slam_toolbox_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('boxygo_localization'), 'launch', 'mapping_launch.py')))
+    
+    nav2_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('boxygo_navigation'), 'launch', 'nav2_launch.py')))
 
     lidar_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('ydlidar_ros2_driver'), 'launch', 'ydlidar_launch.py')))
 
@@ -20,8 +20,9 @@ def generate_launch_description():
 
     return LaunchDescription([
         contoller_launch,
-        slam_toolbox_launch,
         lidar_launch,
         realsense_launch,
-        vslam_launch
+        nav2_launch,
+        #vslam_launch,
     ])
+
