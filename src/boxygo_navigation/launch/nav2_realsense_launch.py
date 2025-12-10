@@ -1,4 +1,5 @@
 from typing import Optional, List
+from launch_ros.actions import Node
 
 from isaac_ros_launch_utils.all_types import *
 import isaac_ros_launch_utils as lu
@@ -35,7 +36,8 @@ def get_splitter_node(camera_name: str) -> ComposableNode:
         plugin='nvblox::RealsenseSplitterNode',
         parameters=[{
             'input_qos': 'SENSOR_DATA',
-            'output_qos': 'SENSOR_DATA'
+            'output_qos': 'SENSOR_DATA',
+            'publish_tf' : False
         }],
         remappings=[
             ('input/infra_1', f'/{camera_name}/infra1/image_rect_raw'),
@@ -80,9 +82,21 @@ def generate_launch_description() -> LaunchDescription:
     args.add_opaque_function(add_camera)
     actions = args.get_launch_actions()
 
+    actions.append(Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='static_tf_camera',
+        arguments=[
+            '0.38', '0', '0.225',
+            '1.5708', '3.1416', '1.5708',
+            'base_link',
+            'camera_imu_optical_frame'
+        ]
+    ))
+
     actions.append(
         lu.component_container(
             args.container_name,
             condition=IfCondition(lu.is_true(args.run_standalone))))
-
+    
     return LaunchDescription(actions)

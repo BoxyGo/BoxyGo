@@ -3,6 +3,7 @@ from typing import List, Tuple
 from launch import Action, LaunchDescription
 from launch_ros.descriptions import ComposableNode
 import isaac_ros_launch_utils as lu
+from launch.actions import LogInfo
 
 from nvblox_ros_python_utils.nvblox_launch_utils import NvbloxMode
 from nvblox_ros_python_utils.nvblox_constants import NVBLOX_CONTAINER_NAME
@@ -44,6 +45,8 @@ def add_nvblox(args: lu.ArgumentContainer) -> List[Action]:
         'nvblox_examples_bringup', 'config/nvblox/specializations/nvblox_detection.yaml')
     dynamics_config = lu.get_path(
         'nvblox_examples_bringup', 'config/nvblox/specializations/nvblox_dynamics.yaml')
+    custom_params = lu.get_path(
+        'boxygo_navigation', 'config/nvblox_params.yaml')
     realsense_config = lu.get_path(
         'nvblox_examples_bringup', 'config/nvblox/specializations/nvblox_realsense.yaml')
 
@@ -62,12 +65,11 @@ def add_nvblox(args: lu.ArgumentContainer) -> List[Action]:
         raise Exception(f'Mode {mode} not implemented for nvblox.')
 
     remappings = get_realsense_remappings(mode)
-    camera_config = realsense_config
-
     parameters = []
     parameters.append(base_config)
     parameters.append(mode_config)
-    parameters.append(camera_config)
+    #parameters.append(custom_params)
+    parameters.append(realsense_config)
     parameters.append({'num_cameras': 1})
     parameters.append({'use_lidar': False})
     parameters.append({
@@ -75,16 +77,20 @@ def add_nvblox(args: lu.ArgumentContainer) -> List[Action]:
         'esdf_slice_bounds_visualization_attachment_frame_id': 'camera_link'
     })
 
+
+    all_params = f"NVBlox full parameters list: {parameters}"
+
+    actions: List[Action] = []
+    actions.append(lu.log_info([all_params]))
+
     nvblox_node = ComposableNode(
         name='nvblox_node',
         package='nvblox_ros',
         plugin='nvblox::NvbloxNode',
         remappings=remappings,
         parameters=parameters,
-        
     )
 
-    actions: List[Action] = []
     if args.run_standalone:
         actions.append(lu.component_container(args.container_name))
     actions.append(lu.load_composable_nodes(args.container_name, [nvblox_node]))

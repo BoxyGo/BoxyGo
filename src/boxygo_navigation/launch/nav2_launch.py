@@ -11,8 +11,8 @@ def generate_launch_description():
     boxygo_navigation_pkg = get_package_share_directory('boxygo_navigation')
     boxygo_localization_pkg = get_package_share_directory('boxygo_localization')
     
-    map_file = os.path.join(boxygo_localization_pkg, 'maps', 'mapa.yaml') # small_city_map.yaml / playground_map.yaml
-    params_file = os.path.join(boxygo_navigation_pkg, 'config', 'nav2_real_param.yaml')
+    map_file = os.path.join(boxygo_localization_pkg, 'maps', 'map.yaml') # playground_map.yaml / map.yaml
+    params_file = os.path.join(boxygo_navigation_pkg, 'config', 'nav2_real_param_inside.yaml') # nav2_real_param_inside.yaml / nav2_real_param_outside.yaml
     ekf_config = os.path.join(boxygo_localization_pkg, 'config', 'ekf.yaml')
 
     use_sim_time = LaunchConfiguration('use_sim_time')
@@ -21,6 +21,21 @@ def generate_launch_description():
         'use_sim_time',
         default_value='false',
         description='Use simulation time if true'
+    )
+
+    imu_node = Node(
+        package='imu_filter_madgwick',
+        executable='imu_filter_madgwick_node',
+        name='imu_filter_madgwick',
+        output='screen',
+        parameters=[{
+                'use_mag': False,
+                'publish_tf': False,
+                'world_frame': 'enu',
+            }],
+        remappings=[
+            ("/imu/data_raw", "/camera/imu")
+        ]
     )
 
     ekf_node = Node(
@@ -46,6 +61,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         declare_use_sim_time,
+        imu_node,
         ekf_node,
         nav2_node
     ])

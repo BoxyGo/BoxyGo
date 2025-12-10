@@ -34,7 +34,7 @@ def add_vslam(args: lu.ArgumentContainer) -> List[Action]:
         ('visual_slam/imu', 'camera/imu'),
     ]
 
-    base_frame = 'camera_link'
+    base_frame = 'base_link'
 
     actions.append(lu.log_info(f'Starting cuVSLAM with base_frame: {base_frame}'))
 
@@ -59,6 +59,9 @@ def add_vslam(args: lu.ArgumentContainer) -> List[Action]:
         'map_frame': 'map',
         'odom_frame': 'odom',
         'base_frame': base_frame,
+        'publish_tf': False,
+        'publish_map_to_odom_tf': False,
+        'publish_odom_to_base_tf': False,
     }
     realsense_parameters = {
         'enable_rectified_pose': True,
@@ -104,7 +107,7 @@ def generate_launch_description() -> LaunchDescription:
         cli=True)
     args.add_arg(
         'enable_imu_fusion',
-        'False',
+        'True',
         description='Whether to use imu data in visual slam.',
         cli=True)
     args.add_arg('container_name', NVBLOX_CONTAINER_NAME)
