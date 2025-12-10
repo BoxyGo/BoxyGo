@@ -15,7 +15,6 @@ def generate_launch_description():
     localization_pkg = get_package_share_directory('boxygo_localization')
     moteus_controller_pkg = get_package_share_directory('boxygo_moteus_control')
 
-    # === Pliki konfigów ===
     map_file = os.path.join(localization_pkg, 'maps', 'map.yaml')
     nav2_params = os.path.join(navigation_pkg, 'config', 'nav2_nvblox_params.yaml')
     ekf_config = os.path.join(localization_pkg, 'config', 'ekf.yaml')
@@ -28,7 +27,6 @@ def generate_launch_description():
         description='Use simulation time if true'
     )
 
-    # === IMU filter (Madgwick) – jak w Twoim działającym launchu ===
     imu_node = Node(
         package='imu_filter_madgwick',
         executable='imu_filter_madgwick_node',
@@ -40,11 +38,9 @@ def generate_launch_description():
             'world_frame': 'enu',
         }],
         remappings=[
-            ("/imu/data_raw", "/camera/imu")  # Realsense IMU
+            ("/imu/data_raw", "/camera/imu")
         ]
     )
-
-    # === EKF (robot_localization) ===
     ekf_node = Node(
         package='robot_localization',
         executable='ekf_node',
@@ -53,7 +49,6 @@ def generate_launch_description():
         parameters=[ekf_config, {'use_sim_time': use_sim_time}],
     )
 
-    # === Lidar ===
     lidar_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
@@ -64,7 +59,6 @@ def generate_launch_description():
         )
     )
 
-    # === Moteus (napęd) ===
     moteus_controller_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
@@ -75,7 +69,6 @@ def generate_launch_description():
         )
     )
 
-    # === Nvblox container (ten sam co NVIDIA: NVBLOX_CONTAINER_NAME) ===
     nvblox_container = ComposableNodeContainer(
         name=NVBLOX_CONTAINER_NAME,
         namespace='',
@@ -84,7 +77,6 @@ def generate_launch_description():
         output='screen',
     )
 
-    # === RealSense + splitter (Twoje nav2_realsense_launch.py) ===
     realsense_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
@@ -95,7 +87,6 @@ def generate_launch_description():
         )
     )
 
-    # === cuVSLAM (Twoje nav2_vslam_nvblox_launch.py) ===
     vslam_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
@@ -106,7 +97,6 @@ def generate_launch_description():
         )
     )
 
-    # === NVBLOX (Twoje nav2_nvblox_launch.py) ===
     nvblox_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
@@ -117,9 +107,8 @@ def generate_launch_description():
         )
     )
 
-    # === Nav2 (bringup_launch.py) – dokładnie ten sam pattern co w działającym launchu ===
     nav2_node = TimerAction(
-        period=5.0,   # dajemy czas, żeby kamera / vslam / nvblox wstały
+        period=5.0,
         actions=[
             SetRemap(src='/cmd_vel', dst='/diff_cont/cmd_vel_unstamped'),
             IncludeLaunchDescription(

@@ -47,8 +47,6 @@ def add_nvblox(args: lu.ArgumentContainer) -> List[Action]:
         'nvblox_examples_bringup', 'config/nvblox/specializations/nvblox_dynamics.yaml')
     custom_params = lu.get_path(
         'boxygo_navigation', 'config/nvblox_params.yaml')
-    realsense_config = lu.get_path(
-        'nvblox_examples_bringup', 'config/nvblox/specializations/nvblox_realsense.yaml')
 
     if mode is NvbloxMode.static:
         mode_config = {}
@@ -68,8 +66,7 @@ def add_nvblox(args: lu.ArgumentContainer) -> List[Action]:
     parameters = []
     parameters.append(base_config)
     parameters.append(mode_config)
-    #parameters.append(custom_params)
-    parameters.append(realsense_config)
+    parameters.append(custom_params)
     parameters.append({'num_cameras': 1})
     parameters.append({'use_lidar': False})
     parameters.append({
