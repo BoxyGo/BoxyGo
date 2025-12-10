@@ -12,13 +12,8 @@ git config --global --add safe.directory "$WS" || true
 git config --global --add safe.directory "$WS/src/moteus_ros2" || true
 git config --global --add safe.directory /workspaces/isaac_ros-dev/src/ydlidar_ros2_driver-humble || true
 git config --global --add safe.directory /workspaces/isaac_ros-dev/src/YDLidar-SDK || true
-git config --global --add safe.directory /workspaces/isaac_ros-dev/src/isaac_ros_nvblox || true
 
 vcs import --input "$REPOS_FILE" src
-
-cd ${ISAAC_ROS_WS}/src/isaac_ros_nvblox/nvblox_examples/realsense_splitter && \
-    git update-index --assume-unchanged COLCON_IGNORE && \
-    rm COLCON_IGNORE
 
 chown -R admin:admin "$WS/src"
 

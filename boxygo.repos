@@ -11,11 +11,6 @@ repositories:
     type: git
     url: https://github.com/BoxyGo/ydlidar_ros2_driver-humble.git
     version: main
-  isaac_ros_nvblox:
-    type: git
-    url: https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_nvblox.git
-    version: release-3.2
-    recursive: true
   ros2_controllers:
     type: git
     url: https://github.com/BoxyGo/diff_drive_controller.git
@@ -23,8 +18,4 @@ repositories:
   greenwave_monitor:
     type: git
     url: https://github.com/NVIDIA-ISAAC-ROS/greenwave_monitor.git
-    version: release-3.2
-  boxygo_nvblox: 
-    type: git
-    url: https://github.com/BoxyGo/boxygo_nvblox.git
     version: release-3.2

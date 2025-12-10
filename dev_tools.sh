@@ -55,8 +55,7 @@ function b() {
     if [ -n "$TARGET_PKG" ]; then
         colcon build --symlink-install --packages-select "$TARGET_PKG"
     else
-        colcon build --symlink-install --packages-up-to realsense_splitter
-        colcon build --symlink-install --packages-skip-regex "nvblox*"
+        colcon build --symlink-install 
     fi
 
     if [ $? -eq 0 ]; then
