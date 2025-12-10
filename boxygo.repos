@@ -24,4 +24,7 @@ repositories:
     type: git
     url: https://github.com/NVIDIA-ISAAC-ROS/greenwave_monitor.git
     version: release-3.2
-  
+  boxygo_nvblox: 
+    type: git
+    url: https://github.com/BoxyGo/boxygo_nvblox.git
+    version: release-3.2
