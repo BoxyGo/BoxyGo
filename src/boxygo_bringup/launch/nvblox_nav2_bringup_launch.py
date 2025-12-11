@@ -14,9 +14,10 @@ def generate_launch_description():
     navigation_pkg = get_package_share_directory('boxygo_navigation')
     localization_pkg = get_package_share_directory('boxygo_localization')
     moteus_controller_pkg = get_package_share_directory('boxygo_moteus_control')
+    nvblox_pkg = get_package_share_directory('boxygo_nvblox')
 
     map_file = os.path.join(localization_pkg, 'maps', 'map.yaml')
-    nav2_params = os.path.join(navigation_pkg, 'config', 'nav2_nvblox_params.yaml')
+    nav2_params = os.path.join(navigation_pkg, 'config', 'nav2_nvblox_params_mppi.yaml')
     ekf_config = os.path.join(localization_pkg, 'config', 'ekf.yaml')
 
     use_sim_time = LaunchConfiguration('use_sim_time')
@@ -80,9 +81,9 @@ def generate_launch_description():
     realsense_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
-                navigation_pkg,
+                nvblox_pkg,
                 'launch',
-                'nav2_realsense_launch.py'
+                'nvblox_realsense_launch.py'
             )
         )
     )
@@ -90,9 +91,9 @@ def generate_launch_description():
     vslam_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
-                navigation_pkg,
+                nvblox_pkg,
                 'launch',
-                'nav2_vslam_nvblox_launch.py'
+                'nvblox_vslam_launch.py'
             )
         )
     )
@@ -100,9 +101,9 @@ def generate_launch_description():
     nvblox_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
-                navigation_pkg,
+                nvblox_pkg,
                 'launch',
-                'nav2_nvblox_launch.py'
+                'nvblox_launch.py'
             )
         )
     )
