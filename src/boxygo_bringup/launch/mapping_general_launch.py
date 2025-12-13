@@ -154,6 +154,10 @@ def generate_launch_description():
         condition=should_launch_algo
     )
 
+    vslam_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(localization_share, 'launch', 'vslam_launch.py'))
+    )
+
     ekf_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(localization_share, 'launch', 'ekf_launch.py')),
         launch_arguments={
@@ -192,10 +196,12 @@ def generate_launch_description():
         rosbag_mode_arg,
         rosbag_file_arg,
         mode_arg,
+
    
 
         log_info,
         hw_interface_launch,
+        vslam_launch,
         slam_launch,
         ekf_launch,
         

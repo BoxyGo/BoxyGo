@@ -36,7 +36,7 @@ def generate_launch_description():
             'accel_random_walk': 0.003,
             'calibration_frequency': 200.0,
             'image_jitter_threshold_ms': 34.0,
-            'base_frame': 'camera_link',
+            'base_frame': 'base_link',
             'imu_frame': 'camera_gyro_optical_frame',
             'enable_slam_visualization': True,
             'enable_landmarks_view': True,
@@ -45,9 +45,10 @@ def generate_launch_description():
                 'camera_infra1_optical_frame',
                 'camera_infra2_optical_frame',
             ],
-            'force_planar_mode' : True,
+            'enable_ground_constraint_in_odometry' : True,
             'publish_map_to_odom_tf' : False,
-            'publish_odom_to_base_tf' : False
+            'publish_odom_to_base_tf' : True,
+            'use_sim_time': True,
         }],
         remappings=[
             ('visual_slam/image_0', 'camera/infra1/image_rect_raw'),

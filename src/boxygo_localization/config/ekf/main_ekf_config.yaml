@@ -3,7 +3,7 @@ ekf_filter_node:
     frequency: 30.0               # Jak często działa filtr (Hz)
     sensor_timeout: 0.3           # Jak długo czeka na dane z sensora (sekundy)
     two_d_mode: true    
-    publish_tf: true              # Publikuje transformację odom → base_link
+    publish_tf: false              # Publikuje transformację odom → base_link
 
     map_frame: map                # Używane tylko gdy jest drugi EKF (globalny)
     odom_frame: odom              # Ramka lokalna (bazowa)

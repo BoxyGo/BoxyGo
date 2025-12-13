@@ -11,7 +11,7 @@ def generate_launch_description():
 
     common_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            PathJoinSubstitution([pkg_boxygo_controllers, 'launch', 'common_controllers.launch.py'])
+            PathJoinSubstitution([pkg_boxygo_controllers, 'launch', 'common_controllers_launch.py'])
         ),
         launch_arguments={
             'sim_mode': 'real',
@@ -30,4 +30,4 @@ def generate_launch_description():
         common_launch,
         lidar_launch,
         realsense_launch
-    ])
+    ])       
