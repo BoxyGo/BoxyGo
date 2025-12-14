@@ -112,10 +112,17 @@ def generate_launch_description():
         description='Select bag file (ONLY used for Play mode, ignore for Record)'
     )
 
+    play_rate_arg = DeclareLaunchArgument(
+        'play_rate',
+        default_value='1.0',
+        description='Speed factor for rosbag playback'
+    )
+
 
     mode_config = LaunchConfiguration('mode')
     rosbag_mode = LaunchConfiguration('rosbag_mode')
     rosbag_file = LaunchConfiguration('rosbag_file')
+    play_rate = LaunchConfiguration('play_rate')
 
     use_sim_time_val = PythonExpression([
         "'True' if '", rosbag_mode, "' == 'play' else ('False' if '", mode_config, "' == 'real' else 'True')"
@@ -155,7 +162,9 @@ def generate_launch_description():
     )
 
     vslam_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(localization_share, 'launch', 'vslam_launch.py'))
+        PythonLaunchDescriptionSource(os.path.join(localization_share, 'launch', 'vslam_launch.py')),
+        launch_arguments={'use_sim_time': use_sim_time_val}.items(), 
+        condition=should_launch_algo 
     )
 
     ekf_launch = IncludeLaunchDescription(
@@ -181,7 +190,7 @@ def generate_launch_description():
     )
 
     play_action = ExecuteProcess(
-        cmd=['ros2', 'bag', 'play', PathJoinSubstitution([bags_directory, rosbag_file]), '--clock'],
+        cmd=['ros2', 'bag', 'play', PathJoinSubstitution([bags_directory, rosbag_file]), '--clock', '--rate', play_rate],
         output='screen',
         condition=IfCondition(PythonExpression(["'", rosbag_mode, "' == 'play'"]))
     )
@@ -196,6 +205,7 @@ def generate_launch_description():
         rosbag_mode_arg,
         rosbag_file_arg,
         mode_arg,
+        play_rate_arg,
 
    
 
