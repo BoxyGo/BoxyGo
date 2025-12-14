@@ -60,7 +60,7 @@
   <xacro:macro name="wheel_gazebo_props" params="link_name">
     <gazebo reference="${link_name}">
       <material>Gazebo/Black</material>
-      <mu1>1.0</mu1>      <mu2>1.0</mu2>      <kp>100000.0</kp>   <kd>50.0</kd>       <minDepth>0.001</minDepth>
+      <mu1>0.2</mu1>      <mu2>0.2</mu2>      <kp>100000.0</kp>   <kd>50.0</kd>       <minDepth>0.001</minDepth>
       <maxVel>0.1</maxVel>
     </gazebo>
   </xacro:macro>
@@ -83,5 +83,76 @@
   <gazebo reference="right_rocker_beam">
     <material>Gazebo/Black</material>
   </gazebo>
+
+<!-- IMU joint (przymocowany sztywno do base_link) -->
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <!-- pozycja IMU względem środka robota (dopasuj jak chcesz) -->
+    <origin xyz="0 0 0.10" rpy="0 0 0"/>
+  </joint>
+
+  <!-- IMU link -->
+  <link name="imu_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.05"/>
+      <inertia
+        ixx="1e-4" ixy="0.0" ixz="0.0"
+        iyy="1e-4" iyz="0.0"
+        izz="1e-4"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.03 0.03 0.02"/>
+      </geometry>
+      <material name="Gazebo/Blue"/>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.03 0.03 0.02"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- IMU sensor w Gazebo -->
+  <gazebo reference="imu_link">
+    <material>Gazebo/Blue</material>
+    <sensor name="imu_sensor" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100.0</update_rate>
+      <visualize>false</visualize>
+
+      <imu>
+        <angular_velocity>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>0.0002</stddev>
+          </noise>
+        </angular_velocity>
+        <linear_acceleration>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>0.0004</stddev>
+          </noise>
+        </linear_acceleration>
+      </imu>
+
+      <plugin name="imu_plugin" filename="libgazebo_ros_imu_sensor.so">
+        <ros>
+          <!-- namespace możesz zmienić, jeśli używasz np. /boxygo -->
+          <namespace>/</namespace>
+          <!-- nazwa topiku IMU -->
+          <remapping>~/out:=imu/data</remapping>
+        </ros>
+        <frame_name>imu_link</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+
 
 </robot>

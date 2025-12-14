@@ -1,15 +1,11 @@
-<?xml version="1.0"?>
+<?xml version="1.0" ?>
 <sdf version="1.6">
-  <world name="asphalt_world">
-    <!-- Włącz standardowy ground_plane, ale z własnym materiałem -->
-    <include>
-      <uri>model://ground_plane</uri>
-      <name>asphalt_plane</name>
-    </include>
-
+  <world name="playground">
+  
+    <!--############### from small_city.world ###############-->
     <gui>
       <camera name="user_camera">
-        <pose>0 -2 0.1 0 0 1.57</pose>
+        <pose>0 0 30 0 1.57 0</pose>
       </camera>
     </gui>
 
@@ -20,6 +16,12 @@
       <sky/>
       <background>0.35 0.35 0.35 1.0</background>
     </scene>
+
+    <physics name='default_physics' default='0' type='ode'>
+      <max_step_size>0.005</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>200</real_time_update_rate>
+    </physics>
 
     <light type="directional" name="sun">
       <pose>0 0 1000 0 0 0</pose>
@@ -35,7 +37,47 @@
       <direction>-0.5 0.1 -0.4</direction>
     </light> 
 
-    <!-- Jeżeli chcesz dodać własny materiał, podmień model -->
-    <!-- lub dopisz kolejne elementy świata tutaj -->
+    <model name="asphalt_base">
+      <static>true</static>
+      <link name="asphalt_link">
+        <pose>0 0 -0.01 0 0 0</pose>
+
+        <!-- Wizualizacja -->
+        <visual name="asphalt_visual">
+          <geometry>
+            <box>
+              <size>100 100 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- Kolizja -->
+        <collision name="asphalt_collision">
+          <geometry>
+            <box>
+              <size>100 100 0.01</size>
+            </box>
+          </geometry>
+
+          <!-- Parametry tarcia -->
+          <surface>
+            <friction>
+              <ode>
+                <mu>0.2</mu>  <!-- Tarcie normalne -->
+                <mu2>0.2</mu2>  <!-- Tarcie boczne -->
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+      </link>
+    </model>
+
+   
+
+
   </world>
 </sdf>

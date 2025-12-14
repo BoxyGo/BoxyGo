@@ -11,7 +11,7 @@ def generate_launch_description():
     boxygo_navigation_pkg = get_package_share_directory('boxygo_navigation')
     boxygo_localization_pkg = get_package_share_directory('boxygo_localization')
     
-    map_file = os.path.join(boxygo_localization_pkg, 'maps', 'map.yaml') # playground_map.yaml / map.yaml
+    map_file = os.path.join(boxygo_localization_pkg, 'maps', 'mapa123.yaml') # playground_map.yaml / map.yaml
     params_file = os.path.join(boxygo_navigation_pkg, 'config', 'nav2_real_param_outside.yaml') # nav2_real_param_inside.yaml / nav2_real_param_outside.yaml
     ekf_config = os.path.join(boxygo_localization_pkg, 'config', 'ekf.yaml')
 

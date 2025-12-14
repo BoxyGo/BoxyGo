@@ -15,7 +15,7 @@ def generate_launch_description():
 
     urdf_path = os.path.join(pkg_boxygo_description, 'urdf', 'luksusowy.urdf.xacro')
     controller_config = os.path.join(pkg_boxygo_controllers, 'config', 'diff_drive_controller.yaml')
-    world_path = os.path.join(pkg_boxygo_gazebo, 'worlds', 'playground.world')
+    world_path = os.path.join(pkg_boxygo_gazebo, 'worlds', 'asphalt.world')
 
     # Jeden argument dla całego launcha
     use_sim_time = LaunchConfiguration('use_sim_time')
