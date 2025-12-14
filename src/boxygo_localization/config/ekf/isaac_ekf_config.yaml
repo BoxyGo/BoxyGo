@@ -1,0 +1,45 @@
+ekf_filter_node:
+  ros__parameters:
+    frequency: 30.0               # Jak często działa filtr (Hz)
+    sensor_timeout: 0.3           # Jak długo czeka na dane z sensora (sekundy)
+    two_d_mode: true    
+    publish_tf: false             # Publikuje transformację odom → base_link
+
+    map_frame: map                # Używane tylko gdy jest drugi EKF (globalny)
+    odom_frame: odom              # Ramka lokalna (bazowa)
+    base_link_frame: base_link    # Ramka robota
+    world_frame: odom             # Dla tego EKF odom = world
+
+    odom0: diff_cont/odom
+    odom0_differential: false
+    odom0_relative: true
+    odom0_config: [false, false, false,
+                   false, false, false,
+                   true, false, false,
+                   false, false, false,
+                   false, false, false]
+
+    # # Isaac ROS Visual SLAM odometria (z kowariancją)
+    # # nav_msgs/Odometry na /visual_slam/tracking/odometry
+    # odom1: visual_slam/tracking/vo_pose_covariance
+    # odom1_differential: false
+    # odom1_relative: true
+    # odom1_config: [true, true, false,      # x, y
+    #                false, false, true,     # yaw (w 2D roll/pitch i tak są ignorowane)
+    #                false, false, false,    # prędkości liniowe
+    #                false, false, false,    # prędkości kątowe
+    #                false, false, false]    # przyspieszenia
+
+    imu0: camera/imu
+    imu0_differential: false
+    imu0_relative: true
+    imu0_remove_gravitational_acceleration: true
+    imu0_queue_size: 10
+    # Only fuse yaw and wz from IMU in 2D
+    imu0_config:  [false, false, false,           # X,      Y,    Z #
+                   false, false, true,           # ROLL, PITCH, YAW #
+                   false, false, false,          # vX,     vY,   vZ #
+                   false, false, false,          # vROLL, vPITCH, vYAW #
+                   false,  false, false]          # aX,     aY,   aZ #
+
+    print_diagnostics: true       # Przydatne przy debugowaniua

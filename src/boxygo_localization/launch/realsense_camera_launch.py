@@ -40,6 +40,20 @@ def generate_launch_description():
             'publish_tf' : False
         }],
     )
+    imu_node = Node(
+        package='imu_filter_madgwick',
+        executable='imu_filter_madgwick_node',
+        name='imu_filter_madgwick',
+        output='screen',
+        parameters=[{
+                'use_mag': False,
+                'publish_tf': False,
+                'world_frame': 'enu',
+            }],
+        remappings=[
+            ("/imu/data_raw", "/camera/imu")
+        ]
+    )
 
     static_tf = Node(
         package='tf2_ros',
@@ -53,6 +67,8 @@ def generate_launch_description():
         ]
     )
 
-    return launch.LaunchDescription([realsense_camera_node, 
-                                     static_tf
+    return launch.LaunchDescription([
+                                     realsense_camera_node, 
+                                     static_tf,
+                                     imu_node
                                      ])

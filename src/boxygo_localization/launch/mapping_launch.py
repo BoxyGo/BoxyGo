@@ -32,20 +32,6 @@ def generate_launch_description():
         ]
     )
 
-    imu_node = Node(
-        package='imu_filter_madgwick',
-        executable='imu_filter_madgwick_node',
-        name='imu_filter_madgwick',
-        output='screen',
-        parameters=[{
-                'use_mag': False,
-                'publish_tf': False,
-                'world_frame': 'enu',
-            }],
-        remappings=[
-            ("/imu/data_raw", "/camera/imu")
-        ]
-    )
 
     ekf_node = Node(
         package='robot_localization',
@@ -56,9 +42,10 @@ def generate_launch_description():
         {'use_sim_time': use_sim_time}]
     )
 
+
+
     return LaunchDescription([
         declare_use_sim_time,
         slam_node,
-        imu_node,
-        ekf_node
+        ekf_node,
     ])

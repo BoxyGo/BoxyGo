@@ -2,7 +2,7 @@
 build/
 install/
 log/
-rosbag/
+rosbags/
 isaac-ros-assets/
 
 # Python bytecode
