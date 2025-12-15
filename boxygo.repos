@@ -19,3 +19,7 @@ repositories:
     type: git
     url: https://github.com/NVIDIA-ISAAC-ROS/greenwave_monitor.git
     version: release-3.2
+  urg_node2:
+    type: git
+    url: https://github.com/Hokuyo-aut/urg_node2.git
+  
