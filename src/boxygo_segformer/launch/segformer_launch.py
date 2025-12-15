@@ -24,7 +24,7 @@ def generate_launch_description():
 
     model_repository_paths_arg = DeclareLaunchArgument(
         "model_repository_paths",
-        default_value=f"[{isaac_ros_ws}/isaac_ros_assets/models]",
+        default_value=f"[{isaac_ros_ws}/segformer/models]",
         description="List of model repository paths"
     )
 
