@@ -63,7 +63,7 @@ def add_vslam(args: lu.ArgumentContainer) -> List[Action]:
         'base_frame': base_frame,
         'publish_tf': False,
         'publish_map_to_odom_tf': False,
-        'publish_odom_to_base_tf': False,
+        'publish_odom_to_base_tf': True,
     }
     realsense_parameters = {
         'enable_rectified_pose': True,
