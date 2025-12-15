@@ -5,9 +5,10 @@ from launch_ros.descriptions import ComposableNode
 import isaac_ros_launch_utils as lu
 from launch.actions import LogInfo
 
+from launch.substitutions import LaunchConfiguration
+
 from nvblox_ros_python_utils.nvblox_launch_utils import NvbloxMode
 from nvblox_ros_python_utils.nvblox_constants import NVBLOX_CONTAINER_NAME
-
 
 def get_realsense_remappings(mode: NvbloxMode) -> List[Tuple[str, str]]:
     remappings: List[Tuple[str, str]] = []
@@ -36,48 +37,32 @@ def get_realsense_remappings(mode: NvbloxMode) -> List[Tuple[str, str]]:
 
 def add_nvblox(args: lu.ArgumentContainer) -> List[Action]:
     mode = NvbloxMode[args.mode]
-    use_lidar = lu.is_true(args.lidar)
 
     base_config = lu.get_path('nvblox_examples_bringup', 'config/nvblox/nvblox_base.yaml')
-    segmentation_config = lu.get_path(
-        'nvblox_examples_bringup', 'config/nvblox/specializations/nvblox_segmentation.yaml')
-    detection_config = lu.get_path(
-        'nvblox_examples_bringup', 'config/nvblox/specializations/nvblox_detection.yaml')
-    dynamics_config = lu.get_path(
-        'nvblox_examples_bringup', 'config/nvblox/specializations/nvblox_dynamics.yaml')
+
     custom_params = lu.get_path(
-        'boxygo_navigation', 'config/nvblox_params.yaml')
-    realsense_config = lu.get_path(
-        'nvblox_examples_bringup', 'config/nvblox/specializations/nvblox_realsense.yaml')
+        'boxygo_nvblox', 'config/nvblox_nav2_params.yaml')
 
     if mode is NvbloxMode.static:
         mode_config = {}
-    elif mode is NvbloxMode.people_segmentation:
-        mode_config = segmentation_config
-        assert not use_lidar, 'Can not run lidar with people segmentation mode.'
-    elif mode is NvbloxMode.people_detection:
-        mode_config = detection_config
-        assert not use_lidar, 'Can not run lidar with people detection mode.'
-    elif mode is NvbloxMode.dynamic:
-        mode_config = dynamics_config
-        assert not use_lidar, 'Can not run lidar with dynamic mode.'
     else:
         raise Exception(f'Mode {mode} not implemented for nvblox.')
+    
+    use_sim_time = LaunchConfiguration('use_sim_time')
 
     remappings = get_realsense_remappings(mode)
     parameters = []
     parameters.append(base_config)
     parameters.append(mode_config)
-    #parameters.append(custom_params)
-    parameters.append(realsense_config)
+    parameters.append(custom_params)
+    parameters.append({'use_sim_time': use_sim_time})
     parameters.append({'num_cameras': 1})
     parameters.append({'use_lidar': False})
     parameters.append({
         'map_clearing_frame_id': 'camera_link',
         'esdf_slice_bounds_visualization_attachment_frame_id': 'camera_link'
     })
-
-
+   
     all_params = f"NVBlox full parameters list: {parameters}"
 
     actions: List[Action] = []
@@ -107,6 +92,7 @@ def generate_launch_description() -> LaunchDescription:
     args.add_arg('lidar', 'False')
     args.add_arg('container_name', NVBLOX_CONTAINER_NAME)
     args.add_arg('run_standalone', 'False')
+    args.add_arg('use_sim_time', 'False')
 
     args.add_opaque_function(add_nvblox)
     return LaunchDescription(args.get_launch_actions())

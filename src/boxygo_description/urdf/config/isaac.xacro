@@ -9,6 +9,10 @@
       <param name="joint_states_topic">/isaac_joint_states</param>
       
       <param name="sum_wrapped_joint_states">true</param>
+
+      <param name="provide_odom_frame">false</param>
+      <param name="publish_odom">false</param>
+      <param name="publish_odom_tf">false</param>
     </hardware>
 
     <joint name="left_wheel_1_joint"> 
@@ -41,6 +45,17 @@
       <command_interface name="velocity"/> 
       <state_interface name="position"/> 
       <state_interface name="velocity"/> 
+    </joint>
+
+    <joint name="left_rocker_beam_joint">
+      <command_interface name="velocity"/> 
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="right_rocker_beam_joint">
+      <command_interface name="velocity"/> 
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
     </joint>
 
   </ros2_control>

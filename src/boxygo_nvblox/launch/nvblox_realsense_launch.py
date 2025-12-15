@@ -20,26 +20,19 @@ from launch_ros.actions import Node
 
 from isaac_ros_launch_utils.all_types import *
 import isaac_ros_launch_utils as lu
+from ament_index_python.packages import get_package_share_directory
+import os
 
 from nvblox_ros_python_utils.nvblox_constants import NVBLOX_CONTAINER_NAME
 
-
-EMITTER_FLASHING_CONFIG_FILE_PATH = lu.get_path(
-    'nvblox_examples_bringup',
-    'config/sensors/realsense_emitter_flashing.yaml')
-
-EMITTER_ON_CONFIG_FILE_PATH = lu.get_path(
-    'nvblox_examples_bringup',
-    'config/sensors/realsense_emitter_on.yaml')
+realsense_params = os.path.join(get_package_share_directory('boxygo_nvblox'), 'config', 'realsense_params.yaml')
 
 
-def get_camera_node(camera_name: str, config_file_path: str,
-                    serial_number: Optional[str] = None) -> ComposableNode:
-    parameters = [config_file_path, {'camera_name': camera_name}]
-    if serial_number:
-        parameters.append({'serial_no': str(serial_number)})
+def get_camera_node() -> ComposableNode:
+    parameters = [realsense_params]
     return ComposableNode(
-        namespace=camera_name,
+        name = 'camera',
+        namespace='camera',
         package='realsense2_camera',
         plugin='realsense2_camera::RealSenseNodeFactory',
         parameters=parameters)
@@ -54,7 +47,7 @@ def get_splitter_node(camera_name: str) -> ComposableNode:
         parameters=[{
             'input_qos': 'SENSOR_DATA',
             'output_qos': 'SENSOR_DATA',
-            'publish_tf' : False
+            'publish_tf': False
         }],
         remappings=[
             ('input/infra_1', f'/{camera_name}/infra1/image_rect_raw'),
@@ -70,16 +63,10 @@ def get_splitter_node(camera_name: str) -> ComposableNode:
 
 def add_camera(args: lu.ArgumentContainer) -> List[Action]:
     camera_name = 'camera'
-    serial_number = None if args.camera_serial_number == '' else str(args.camera_serial_number)
     run_splitter = args.run_splitter
 
-    if run_splitter:
-        config_file_path = EMITTER_FLASHING_CONFIG_FILE_PATH
-    else:
-        config_file_path = EMITTER_ON_CONFIG_FILE_PATH
-
     nodes: List[ComposableNode] = []
-    nodes.append(get_camera_node(camera_name, config_file_path, serial_number))
+    nodes.append(get_camera_node())
     if run_splitter:
         nodes.append(get_splitter_node(camera_name))
 

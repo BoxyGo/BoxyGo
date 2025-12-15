@@ -99,7 +99,7 @@
   <link name="left_wheel_1">
     <visual>
       <geometry>
-        <mesh filename="package://boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/wheel.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <material name="black"/>
@@ -127,7 +127,7 @@
   <link name="left_wheel_2">
     <visual>
       <geometry>
-        <mesh filename="package://boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/wheel.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <material name="black"/>
@@ -155,7 +155,7 @@
   <link name="left_wheel_3">
     <visual>
       <geometry>
-        <mesh filename="package://boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/wheel.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <material name="black"/>
@@ -183,7 +183,7 @@
   <link name="right_wheel_1">
     <visual>
       <geometry>
-        <mesh filename="package://boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/wheel.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <material name="black"/>
@@ -211,7 +211,7 @@
   <link name="right_wheel_2">
     <visual>
       <geometry>
-        <mesh filename="package://boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/wheel.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <material name="black"/>
@@ -239,7 +239,7 @@
   <link name="right_wheel_3">
     <visual>
       <geometry>
-        <mesh filename="package://boxygo_description/meshes/wheel.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://boxygo_description/meshes/wheel.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <material name="black"/>
@@ -270,6 +270,9 @@
       <param name="joint_commands_topic">/isaac_joint_commands</param>
       <param name="joint_states_topic">/isaac_joint_states</param>
       <param name="sum_wrapped_joint_states">true</param>
+      <param name="provide_odom_frame">false</param>
+      <param name="publish_odom">false</param>
+      <param name="publish_odom_tf">false</param>
     </hardware>
     <joint name="left_wheel_1_joint">
       <command_interface name="velocity"/>
@@ -297,6 +300,16 @@
       <state_interface name="velocity"/>
     </joint>
     <joint name="right_wheel_3_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="left_rocker_beam_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="right_rocker_beam_joint">
       <command_interface name="velocity"/>
       <state_interface name="position"/>
       <state_interface name="velocity"/>
