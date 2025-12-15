@@ -26,6 +26,8 @@ RUN apt-get update --allow-releaseinfo-change && \
         ros-humble-imu-tools \
         ros-humble-isaac-ros-segformer \
         ros-humble-isaac-ros-depth-image-proc \
+        ros-humble-laser-proc \
+
     && rm -rf /var/lib/apt/lists/*
 
 RUN rosdep update && rosdep install isaac_ros_nvblox
