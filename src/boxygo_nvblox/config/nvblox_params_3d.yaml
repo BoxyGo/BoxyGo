@@ -1,45 +1,62 @@
 /**:
   ros__parameters:
-    # Główne ramki
-    global_frame: "map"          # bo global_costmap jest w 'map'
-    pose_frame: "base_link"      # rama robota
+    # --- Główne ramki ---
+    global_frame: "map"
+    pose_frame: "base_link"
     map_clearing_frame_id: "base_link"
 
-    # Typ mapowania – statyczny TSDF, bez dynamic mappera
-    mapping_type: "static_tsdf"  # ważne!
+    # --- Typ mapowania ---
+    # "static_tsdf" jest idealny do rekonstrukcji (najlepsza jakość mesha)
+    mapping_type: "static_tsdf"
 
-    # Sensory
+    # --- Sensory ---
     use_depth: true
-    use_color: false
+    use_color: true      # Ważne dla kolorowego mesha (rekonstrukcji)
     use_lidar: false
 
     input_qos: "SENSOR_DATA"
 
-    # Częstotliwości integracji (żeby nie zabić Orina)
+    # --- Wydajność i Integracja ---
     integrate_depth_rate_hz: 30.0
 
-    # Rozdzielczość voxela – 5 cm jest dobrym kompromisem
+    # --- Jakość Rekonstrukcji (Voxel Size) ---
+    # 0.05 (5cm) jest ok, ale do ładnej rekonstrukcji 3D można zejść do 0.03 lub 0.04.
+    # Uwaga: 0.02 (2cm) wygląda świetnie, ale zużywa 8x więcej pamięci niż 0.04!
     voxel_size: 0.05
 
-    # Czyszczenie mapy (żeby się nie rozrastała w nieskończoność)
-    map_clearing_radius_m: 2.0
-    clear_map_outside_radius_rate_hz: 1.0
+    # --- KLUCZOWE ZMIANY DLA REKONSTRUKCJI 3D ---
+    # Ustawienie -1.0 wyłącza czyszczenie mapy.
+    # Dzięki temu robot "pamięta" całą przebytą trasę i buduje kompletną mapę 3D.
+    map_clearing_radius_m: -1.0
+    clear_map_outside_radius_rate_hz: 0.0
 
-    # ESDF – tryb 2D, bo Nav2 bierze slice
+    # --- Generowanie Mesha (Wizualizacja) ---
+    # Częstotliwość aktualizacji mesha w Rviz.
+    # 5.0 Hz zapewnia płynne pojawianie się mapy.
+    mesh_update_rate_hz: 2.0
+    decay_tsdf_rate_hz: 0.0  # Wyłączone, aby TSDF nie zanikał z czasem.
+    layer_streamer_bandwidth_limit_mbpss: 1000.0  # Wysoki limit, aby uniknąć opóźnień w strumieniowaniu danych.
+    
+    # Czy generować ESDF?
+    # Jeśli robisz tylko rekonstrukcję wizualną, możesz to wyłączyć, by oszczędzić zasoby.
+    # Jeśli nawigujesz, zostaw włączone.
+    compute_esdf: true  
+    esdf_update_rate_hz: 2.0 # ESDF może być liczony rzadziej niż TSDF
+
+    # --- ESDF Mode ---
+    # Jeśli nadal używasz Nav2, zostaw "2d".
+    # Jeśli chcesz pełną mapę odległości w 3D (np. dla drona), zmień na "3d".
     esdf_mode: "2d"
 
-    # Statyczny mapper – to jego parametry będą używane przy static_tsdf
+    # --- Parametry Mappera ---
     static_mapper:
+      # Slice height - ważne dla Nav2 (rzut na 2D)
       esdf_slice_height: 0.38
       esdf_slice_min_height: 0.10
       esdf_slice_max_height: 2.0
 
-    
-    map_clearing_radius_m: 0.0
-    decay_tsdf_rate_hz: 0.0
-
-
-    # Ograniczenie wysokości workspace'u – nie mapuj sufitu
-    workspace_bounds_type: "kHeightBounds"
-    workspace_bounds_min_height_m: -0.1
-    workspace_bounds_max_height_m: 3.0
+      # Ograniczenie Workspace'u
+      # Warto zwiększyć max_height, jeśli chcesz złapać sufit w rekonstrukcji.
+      workspace_bounds_type: "kHeightBounds"
+      workspace_bounds_min_height_m: -0.1
+      workspace_bounds_max_height_m: 3.5  # Podniosłem do 3.5m, żeby złapać wysokie elementy
