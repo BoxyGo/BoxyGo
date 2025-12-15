@@ -1,7 +1,7 @@
 import os
 import datetime
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, ExecuteProcess, LogInfo
+from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, ExecuteProcess, LogInfo, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, PythonExpression
 from launch.conditions import IfCondition, UnlessCondition
@@ -248,8 +248,8 @@ def generate_launch_description():
         hw_interface_launch,
         vslam_launch,
         nvblox_launch,
+        play_action,
         
         record_all_action,
-        record_sensors_action,
-        play_action
+        record_sensors_action
     ])

@@ -17,6 +17,7 @@
 
     # Częstotliwości integracji (żeby nie zabić Orina)
     integrate_depth_rate_hz: 30.0
+    decay_tsdf_rate_hz: 0.0
 
     # Rozdzielczość voxela – 5 cm jest dobrym kompromisem
     voxel_size: 0.05

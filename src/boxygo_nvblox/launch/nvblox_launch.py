@@ -41,7 +41,7 @@ def add_nvblox(args: lu.ArgumentContainer) -> List[Action]:
     base_config = lu.get_path('nvblox_examples_bringup', 'config/nvblox/nvblox_base.yaml')
 
     custom_params = lu.get_path(
-        'boxygo_nvblox', 'config/nvblox_nav2_params.yaml')
+        'boxygo_nvblox', 'config/nvblox_params_3d.yaml')
 
     if mode is NvbloxMode.static:
         mode_config = {}
