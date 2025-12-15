@@ -4,6 +4,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.substitutions import FindPackageShare
 from launch.substitutions import PathJoinSubstitution
 from ament_index_python.packages import get_package_share_directory
+from launch_ros.actions import  Node 
 import os 
 
 def generate_launch_description():
@@ -20,14 +21,33 @@ def generate_launch_description():
         }.items()
     )
 
+    imu_node = Node(
+        package='imu_filter_madgwick',
+        executable='imu_filter_madgwick_node',
+        name='imu_filter_madgwick',
+        output='screen',
+        parameters=[{
+                'use_mag': False,
+                'publish_tf': False,
+                'world_frame': 'enu',
+            }],
+        remappings=[
+            ("/imu/data_raw", "/camera/imu")
+        ]
+    )
+
            
     lidar_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('ydlidar_ros2_driver'), 'launch', 'ydlidar_launch.py')))
 
-    realsense_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('boxygo_localization'), 'launch', 'realsense_camera_launch.py')))
+    #realsense_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('boxygo_localization'), 'launch', 'realsense_camera_launch.py')))
+
+    realsense_nvblox_launch = IncludeLaunchDescription( PythonLaunchDescriptionSource( os.path.join(get_package_share_directory('boxygo_nvblox'), 'launch', 'nvblox_realsense_launch.py')))
     
 
     return LaunchDescription([
         common_launch,
         lidar_launch,
-        realsense_launch
-    ])       
+        imu_node,
+        realsense_nvblox_launch
+        #realsense_launch
+    ])

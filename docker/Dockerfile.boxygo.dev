@@ -38,6 +38,7 @@ RUN apt-get update --allow-releaseinfo-change && apt-get install -y \
         ros-humble-rqt-graph \
         ros-humble-rqt-topic \
         ros-humble-rqt-console \
+        ros-humble-isaac-ros-segformer \
 
     && rm -rf /var/lib/apt/lists/*
 

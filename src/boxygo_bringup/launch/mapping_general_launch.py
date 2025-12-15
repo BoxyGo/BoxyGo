@@ -6,11 +6,15 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, PythonExpression
 from launch.conditions import IfCondition, UnlessCondition
 from ament_index_python.packages import get_package_share_directory
+from launch_ros.actions import Node, ComposableNodeContainer
+from nvblox_ros_python_utils.nvblox_constants import NVBLOX_CONTAINER_NAME
+
 
 def generate_launch_description():
 
     controllers_share = get_package_share_directory('boxygo_controllers')
     localization_share = get_package_share_directory('boxygo_localization')
+    nvblox_share = get_package_share_directory('boxygo_nvblox')
 
     
     workspace_dir = '/workspaces/isaac_ros-dev'
@@ -38,12 +42,23 @@ def generate_launch_description():
     current_time = datetime.datetime.now().strftime("%m%d_%H%M%S")
     
     topics_to_record = [
+        '/imu/data',
         '/scan',
         '/camera/imu',
         '/tf',
         '/tf_static',
         '/joint_states',
-        '/odom_encoders'
+        '/diff_cont/odom',
+        '/tf_static', 
+        '/camera/imu', 
+        '/camera/color/camera_info', 
+        '/camera/color/image_raw',
+        '/camera/realsense_splitter_node/output/depth', 
+        '/camera/depth/camera_info',
+        '/camera/realsense_splitter_node/output/infra_1', 
+        '/camera/infra1/camera_info',
+        '/camera/realsense_splitter_node/output/infra_2', 
+        '/camera/infra2/camera_info'
     ]
 
     slam_config_dir = os.path.join(localization_share, 'config', 'slam')
@@ -92,7 +107,7 @@ def generate_launch_description():
 
 
     mode_arg = DeclareLaunchArgument(
-        'mode',
+        'mode_platform',
         default_value='real',
         choices=['real', 'isaac', 'gazebo'],
         description='Select operation mode (hardware interface)'
@@ -113,7 +128,7 @@ def generate_launch_description():
     )
 
 
-    mode_config = LaunchConfiguration('mode')
+    mode_config = LaunchConfiguration('mode_platform')
     rosbag_mode = LaunchConfiguration('rosbag_mode')
     rosbag_file = LaunchConfiguration('rosbag_file')
 
@@ -155,7 +170,27 @@ def generate_launch_description():
     )
 
     vslam_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(localization_share, 'launch', 'vslam_launch.py'))
+        PythonLaunchDescriptionSource(os.path.join(nvblox_share, 'launch', 'nvblox_vslam_launch.py')),
+        launch_arguments={
+            'use_sim_time': use_sim_time_val
+        }.items(),
+        condition=should_launch_algo
+    )
+
+    nvblox_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(nvblox_share, 'launch', 'nvblox_launch.py')),
+        launch_arguments={
+            'use_sim_time': use_sim_time_val
+        }.items(),
+        condition=should_launch_algo
+    )
+
+    nvblox_container = ComposableNodeContainer(
+        name=NVBLOX_CONTAINER_NAME,
+        namespace='',
+        package='rclcpp_components',
+        executable='component_container_mt',
+        output='screen',
     )
 
     ekf_launch = IncludeLaunchDescription(
@@ -196,14 +231,15 @@ def generate_launch_description():
         rosbag_mode_arg,
         rosbag_file_arg,
         mode_arg,
-
    
 
         log_info,
-        hw_interface_launch,
-        vslam_launch,
+        nvblox_container,
         slam_launch,
         ekf_launch,
+        hw_interface_launch,
+        vslam_launch,
+        nvblox_launch,
         
         record_all_action,
         record_sensors_action,

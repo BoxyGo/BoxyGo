@@ -20,6 +20,8 @@ from typing import List
 from isaac_ros_launch_utils.all_types import *
 import isaac_ros_launch_utils as lu
 
+from launch.substitutions import LaunchConfiguration
+
 from nvblox_ros_python_utils.nvblox_constants import NVBLOX_CONTAINER_NAME
 
 
@@ -74,12 +76,15 @@ def add_vslam(args: lu.ArgumentContainer) -> List[Action]:
         ],
     }
 
+    use_sim_time = LaunchConfiguration('use_sim_time')
+
     remappings = realsense_remappings
     camera_parameters = realsense_parameters
 
     parameters = []
     parameters.append(base_parameters)
     parameters.append(camera_parameters)
+    parameters.append({'use_sim_time': use_sim_time})
     parameters.append(
         {'enable_ground_constraint_in_odometry': args.enable_ground_constraint_in_odometry})
     parameters.append({'enable_imu_fusion': args.enable_imu_fusion})
@@ -112,5 +117,6 @@ def generate_launch_description() -> LaunchDescription:
         cli=True)
     args.add_arg('container_name', NVBLOX_CONTAINER_NAME)
     args.add_arg('run_standalone', 'False')
+    args.add_arg('use_sim_time', 'False')
     args.add_opaque_function(add_vslam)
     return LaunchDescription(args.get_launch_actions())

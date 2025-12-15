@@ -1,0 +1,47 @@
+# visual_slam_node:
+#   ros__parameters:
+
+#     use_sim_time: false
+#     num_cameras: 1
+#     min_num_images: 2
+#     enable_localization_n_mapping: false
+    
+#     # IMU / Noise settings
+#     gyro_noise_density: 0.000244
+#     gyro_random_walk: 0.000019393
+#     accel_noise_density: 0.001862
+#     accel_random_walk: 0.003
+#     calibration_frequency: 200.0
+    
+#     # Frames
+#     base_frame: "base_link"
+#     rig_frame: "base_link"
+#     imu_frame: "camera_gyro_optical_frame"
+#     map_frame: "map"
+#     odom_frame: "odom"
+    
+#     # Visualization / Debug
+#     enable_slam_visualization: true
+#     enable_landmarks_view: true
+#     enable_observations_view: true
+#     verbosity: 5
+#     enable_debug_mode: false
+#     debug_dump_path: "/tmp/cuvslam"
+#     path_max_size: 200
+    
+#     # TF publishing
+#     publish_tf: false
+#     publish_map_to_odom_tf: false
+#     publish_odom_to_base_tf: false
+
+#     # --- RealSense specific ---
+#     enable_rectified_pose: true
+#     enable_image_denoising: false
+#     rectified_images: true
+#     camera_optical_frames:
+#       - "camera_infra1_optical_frame"
+#       - "camera_infra2_optical_frame"
+
+#     # --- Dynamic args defaults ---
+#     enable_ground_constraint_in_odometry: false
+#     enable_imu_fusion: true

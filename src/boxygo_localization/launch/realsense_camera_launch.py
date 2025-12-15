@@ -67,7 +67,8 @@ def generate_launch_description():
         ]
     )
 
-    return launch.LaunchDescription([realsense_camera_node, 
+    return launch.LaunchDescription([
+                                     realsense_camera_node, 
                                      static_tf,
                                      imu_node
                                      ])
