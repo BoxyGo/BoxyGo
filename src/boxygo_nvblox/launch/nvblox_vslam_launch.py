@@ -44,6 +44,8 @@ def add_vslam(args: lu.ArgumentContainer) -> List[Action]:
         'num_cameras': 2,
         'min_num_images': 2,
         'enable_localization_n_mapping': False,
+        'enable_ground_constraint_in_odometry': True,
+        'enable_imu_fusion': True,
         'gyro_noise_density': 0.000244,
         'gyro_random_walk': 0.000019393,
         'accel_noise_density': 0.001862,
@@ -63,7 +65,7 @@ def add_vslam(args: lu.ArgumentContainer) -> List[Action]:
         'base_frame': base_frame,
         'publish_tf': False,
         'publish_map_to_odom_tf': False,
-        'publish_odom_to_base_tf': False,
+        'publish_odom_to_base_tf': False
     }
     realsense_parameters = {
         'enable_rectified_pose': True,
@@ -85,9 +87,6 @@ def add_vslam(args: lu.ArgumentContainer) -> List[Action]:
     parameters.append(base_parameters)
     parameters.append(camera_parameters)
     parameters.append({'use_sim_time': use_sim_time})
-    parameters.append(
-        {'enable_ground_constraint_in_odometry': args.enable_ground_constraint_in_odometry})
-    parameters.append({'enable_imu_fusion': args.enable_imu_fusion})
 
     vslam_node = ComposableNode(
         name='visual_slam_node',
@@ -105,18 +104,8 @@ def add_vslam(args: lu.ArgumentContainer) -> List[Action]:
 
 def generate_launch_description() -> LaunchDescription:
     args = lu.ArgumentContainer()
-    args.add_arg(
-        'enable_ground_constraint_in_odometry',
-        'False',
-        description='Whether to constraint robot movement to a 2d plane (e.g. for AMRs).',
-        cli=True)
-    args.add_arg(
-        'enable_imu_fusion',
-        'True',
-        description='Whether to use imu data in visual slam.',
-        cli=True)
     args.add_arg('container_name', NVBLOX_CONTAINER_NAME)
     args.add_arg('run_standalone', 'False')
-    args.add_arg('use_sim_time', 'False')
+    args.add_arg('use_sim_time', 'True')
     args.add_opaque_function(add_vslam)
     return LaunchDescription(args.get_launch_actions())

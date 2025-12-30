@@ -1,7 +1,9 @@
 ekf_filter_node:
   ros__parameters:
-    frequency: 30.0               # Jak często działa filtr (Hz)
-    sensor_timeout: 0.3           # Jak długo czeka na dane z sensora (sekundy)
+    frequency: 30.0     
+    debug: true
+    #debug_out_file: /tmp/ekf_debug1.txt          # Jak często działa filtr (Hz)
+    sensor_timeout: 0.5         # Jak długo czeka na dane z sensora (sekundy)
     two_d_mode: true    
     publish_tf: true              # Publikuje transformację odom → base_link
 
@@ -19,22 +21,22 @@ ekf_filter_node:
                    false, false, false,
                    false, false, false]
 
-    # # Isaac ROS Visual SLAM odometria (z kowariancją)
-    # # nav_msgs/Odometry na /visual_slam/tracking/odometry
-    # odom1: visual_slam/tracking/vo_pose_covariance
-    # odom1_differential: false
-    # odom1_relative: true
-    # odom1_config: [true, true, false,      # x, y
-    #                false, false, true,     # yaw (w 2D roll/pitch i tak są ignorowane)
-    #                false, false, false,    # prędkości liniowe
-    #                false, false, false,    # prędkości kątowe
-    #                false, false, false]    # przyspieszenia
+    pose0: /visual_slam/tracking/vo_pose_covariance
+    pose0_config: [true, true, false,
+                   false, false, true,
+                   false, false, false,
+                   false, false, false,
+                   false, false, false]
+
+    pose0_differential: true
+    pose0_relative: false
+    pose0_queue_size: 10
+    pose0_rejection_threshold: 2.0
 
     imu0: imu/data
     imu0_differential: false
     imu0_relative: true
     imu0_remove_gravitational_acceleration: true
-    imu0_queue_size: 10
     # Only fuse yaw and wz from IMU in 2D
     imu0_config:  [false, false, false,           # X,      Y,    Z #
                    false, false, true,           # ROLL, PITCH, YAW #
