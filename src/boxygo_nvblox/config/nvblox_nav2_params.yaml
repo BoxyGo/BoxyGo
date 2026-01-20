@@ -1,41 +1,11 @@
 /**:
   ros__parameters:
-    # Główne ramki
-    global_frame: "map"          # bo global_costmap jest w 'map'
-    pose_frame: "base_link"      # rama robota
-    map_clearing_frame_id: "base_link"
-
-    # Typ mapowania – statyczny TSDF, bez dynamic mappera
-    mapping_type: "static_tsdf"  # ważne!
-
-    # Sensory
-    use_depth: true
-    use_color: true
+    use_color: false
     use_lidar: false
-
     input_qos: "SENSOR_DATA"
-
-    # Częstotliwości integracji (żeby nie zabić Orina)
-    integrate_depth_rate_hz: 30.0
-    
-    # Rozdzielczość voxela – 5 cm jest dobrym kompromisem
-    voxel_size: 0.05
-
-    # Czyszczenie mapy (żeby się nie rozrastała w nieskończoność)
     map_clearing_radius_m: 2.0
-    clear_map_outside_radius_rate_hz: 1.0
 
-    # ESDF – tryb 2D, bo Nav2 bierze slice
-    esdf_mode: "2d"
-
-    # Statyczny mapper – to jego parametry będą używane przy static_tsdf
     static_mapper:
-      esdf_slice_height: 0.38
-      esdf_slice_min_height: 0.10
-      esdf_slice_max_height: 2.0
-
-
-      # Ograniczenie wysokości workspace'u – nie mapuj sufitu
-      workspace_bounds_type: "kHeightBounds"
-      workspace_bounds_min_height_m: -0.1
-      workspace_bounds_max_height_m: 3.0
+      esdf_slice_height: 0.06
+      esdf_slice_min_height: 0.05
+      esdf_slice_max_height: 0.5

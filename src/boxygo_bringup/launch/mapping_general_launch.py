@@ -206,7 +206,7 @@ def generate_launch_description():
     )
 
     play_action = ExecuteProcess(
-        cmd=['ros2', 'bag', 'play', PathJoinSubstitution([bags_directory, rosbag_file]), '--clock', '--rate', play_rate],
+        cmd=['ros2', 'bag', 'play', PathJoinSubstitution([bags_directory, rosbag_file]), '--rate', play_rate],
         output='screen',
         condition=IfCondition(PythonExpression(["'", rosbag_mode, "' == 'play'"]))
     )
