@@ -16,7 +16,7 @@ def generate_launch_description():
         ),
         launch_arguments={
             'sim_mode': 'real',
-            'use_sim_time': 'false',
+            'use_sim_time': 'true',
             'start_control_node': 'true' # Rzeczywisty robot potrzebuje managera
         }.items()
     )

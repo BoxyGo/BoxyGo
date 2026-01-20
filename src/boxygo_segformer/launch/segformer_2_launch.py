@@ -26,8 +26,6 @@ def generate_launch_description():
             default_value='360',  # ZMIANA z 380 na 360
             description='The input image height (camera)'),
 
-        # --- USTAWIENIA SIECI (SegFormer) ---
-        # SegFormer (Cityscapes) zazwyczaj oczekuje 224x224, 512x512 lub 1024x1024
         DeclareLaunchArgument(
             'network_image_width',
             default_value='224',
@@ -118,25 +116,6 @@ def generate_launch_description():
 
     container_name = 'segformer_container'
 
-    # 1. REALSENSE CAMERA NODE
-    realsense_camera_node = Node(
-        package='realsense2_camera',
-        executable='realsense2_camera_node',
-        namespace='camera',
-        parameters=[{
-            # POPRAWIONE: Wymuszamy profil 640x360x30
-            'depth_module.profile': '640x360x30', 
-            'rgb_camera.profile': '640x360x30',
-            'align_depth.enable': True,
-            'enable_depth': True,
-            'enable_color': True,
-            'enable_infra1': False,
-            'enable_infra2': False,
-            'enable_sync': True,
-        }],
-        output='screen'
-    )
-
     # 2. DNN IMAGE ENCODER (Resize + Normalize)
     encoder_dir = get_package_share_directory('isaac_ros_dnn_image_encoder')
     encoder_node_launch = IncludeLaunchDescription(
@@ -176,9 +155,7 @@ def generate_launch_description():
             'output_tensor_formats': output_tensor_formats,
         }]
     )
-
-    # 4. SEGFORMER DECODER (Tensor -> Color Mask)
-    # Dekoder automatycznie weźmie height 360 z LaunchConfiguration
+    
     segformer_decoder_node = ComposableNode(
         name='segformer_decoder_node',
         package='isaac_ros_unet',
@@ -210,7 +187,7 @@ def generate_launch_description():
             ('rgb/image_rect_color', '/segformer/colored_segmentation_mask'),
             ('rgb/camera_info', '/camera/color/camera_info'),
             ('depth_registered/image_rect', '/camera/aligned_depth_to_color/image_raw'),
-            ('points', '/segformer/semantic_pointcloud')
+            ('points', '/segformer/semantic_pointc')
         ]
     )
 
