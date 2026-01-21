@@ -14,7 +14,6 @@ def generate_launch_description():
 
     controllers_share = get_package_share_directory('boxygo_controllers')
     localization_share = get_package_share_directory('boxygo_localization')
-    nvblox_share = get_package_share_directory('boxygo_nvblox')
 
     
     workspace_dir = '/workspaces/isaac_ros-dev'
@@ -177,28 +176,13 @@ def generate_launch_description():
     )
 
     vslam_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(nvblox_share, 'launch', 'nvblox_vslam_launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(localization_share, 'launch', 'vslam_launch.py')),
         launch_arguments={
             'use_sim_time': use_sim_time_val
         }.items(),
         condition=should_launch_algo
     )
 
-    nvblox_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(nvblox_share, 'launch', 'nvblox_launch.py')),
-        launch_arguments={
-            'use_sim_time': use_sim_time_val
-        }.items(),
-        condition=should_launch_algo
-    )
-
-    nvblox_container = ComposableNodeContainer(
-        name=NVBLOX_CONTAINER_NAME,
-        namespace='',
-        package='rclcpp_components',
-        executable='component_container_mt',
-        output='screen',
-    )
     ekf_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(localization_share, 'launch', 'ekf_launch.py')),
         launch_arguments={
@@ -222,7 +206,7 @@ def generate_launch_description():
     )
 
     play_action = ExecuteProcess(
-        cmd=['ros2', 'bag', 'play', PathJoinSubstitution([bags_directory, rosbag_file]), '--clock', '--rate', play_rate],
+        cmd=['ros2', 'bag', 'play', PathJoinSubstitution([bags_directory, rosbag_file]),  '--clock', '--rate', play_rate],
         output='screen',
         condition=IfCondition(PythonExpression(["'", rosbag_mode, "' == 'play'"]))
     )
@@ -238,18 +222,12 @@ def generate_launch_description():
         rosbag_file_arg,
         mode_arg,
         play_rate_arg,
-
-   
-
         log_info,
-        nvblox_container,
         slam_launch,
         ekf_launch,
         hw_interface_launch,
         vslam_launch,
-        nvblox_launch,
-        play_action,
-        
+        play_action, 
         record_all_action,
         record_sensors_action
     ])

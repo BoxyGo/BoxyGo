@@ -47,8 +47,8 @@ def generate_launch_description():
             ],
             'enable_ground_constraint_in_odometry' : True,
             'publish_map_to_odom_tf' : False,
-            'publish_odom_to_base_tf' : True,
-            'use_sim_time': True,
+            'publish_odom_to_base_tf' : False,
+            'use_sim_time': True
         }],
         remappings=[
             ('visual_slam/image_0', 'camera/infra1/image_rect_raw'),

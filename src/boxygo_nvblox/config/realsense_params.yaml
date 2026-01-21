@@ -1,34 +1,35 @@
-# --- Parametry identyfikacyjne ---
+# realsense_params_vslam_nvblox_segformer.yaml
+
 camera_name: "camera"
-device_type: ''
-serial_no: ''
-usb_port_id: ''
+serial_no: ""
 initial_reset: true
-publish_tf: true        # <--- WAŻNE: Musi być true!
+publish_tf: false
 
-# --- Ustawienia RGB ---
-enable_color: true
-rgb_camera:
-  profile: "640x480x30"
-color_info_qos: "SENSOR_DATA"
-color_qos: "SENSOR_DATA"
-
-# --- Ustawienia Depth ---
-enable_depth: true
-depth_module:
-  profile: "640x480x30"
-  emitter_enabled: 1
-  emitter_on_off: true    # Stały laser jest lepszy, ale zostawiam jak chcesz
-  enable_auto_exposure: true
-depth_qos: "SENSOR_DATA"
-depth_info_qos: "SENSOR_DATA"
-
-# --- Ustawienia Infra (VSLAM) ---
+# --- IR stereo dla VSLAM ---
 enable_infra1: true
 enable_infra2: true
 infra_qos: "SENSOR_DATA"
+# opcjonalnie możesz wymusić profil IR, jeśli potrzebujesz
+# infra_profile: "640x360x60"
 
-# --- IMU i Sync (VSLAM + Segformer) ---
+# --- Depth dla nvblox ---
+enable_depth: true
+depth_module:
+  profile: "640x360x30"
+  enable_auto_exposure: true
+  emitter_enabled: 1
+  emitter_on_off: true
+depth_qos: "SENSOR_DATA"
+depth_info_qos: "SENSOR_DATA"
+
+# --- RGB dla SegFormer (i opcjonalnie koloryzacji mesha w nvblox) ---
+enable_color: true
+rgb_camera:
+  profile: "640x360x30"
+color_qos: "SENSOR_DATA"
+color_info_qos: "SENSOR_DATA"
+
+# --- IMU + synchronizacja dla VSLAM ---
 enable_sync: true
 enable_gyro: true
 enable_accel: true
@@ -36,7 +37,10 @@ unite_imu_method: 2
 gyro_fps: 200
 accel_fps: 250
 
-# --- NVBLOX / Segformer ---
-align_depth: true       # Zmieniono składnię na prostszą (dla płaskiego YAML)
+# --- Post-processing / dodatkowe ---
+# W zależności od wersji wrappera parametr bywa jako filtr "align_depth.enable".
+# Publikuje depth wyrównany do koloru (ułatwia fuzję 2D maski z 3D). :contentReference[oaicite:2]{index=2}
+align_depth.enable: true
+
 pointcloud:
   enable: false
