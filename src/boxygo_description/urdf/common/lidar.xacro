@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <xacro:macro name="sensor_ydlidar" params="parent_link x_offset y_offset z_offset">
+  <xacro:macro name="sensor_hokuyo_ust10lx" params="parent_link x_offset y_offset z_offset">
     
     <joint name="laser_joint" type="fixed">
       <parent link="${parent_link}"/>
       <child link="laser_frame"/>
-      <origin xyz="${x_offset} ${y_offset} ${z_offset}" rpy="0 0 3.173"/>
+      <origin xyz="${x_offset} ${y_offset} ${z_offset}" rpy="0 0 0"/>
     </joint>
 
     <link name="laser_frame">
@@ -33,22 +33,23 @@
     </link>
 
     <gazebo reference="laser_frame">
-      <sensor name="lidar" type="ray">
+      <sensor name="ust_10lx" type="ray">
         <always_on>true</always_on>
-        <visualize>false</visualize> <update_rate>8</update_rate>
+        <visualize>false</visualize> 
+        <update_rate>40</update_rate>
         <ray>
           <scan>
             <horizontal>
-              <samples>560</samples>
+              <samples>1081</samples>
               <resolution>1</resolution>
-              <min_angle>-3.14</min_angle>
-              <max_angle>3.14</max_angle>
+              <min_angle>-2.35619449</min_angle>
+              <max_angle>2.35619449</max_angle>
             </horizontal>
           </scan>
           <range>
-            <min>0.08</min>
-            <max>12.0</max>
-            <resolution>0.0017</resolution>
+            <min>0.04</min>
+            <max>10.0</max>
+            <resolution>0.01</resolution>
           </range>
           <noise>
             <type>gaussian</type>

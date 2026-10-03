@@ -46,6 +46,6 @@ def generate_launch_description():
 
     return LaunchDescription([
         declare_use_sim_time,
-        slam_node,
         ekf_node,
+        slam_node,
     ])

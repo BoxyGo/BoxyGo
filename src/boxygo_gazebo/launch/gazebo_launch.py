@@ -15,7 +15,7 @@ def generate_launch_description():
 
     urdf_path = os.path.join(pkg_boxygo_description, 'urdf', 'luksusowy.urdf.xacro')
     controller_config = os.path.join(pkg_boxygo_controllers, 'config', 'diff_drive_controller.yaml')
-    world_path = os.path.join(pkg_boxygo_gazebo, 'worlds', 'playground.world')
+    world_path = os.path.join(pkg_boxygo_gazebo, 'worlds', 'playgroundv2.world')
 
     # Jeden argument dla całego launcha
     use_sim_time = LaunchConfiguration('use_sim_time')
@@ -53,9 +53,9 @@ def generate_launch_description():
         arguments=[
             '-entity', 'delivery_robot',
             '-topic', 'robot_description',
-            '-x', '3.0',
+            '-x', '-8.0',
             '-y', '0.0',
-            '-z', '0.5',
+            '-z', '0.2',
             '-R', '0.0',
             '-P', '0.0',
             '-Y', '0.0'

@@ -277,8 +277,8 @@ local_costmap:
       inflation_layer:
         plugin: nav2_costmap_2d::InflationLayer
         enabled: true
-        cost_scaling_factor: 5.0
-        inflation_radius: 0.3
+        cost_scaling_factor: 3.0
+        inflation_radius: 0.55
 
   local_costmap_client:
     ros__parameters:
@@ -333,7 +333,7 @@ global_costmap:
         plugin: nav2_costmap_2d::InflationLayer
         enabled: true
         cost_scaling_factor: 3.0
-        inflation_radius: 0.7
+        inflation_radius: 0.55
 
   global_costmap_client:
     ros__parameters:
@@ -370,7 +370,7 @@ planner_server:
       max_iterations: 500000 
       max_on_approach_iterations: 500 
       max_planning_time: 3.0  
-      cost_travel_multiplier: 30.0
+      cost_travel_multiplier: 2.5
       use_final_approach_orientation: false
       smoother:
         max_iterations: 500

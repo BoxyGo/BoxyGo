@@ -15,13 +15,27 @@ diff_cont:
     odom_frame_id: odom
     publish_odometry_tf: false
     enable_odom_tf: false
+    wheels_per_side: 3
     left_wheel_names: ["left_wheel_1_joint", "left_wheel_2_joint", "left_wheel_3_joint"]
     right_wheel_names: ["right_wheel_1_joint", "right_wheel_2_joint", "right_wheel_3_joint"]
-    wheel_separation: 0.55  # 6_wheel_robot.urdf.xacro 0.657    robot_luksusowy.urdf.xacro 0.55
-    wheel_radius: 0.0845     # 6_wheel_robot.urdf.xacro 0.1016   robot_luksusowy.urdf.xacro 0.085
-    wheels_per_side: 3
-    odom_middle_wheel_calc: true
-    pose_covariance_diagonal: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01]
-    twist_covariance_diagonal: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01]
-    
+    wheel_separation: 0.75 
+    wheel_radius: 0.0845    
 
+    linear.x.has_velocity_limits: true
+    linear.x.has_acceleration_limits: true
+    linear.x.max_velocity: 0.3
+    linear.x.min_velocity: -0.3
+    linear.x.max_acceleration: 1.0
+    linear.x.min_acceleration: -1.0
+
+    angular.z.has_velocity_limits: true
+    angular.z.has_acceleration_limits: true
+    angular.z.max_velocity: 0.8
+    angular.z.min_velocity: -0.8
+    angular.z.max_acceleration: 1.0
+    angular.z.min_acceleration: -1.0
+
+    #show_log: true
+    #odom_middle_wheel_calc: true
+    #pose_covariance_diagonal: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01]
+    #twist_covariance_diagonal: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01]

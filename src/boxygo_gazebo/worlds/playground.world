@@ -50,8 +50,8 @@
           <surface>
             <friction>
               <ode>
-                <mu>100</mu>
-                <mu2>50</mu2>
+                <mu>10000</mu>
+                <mu2>5000</mu2>
               </ode>
             </friction>
           </surface>
@@ -130,7 +130,7 @@
           <material><script><name>Gazebo/Black</name></script></material>
         </visual>
         <collision name="wall_east_collision">
-          <pose>-8 0 0.75 0 0 0</pose>
+          <pose>10 0 0.75 0 0 0</pose>
           <geometry><box><size>0.2 20 1.5</size></box></geometry>
         </collision>
         <!-- West wall -->
@@ -214,6 +214,16 @@
         </collision>
       </link>
     </model>
+    <!-- <model name="miara2m">
+      <static>true</static>
+      <link name="link">
+        <pose>1 0 0 0 0 0</pose>
+        <visual name="vis">
+          <geometry><box><size>2.0 0.6 0.02</size></box></geometry>
+          <material><script><name>Gazebo/Red</name></script></material>
+        </visual>
+      </link>
+    </model> -->
     <model name="pillar_2_3">
       <static>true</static>
       <link name="link">
